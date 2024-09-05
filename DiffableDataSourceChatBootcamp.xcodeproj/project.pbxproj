@@ -37,6 +37,141 @@
 		9BDECCF82C8A2B5F002CDE8D /* CustomMessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECCF72C8A2B5F002CDE8D /* CustomMessageType.swift */; };
 		9BDECCF92C8A2B5F002CDE8D /* CustomMessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECCF72C8A2B5F002CDE8D /* CustomMessageType.swift */; };
 		9BDECCFA2C8A2B5F002CDE8D /* CustomMessageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECCF72C8A2B5F002CDE8D /* CustomMessageType.swift */; };
+		9BDECD102C8A2D4B002CDE8D /* MessageListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECCFD2C8A2D4B002CDE8D /* MessageListTableViewCell.swift */; };
+		9BDECD112C8A2D4B002CDE8D /* MessageListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECCFD2C8A2D4B002CDE8D /* MessageListTableViewCell.swift */; };
+		9BDECD122C8A2D4B002CDE8D /* MessageListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECCFD2C8A2D4B002CDE8D /* MessageListTableViewCell.swift */; };
+		9BDECD132C8A2D4B002CDE8D /* MessageListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECCFE2C8A2D4B002CDE8D /* MessageListTableViewCell.xib */; };
+		9BDECD142C8A2D4B002CDE8D /* MessageListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECCFE2C8A2D4B002CDE8D /* MessageListTableViewCell.xib */; };
+		9BDECD152C8A2D4B002CDE8D /* MessageListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECCFE2C8A2D4B002CDE8D /* MessageListTableViewCell.xib */; };
+		9BDECD222C8A2D4B002CDE8D /* NoteBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD032C8A2D4B002CDE8D /* NoteBubbleView.swift */; };
+		9BDECD232C8A2D4B002CDE8D /* NoteBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD032C8A2D4B002CDE8D /* NoteBubbleView.swift */; };
+		9BDECD242C8A2D4B002CDE8D /* NoteBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD032C8A2D4B002CDE8D /* NoteBubbleView.swift */; };
+		9BDECD252C8A2D4B002CDE8D /* NoteBubbleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD042C8A2D4B002CDE8D /* NoteBubbleView.xib */; };
+		9BDECD262C8A2D4B002CDE8D /* NoteBubbleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD042C8A2D4B002CDE8D /* NoteBubbleView.xib */; };
+		9BDECD272C8A2D4B002CDE8D /* NoteBubbleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD042C8A2D4B002CDE8D /* NoteBubbleView.xib */; };
+		9BDECD522C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD352C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift */; };
+		9BDECD532C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD352C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift */; };
+		9BDECD542C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD352C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift */; };
+		9BDECD552C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD362C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.xib */; };
+		9BDECD562C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD362C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.xib */; };
+		9BDECD572C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD362C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.xib */; };
+		9BDECD582C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD372C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.swift */; };
+		9BDECD592C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD372C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.swift */; };
+		9BDECD5A2C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD372C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.swift */; };
+		9BDECD5B2C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD382C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.xib */; };
+		9BDECD5C2C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD382C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.xib */; };
+		9BDECD5D2C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD382C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.xib */; };
+		9BDECD5E2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD392C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.swift */; };
+		9BDECD5F2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD392C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.swift */; };
+		9BDECD602C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD392C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.swift */; };
+		9BDECD612C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD3A2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.xib */; };
+		9BDECD622C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD3A2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.xib */; };
+		9BDECD632C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD3A2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.xib */; };
+		9BDECD642C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD3B2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.swift */; };
+		9BDECD652C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD3B2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.swift */; };
+		9BDECD662C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD3B2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.swift */; };
+		9BDECD672C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD3C2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.xib */; };
+		9BDECD682C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD3C2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.xib */; };
+		9BDECD692C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD3C2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.xib */; };
+		9BDECD6A2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD3D2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.swift */; };
+		9BDECD6B2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD3D2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.swift */; };
+		9BDECD6C2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD3D2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.swift */; };
+		9BDECD6D2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD3E2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.xib */; };
+		9BDECD6E2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD3E2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.xib */; };
+		9BDECD6F2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD3E2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.xib */; };
+		9BDECD732C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD402C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.swift */; };
+		9BDECD742C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD402C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.swift */; };
+		9BDECD752C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD402C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.swift */; };
+		9BDECD762C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD412C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.xib */; };
+		9BDECD772C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD412C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.xib */; };
+		9BDECD782C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD412C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.xib */; };
+		9BDECD792C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD422C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.swift */; };
+		9BDECD7A2C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD422C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.swift */; };
+		9BDECD7B2C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD422C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.swift */; };
+		9BDECD7C2C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD432C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.xib */; };
+		9BDECD7D2C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD432C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.xib */; };
+		9BDECD7E2C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD432C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.xib */; };
+		9BDECD7F2C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD442C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.swift */; };
+		9BDECD802C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD442C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.swift */; };
+		9BDECD812C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD442C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.swift */; };
+		9BDECD822C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD452C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.xib */; };
+		9BDECD832C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD452C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.xib */; };
+		9BDECD842C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD452C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.xib */; };
+		9BDECD852C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD462C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.swift */; };
+		9BDECD862C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD462C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.swift */; };
+		9BDECD872C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD462C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.swift */; };
+		9BDECD882C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD472C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.xib */; };
+		9BDECD892C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD472C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.xib */; };
+		9BDECD8A2C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD472C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.xib */; };
+		9BDECD8B2C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD482C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.swift */; };
+		9BDECD8C2C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD482C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.swift */; };
+		9BDECD8D2C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD482C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.swift */; };
+		9BDECD8E2C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD492C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.xib */; };
+		9BDECD8F2C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD492C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.xib */; };
+		9BDECD902C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD492C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.xib */; };
+		9BDECD912C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD4A2C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.swift */; };
+		9BDECD922C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD4A2C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.swift */; };
+		9BDECD932C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD4A2C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.swift */; };
+		9BDECD942C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD4B2C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.xib */; };
+		9BDECD952C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD4B2C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.xib */; };
+		9BDECD962C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD4B2C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.xib */; };
+		9BDECD972C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD4C2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.swift */; };
+		9BDECD982C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD4C2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.swift */; };
+		9BDECD992C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD4C2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.swift */; };
+		9BDECD9A2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD4D2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.xib */; };
+		9BDECD9B2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD4D2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.xib */; };
+		9BDECD9C2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD4D2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.xib */; };
+		9BDECDA62C8A2F61002CDE8D /* StickerKeyboardChildCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD9D2C8A2F61002CDE8D /* StickerKeyboardChildCell.swift */; };
+		9BDECDA72C8A2F61002CDE8D /* StickerKeyboardChildCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD9D2C8A2F61002CDE8D /* StickerKeyboardChildCell.swift */; };
+		9BDECDA82C8A2F61002CDE8D /* StickerKeyboardChildCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD9D2C8A2F61002CDE8D /* StickerKeyboardChildCell.swift */; };
+		9BDECDA92C8A2F61002CDE8D /* StickerKeyboardChildCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD9E2C8A2F61002CDE8D /* StickerKeyboardChildCell.xib */; };
+		9BDECDAA2C8A2F61002CDE8D /* StickerKeyboardChildCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD9E2C8A2F61002CDE8D /* StickerKeyboardChildCell.xib */; };
+		9BDECDAB2C8A2F61002CDE8D /* StickerKeyboardChildCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECD9E2C8A2F61002CDE8D /* StickerKeyboardChildCell.xib */; };
+		9BDECDAC2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD9F2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.swift */; };
+		9BDECDAD2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD9F2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.swift */; };
+		9BDECDAE2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECD9F2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.swift */; };
+		9BDECDAF2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDA02C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.xib */; };
+		9BDECDB02C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDA02C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.xib */; };
+		9BDECDB12C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDA02C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.xib */; };
+		9BDECDB22C8A2F61002CDE8D /* StickerKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDA12C8A2F61002CDE8D /* StickerKeyboardView.swift */; };
+		9BDECDB32C8A2F61002CDE8D /* StickerKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDA12C8A2F61002CDE8D /* StickerKeyboardView.swift */; };
+		9BDECDB42C8A2F61002CDE8D /* StickerKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDA12C8A2F61002CDE8D /* StickerKeyboardView.swift */; };
+		9BDECDB52C8A2F61002CDE8D /* StickerKeyboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDA22C8A2F61002CDE8D /* StickerKeyboardView.xib */; };
+		9BDECDB62C8A2F61002CDE8D /* StickerKeyboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDA22C8A2F61002CDE8D /* StickerKeyboardView.xib */; };
+		9BDECDB72C8A2F61002CDE8D /* StickerKeyboardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDA22C8A2F61002CDE8D /* StickerKeyboardView.xib */; };
+		9BDECDB82C8A2F61002CDE8D /* StickerKeyboardViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDA32C8A2F61002CDE8D /* StickerKeyboardViewCell.swift */; };
+		9BDECDB92C8A2F61002CDE8D /* StickerKeyboardViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDA32C8A2F61002CDE8D /* StickerKeyboardViewCell.swift */; };
+		9BDECDBA2C8A2F61002CDE8D /* StickerKeyboardViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDA32C8A2F61002CDE8D /* StickerKeyboardViewCell.swift */; };
+		9BDECDBB2C8A2F61002CDE8D /* StickerKeyboardViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDA42C8A2F61002CDE8D /* StickerKeyboardViewCell.xib */; };
+		9BDECDBC2C8A2F61002CDE8D /* StickerKeyboardViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDA42C8A2F61002CDE8D /* StickerKeyboardViewCell.xib */; };
+		9BDECDBD2C8A2F61002CDE8D /* StickerKeyboardViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDA42C8A2F61002CDE8D /* StickerKeyboardViewCell.xib */; };
+		9BDECDC22C8A2F6B002CDE8D /* MessagePopMenuViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDBE2C8A2F6B002CDE8D /* MessagePopMenuViewController.storyboard */; };
+		9BDECDC32C8A2F6B002CDE8D /* MessagePopMenuViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDBE2C8A2F6B002CDE8D /* MessagePopMenuViewController.storyboard */; };
+		9BDECDC42C8A2F6B002CDE8D /* MessagePopMenuViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDBE2C8A2F6B002CDE8D /* MessagePopMenuViewController.storyboard */; };
+		9BDECDC52C8A2F6B002CDE8D /* MessagePopMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDBF2C8A2F6B002CDE8D /* MessagePopMenuViewController.swift */; };
+		9BDECDC62C8A2F6B002CDE8D /* MessagePopMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDBF2C8A2F6B002CDE8D /* MessagePopMenuViewController.swift */; };
+		9BDECDC72C8A2F6B002CDE8D /* MessagePopMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDBF2C8A2F6B002CDE8D /* MessagePopMenuViewController.swift */; };
+		9BDECDC82C8A2F6B002CDE8D /* MessagePopoverBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDC02C8A2F6B002CDE8D /* MessagePopoverBackgroundView.swift */; };
+		9BDECDC92C8A2F6B002CDE8D /* MessagePopoverBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDC02C8A2F6B002CDE8D /* MessagePopoverBackgroundView.swift */; };
+		9BDECDCA2C8A2F6B002CDE8D /* MessagePopoverBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDC02C8A2F6B002CDE8D /* MessagePopoverBackgroundView.swift */; };
+		9BDECDD22C8A2F73002CDE8D /* InputNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDCB2C8A2F73002CDE8D /* InputNoteViewController.swift */; };
+		9BDECDD32C8A2F73002CDE8D /* InputNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDCB2C8A2F73002CDE8D /* InputNoteViewController.swift */; };
+		9BDECDD42C8A2F73002CDE8D /* InputNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDCB2C8A2F73002CDE8D /* InputNoteViewController.swift */; };
+		9BDECDD52C8A2F73002CDE8D /* InputNoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDCC2C8A2F73002CDE8D /* InputNoteViewController.xib */; };
+		9BDECDD62C8A2F73002CDE8D /* InputNoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDCC2C8A2F73002CDE8D /* InputNoteViewController.xib */; };
+		9BDECDD72C8A2F73002CDE8D /* InputNoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDCC2C8A2F73002CDE8D /* InputNoteViewController.xib */; };
+		9BDECDD82C8A2F73002CDE8D /* NoteIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDCD2C8A2F73002CDE8D /* NoteIconView.swift */; };
+		9BDECDD92C8A2F73002CDE8D /* NoteIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDCD2C8A2F73002CDE8D /* NoteIconView.swift */; };
+		9BDECDDA2C8A2F73002CDE8D /* NoteIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDCD2C8A2F73002CDE8D /* NoteIconView.swift */; };
+		9BDECDDB2C8A2F73002CDE8D /* NoteIconView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDCE2C8A2F73002CDE8D /* NoteIconView.xib */; };
+		9BDECDDC2C8A2F73002CDE8D /* NoteIconView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDCE2C8A2F73002CDE8D /* NoteIconView.xib */; };
+		9BDECDDD2C8A2F73002CDE8D /* NoteIconView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDCE2C8A2F73002CDE8D /* NoteIconView.xib */; };
+		9BDECDDE2C8A2F73002CDE8D /* NotePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDCF2C8A2F73002CDE8D /* NotePreviewViewController.swift */; };
+		9BDECDDF2C8A2F73002CDE8D /* NotePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDCF2C8A2F73002CDE8D /* NotePreviewViewController.swift */; };
+		9BDECDE02C8A2F73002CDE8D /* NotePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECDCF2C8A2F73002CDE8D /* NotePreviewViewController.swift */; };
+		9BDECDE12C8A2F73002CDE8D /* NotePreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDD02C8A2F73002CDE8D /* NotePreviewViewController.xib */; };
+		9BDECDE22C8A2F73002CDE8D /* NotePreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDD02C8A2F73002CDE8D /* NotePreviewViewController.xib */; };
+		9BDECDE32C8A2F73002CDE8D /* NotePreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECDD02C8A2F73002CDE8D /* NotePreviewViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +212,51 @@
 		9BDECCEF2C8A2B2E002CDE8D /* MessageInputType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageInputType.swift; sourceTree = "<group>"; };
 		9BDECCF32C8A2B3A002CDE8D /* MessageSendModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageSendModel.swift; sourceTree = "<group>"; };
 		9BDECCF72C8A2B5F002CDE8D /* CustomMessageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMessageType.swift; sourceTree = "<group>"; };
+		9BDECCFD2C8A2D4B002CDE8D /* MessageListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageListTableViewCell.swift; sourceTree = "<group>"; };
+		9BDECCFE2C8A2D4B002CDE8D /* MessageListTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MessageListTableViewCell.xib; sourceTree = "<group>"; };
+		9BDECD032C8A2D4B002CDE8D /* NoteBubbleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteBubbleView.swift; sourceTree = "<group>"; };
+		9BDECD042C8A2D4B002CDE8D /* NoteBubbleView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteBubbleView.xib; sourceTree = "<group>"; };
+		9BDECD352C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherMessageCollectionViewCell.swift; sourceTree = "<group>"; };
+		9BDECD362C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OtherMessageCollectionViewCell.xib; sourceTree = "<group>"; };
+		9BDECD372C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherMessageCollectionViewImageCell.swift; sourceTree = "<group>"; };
+		9BDECD382C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OtherMessageCollectionViewImageCell.xib; sourceTree = "<group>"; };
+		9BDECD392C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherMessageCollectionViewReplyCell.swift; sourceTree = "<group>"; };
+		9BDECD3A2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OtherMessageCollectionViewReplyCell.xib; sourceTree = "<group>"; };
+		9BDECD3B2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherMessageCollectionViewReplyStickerCell.swift; sourceTree = "<group>"; };
+		9BDECD3C2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OtherMessageCollectionViewReplyStickerCell.xib; sourceTree = "<group>"; };
+		9BDECD3D2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherMessageCollectionViewStickerCell.swift; sourceTree = "<group>"; };
+		9BDECD3E2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OtherMessageCollectionViewStickerCell.xib; sourceTree = "<group>"; };
+		9BDECD402C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OwnMessageCollectionViewCell.swift; sourceTree = "<group>"; };
+		9BDECD412C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OwnMessageCollectionViewCell.xib; sourceTree = "<group>"; };
+		9BDECD422C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OwnMessageCollectionViewImageCell.swift; sourceTree = "<group>"; };
+		9BDECD432C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OwnMessageCollectionViewImageCell.xib; sourceTree = "<group>"; };
+		9BDECD442C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OwnMessageCollectionViewReplyCell.swift; sourceTree = "<group>"; };
+		9BDECD452C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OwnMessageCollectionViewReplyCell.xib; sourceTree = "<group>"; };
+		9BDECD462C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OwnMessageCollectionViewReplyStickerCell.swift; sourceTree = "<group>"; };
+		9BDECD472C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OwnMessageCollectionViewReplyStickerCell.xib; sourceTree = "<group>"; };
+		9BDECD482C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OwnMessageCollectionViewStickerCell.swift; sourceTree = "<group>"; };
+		9BDECD492C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OwnMessageCollectionViewStickerCell.xib; sourceTree = "<group>"; };
+		9BDECD4A2C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnreadMessageCollectionViewCell.swift; sourceTree = "<group>"; };
+		9BDECD4B2C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnreadMessageCollectionViewCell.xib; sourceTree = "<group>"; };
+		9BDECD4C2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnsendMessageCollectionViewCell.swift; sourceTree = "<group>"; };
+		9BDECD4D2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UnsendMessageCollectionViewCell.xib; sourceTree = "<group>"; };
+		9BDECD9D2C8A2F61002CDE8D /* StickerKeyboardChildCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StickerKeyboardChildCell.swift; sourceTree = "<group>"; };
+		9BDECD9E2C8A2F61002CDE8D /* StickerKeyboardChildCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StickerKeyboardChildCell.xib; sourceTree = "<group>"; };
+		9BDECD9F2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StickerKeyboardPagerTabCell.swift; sourceTree = "<group>"; };
+		9BDECDA02C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StickerKeyboardPagerTabCell.xib; sourceTree = "<group>"; };
+		9BDECDA12C8A2F61002CDE8D /* StickerKeyboardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StickerKeyboardView.swift; sourceTree = "<group>"; };
+		9BDECDA22C8A2F61002CDE8D /* StickerKeyboardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StickerKeyboardView.xib; sourceTree = "<group>"; };
+		9BDECDA32C8A2F61002CDE8D /* StickerKeyboardViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StickerKeyboardViewCell.swift; sourceTree = "<group>"; };
+		9BDECDA42C8A2F61002CDE8D /* StickerKeyboardViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StickerKeyboardViewCell.xib; sourceTree = "<group>"; };
+		9BDECDBE2C8A2F6B002CDE8D /* MessagePopMenuViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MessagePopMenuViewController.storyboard; sourceTree = "<group>"; };
+		9BDECDBF2C8A2F6B002CDE8D /* MessagePopMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagePopMenuViewController.swift; sourceTree = "<group>"; };
+		9BDECDC02C8A2F6B002CDE8D /* MessagePopoverBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagePopoverBackgroundView.swift; sourceTree = "<group>"; };
+		9BDECDCB2C8A2F73002CDE8D /* InputNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputNoteViewController.swift; sourceTree = "<group>"; };
+		9BDECDCC2C8A2F73002CDE8D /* InputNoteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InputNoteViewController.xib; sourceTree = "<group>"; };
+		9BDECDCD2C8A2F73002CDE8D /* NoteIconView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteIconView.swift; sourceTree = "<group>"; };
+		9BDECDCE2C8A2F73002CDE8D /* NoteIconView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteIconView.xib; sourceTree = "<group>"; };
+		9BDECDCF2C8A2F73002CDE8D /* NotePreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotePreviewViewController.swift; sourceTree = "<group>"; };
+		9BDECDD02C8A2F73002CDE8D /* NotePreviewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotePreviewViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +352,11 @@
 			isa = PBXGroup;
 			children = (
 				9BDECCB22C8A2404002CDE8D /* LaunchScreen.storyboard */,
+				9BDECDD12C8A2F73002CDE8D /* Note */,
+				9BDECDC12C8A2F6B002CDE8D /* MenuView */,
+				9BDECDA52C8A2F61002CDE8D /* InputSticker */,
+				9BDECD092C8A2D4B002CDE8D /* RoomListCell */,
+				9BDECD4E2C8A2DB2002CDE8D /* MessageCell */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -224,6 +409,86 @@
 			children = (
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9BDECD092C8A2D4B002CDE8D /* RoomListCell */ = {
+			isa = PBXGroup;
+			children = (
+				9BDECCFD2C8A2D4B002CDE8D /* MessageListTableViewCell.swift */,
+				9BDECCFE2C8A2D4B002CDE8D /* MessageListTableViewCell.xib */,
+				9BDECD032C8A2D4B002CDE8D /* NoteBubbleView.swift */,
+				9BDECD042C8A2D4B002CDE8D /* NoteBubbleView.xib */,
+			);
+			path = RoomListCell;
+			sourceTree = "<group>";
+		};
+		9BDECD4E2C8A2DB2002CDE8D /* MessageCell */ = {
+			isa = PBXGroup;
+			children = (
+				9BDECD352C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift */,
+				9BDECD362C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.xib */,
+				9BDECD372C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.swift */,
+				9BDECD382C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.xib */,
+				9BDECD392C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.swift */,
+				9BDECD3A2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.xib */,
+				9BDECD3B2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.swift */,
+				9BDECD3C2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.xib */,
+				9BDECD3D2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.swift */,
+				9BDECD3E2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.xib */,
+				9BDECD402C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.swift */,
+				9BDECD412C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.xib */,
+				9BDECD422C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.swift */,
+				9BDECD432C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.xib */,
+				9BDECD442C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.swift */,
+				9BDECD452C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.xib */,
+				9BDECD462C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.swift */,
+				9BDECD472C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.xib */,
+				9BDECD482C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.swift */,
+				9BDECD492C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.xib */,
+				9BDECD4A2C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.swift */,
+				9BDECD4B2C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.xib */,
+				9BDECD4C2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.swift */,
+				9BDECD4D2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.xib */,
+			);
+			path = MessageCell;
+			sourceTree = "<group>";
+		};
+		9BDECDA52C8A2F61002CDE8D /* InputSticker */ = {
+			isa = PBXGroup;
+			children = (
+				9BDECD9D2C8A2F61002CDE8D /* StickerKeyboardChildCell.swift */,
+				9BDECD9E2C8A2F61002CDE8D /* StickerKeyboardChildCell.xib */,
+				9BDECD9F2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.swift */,
+				9BDECDA02C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.xib */,
+				9BDECDA12C8A2F61002CDE8D /* StickerKeyboardView.swift */,
+				9BDECDA22C8A2F61002CDE8D /* StickerKeyboardView.xib */,
+				9BDECDA32C8A2F61002CDE8D /* StickerKeyboardViewCell.swift */,
+				9BDECDA42C8A2F61002CDE8D /* StickerKeyboardViewCell.xib */,
+			);
+			path = InputSticker;
+			sourceTree = "<group>";
+		};
+		9BDECDC12C8A2F6B002CDE8D /* MenuView */ = {
+			isa = PBXGroup;
+			children = (
+				9BDECDBE2C8A2F6B002CDE8D /* MessagePopMenuViewController.storyboard */,
+				9BDECDBF2C8A2F6B002CDE8D /* MessagePopMenuViewController.swift */,
+				9BDECDC02C8A2F6B002CDE8D /* MessagePopoverBackgroundView.swift */,
+			);
+			path = MenuView;
+			sourceTree = "<group>";
+		};
+		9BDECDD12C8A2F73002CDE8D /* Note */ = {
+			isa = PBXGroup;
+			children = (
+				9BDECDCB2C8A2F73002CDE8D /* InputNoteViewController.swift */,
+				9BDECDCC2C8A2F73002CDE8D /* InputNoteViewController.xib */,
+				9BDECDCD2C8A2F73002CDE8D /* NoteIconView.swift */,
+				9BDECDCE2C8A2F73002CDE8D /* NoteIconView.xib */,
+				9BDECDCF2C8A2F73002CDE8D /* NotePreviewViewController.swift */,
+				9BDECDD02C8A2F73002CDE8D /* NotePreviewViewController.xib */,
+			);
+			path = Note;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,9 +595,31 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BDECD252C8A2D4B002CDE8D /* NoteBubbleView.xib in Resources */,
+				9BDECDBB2C8A2F61002CDE8D /* StickerKeyboardViewCell.xib in Resources */,
+				9BDECD762C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.xib in Resources */,
+				9BDECD672C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.xib in Resources */,
+				9BDECD132C8A2D4B002CDE8D /* MessageListTableViewCell.xib in Resources */,
+				9BDECD612C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.xib in Resources */,
+				9BDECDE12C8A2F73002CDE8D /* NotePreviewViewController.xib in Resources */,
+				9BDECDB52C8A2F61002CDE8D /* StickerKeyboardView.xib in Resources */,
 				9BDECCB12C8A2404002CDE8D /* Assets.xcassets in Resources */,
+				9BDECD6D2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.xib in Resources */,
+				9BDECD942C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.xib in Resources */,
+				9BDECD552C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.xib in Resources */,
 				9BDECCB42C8A2404002CDE8D /* Base in Resources */,
+				9BDECD7C2C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.xib in Resources */,
+				9BDECD9A2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.xib in Resources */,
+				9BDECDC22C8A2F6B002CDE8D /* MessagePopMenuViewController.storyboard in Resources */,
+				9BDECD822C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.xib in Resources */,
+				9BDECDA92C8A2F61002CDE8D /* StickerKeyboardChildCell.xib in Resources */,
+				9BDECD5B2C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.xib in Resources */,
+				9BDECD8E2C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.xib in Resources */,
+				9BDECDDB2C8A2F73002CDE8D /* NoteIconView.xib in Resources */,
+				9BDECD882C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.xib in Resources */,
+				9BDECDD52C8A2F73002CDE8D /* InputNoteViewController.xib in Resources */,
 				9BDECCAF2C8A2403002CDE8D /* Base in Resources */,
+				9BDECDAF2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +627,28 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BDECD892C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.xib in Resources */,
+				9BDECDD62C8A2F73002CDE8D /* InputNoteViewController.xib in Resources */,
+				9BDECD9B2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.xib in Resources */,
+				9BDECD6E2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.xib in Resources */,
+				9BDECD562C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.xib in Resources */,
+				9BDECD772C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.xib in Resources */,
+				9BDECD622C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.xib in Resources */,
+				9BDECDC32C8A2F6B002CDE8D /* MessagePopMenuViewController.storyboard in Resources */,
+				9BDECD5C2C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.xib in Resources */,
+				9BDECD142C8A2D4B002CDE8D /* MessageListTableViewCell.xib in Resources */,
+				9BDECD7D2C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.xib in Resources */,
+				9BDECDB62C8A2F61002CDE8D /* StickerKeyboardView.xib in Resources */,
+				9BDECD682C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.xib in Resources */,
+				9BDECDE22C8A2F73002CDE8D /* NotePreviewViewController.xib in Resources */,
+				9BDECDAA2C8A2F61002CDE8D /* StickerKeyboardChildCell.xib in Resources */,
+				9BDECD8F2C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.xib in Resources */,
+				9BDECDBC2C8A2F61002CDE8D /* StickerKeyboardViewCell.xib in Resources */,
+				9BDECDDC2C8A2F73002CDE8D /* NoteIconView.xib in Resources */,
+				9BDECDB02C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.xib in Resources */,
+				9BDECD832C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.xib in Resources */,
+				9BDECD262C8A2D4B002CDE8D /* NoteBubbleView.xib in Resources */,
+				9BDECD952C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +656,28 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BDECD8A2C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.xib in Resources */,
+				9BDECDD72C8A2F73002CDE8D /* InputNoteViewController.xib in Resources */,
+				9BDECD9C2C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.xib in Resources */,
+				9BDECD6F2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.xib in Resources */,
+				9BDECD572C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.xib in Resources */,
+				9BDECD782C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.xib in Resources */,
+				9BDECD632C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.xib in Resources */,
+				9BDECDC42C8A2F6B002CDE8D /* MessagePopMenuViewController.storyboard in Resources */,
+				9BDECD5D2C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.xib in Resources */,
+				9BDECD152C8A2D4B002CDE8D /* MessageListTableViewCell.xib in Resources */,
+				9BDECD7E2C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.xib in Resources */,
+				9BDECDB72C8A2F61002CDE8D /* StickerKeyboardView.xib in Resources */,
+				9BDECD692C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.xib in Resources */,
+				9BDECDE32C8A2F73002CDE8D /* NotePreviewViewController.xib in Resources */,
+				9BDECDAB2C8A2F61002CDE8D /* StickerKeyboardChildCell.xib in Resources */,
+				9BDECD902C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.xib in Resources */,
+				9BDECDBD2C8A2F61002CDE8D /* StickerKeyboardViewCell.xib in Resources */,
+				9BDECDDD2C8A2F73002CDE8D /* NoteIconView.xib in Resources */,
+				9BDECDB12C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.xib in Resources */,
+				9BDECD842C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.xib in Resources */,
+				9BDECD272C8A2D4B002CDE8D /* NoteBubbleView.xib in Resources */,
+				9BDECD962C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,15 +689,38 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BDECCF02C8A2B2E002CDE8D /* MessageInputType.swift in Sources */,
+				9BDECDB82C8A2F61002CDE8D /* StickerKeyboardViewCell.swift in Sources */,
+				9BDECD8B2C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.swift in Sources */,
+				9BDECD792C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.swift in Sources */,
+				9BDECD102C8A2D4B002CDE8D /* MessageListTableViewCell.swift in Sources */,
 				9BDECCE02C8A2AB3002CDE8D /* User.swift in Sources */,
+				9BDECDDE2C8A2F73002CDE8D /* NotePreviewViewController.swift in Sources */,
+				9BDECD522C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift in Sources */,
+				9BDECDD82C8A2F73002CDE8D /* NoteIconView.swift in Sources */,
+				9BDECDB22C8A2F61002CDE8D /* StickerKeyboardView.swift in Sources */,
+				9BDECDC52C8A2F6B002CDE8D /* MessagePopMenuViewController.swift in Sources */,
+				9BDECD642C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.swift in Sources */,
 				9BDECCAC2C8A2403002CDE8D /* ViewController.swift in Sources */,
+				9BDECD222C8A2D4B002CDE8D /* NoteBubbleView.swift in Sources */,
+				9BDECDC82C8A2F6B002CDE8D /* MessagePopoverBackgroundView.swift in Sources */,
 				9BDECCA82C8A2403002CDE8D /* AppDelegate.swift in Sources */,
 				9BDECCE82C8A2B0A002CDE8D /* MessageSection.swift in Sources */,
+				9BDECD582C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.swift in Sources */,
 				9BDECCF42C8A2B3A002CDE8D /* MessageSendModel.swift in Sources */,
 				9BDECCAA2C8A2403002CDE8D /* SceneDelegate.swift in Sources */,
+				9BDECDD22C8A2F73002CDE8D /* InputNoteViewController.swift in Sources */,
 				9BDECCE42C8A2AE3002CDE8D /* Room.swift in Sources */,
 				9BDECCF82C8A2B5F002CDE8D /* CustomMessageType.swift in Sources */,
+				9BDECDA62C8A2F61002CDE8D /* StickerKeyboardChildCell.swift in Sources */,
+				9BDECD912C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.swift in Sources */,
+				9BDECD852C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.swift in Sources */,
+				9BDECD5E2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.swift in Sources */,
+				9BDECD972C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.swift in Sources */,
+				9BDECD7F2C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.swift in Sources */,
+				9BDECDAC2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.swift in Sources */,
+				9BDECD732C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.swift in Sources */,
 				9BDECCEC2C8A2B20002CDE8D /* Message.swift in Sources */,
+				9BDECD6A2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,13 +728,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BDECDC92C8A2F6B002CDE8D /* MessagePopoverBackgroundView.swift in Sources */,
+				9BDECDD92C8A2F73002CDE8D /* NoteIconView.swift in Sources */,
+				9BDECD7A2C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.swift in Sources */,
+				9BDECD8C2C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.swift in Sources */,
+				9BDECD5F2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.swift in Sources */,
 				9BDECCE12C8A2AB3002CDE8D /* User.swift in Sources */,
 				9BDECCE92C8A2B0A002CDE8D /* MessageSection.swift in Sources */,
+				9BDECDC62C8A2F6B002CDE8D /* MessagePopMenuViewController.swift in Sources */,
+				9BDECD862C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.swift in Sources */,
 				9BDECCED2C8A2B20002CDE8D /* Message.swift in Sources */,
+				9BDECDB92C8A2F61002CDE8D /* StickerKeyboardViewCell.swift in Sources */,
 				9BDECCBF2C8A2405002CDE8D /* DiffableDataSourceChatBootcampTests.swift in Sources */,
+				9BDECDAD2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.swift in Sources */,
+				9BDECDA72C8A2F61002CDE8D /* StickerKeyboardChildCell.swift in Sources */,
+				9BDECD532C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift in Sources */,
 				9BDECCF92C8A2B5F002CDE8D /* CustomMessageType.swift in Sources */,
+				9BDECDDF2C8A2F73002CDE8D /* NotePreviewViewController.swift in Sources */,
 				9BDECCF12C8A2B2E002CDE8D /* MessageInputType.swift in Sources */,
+				9BDECD802C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.swift in Sources */,
+				9BDECD742C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.swift in Sources */,
+				9BDECDB32C8A2F61002CDE8D /* StickerKeyboardView.swift in Sources */,
+				9BDECD6B2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.swift in Sources */,
+				9BDECD652C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.swift in Sources */,
+				9BDECD982C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.swift in Sources */,
+				9BDECDD32C8A2F73002CDE8D /* InputNoteViewController.swift in Sources */,
+				9BDECD232C8A2D4B002CDE8D /* NoteBubbleView.swift in Sources */,
+				9BDECD112C8A2D4B002CDE8D /* MessageListTableViewCell.swift in Sources */,
 				9BDECCE52C8A2AE3002CDE8D /* Room.swift in Sources */,
+				9BDECD922C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.swift in Sources */,
+				9BDECD592C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.swift in Sources */,
 				9BDECCF52C8A2B3A002CDE8D /* MessageSendModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -389,15 +766,38 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BDECD872C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyStickerCell.swift in Sources */,
 				9BDECCFA2C8A2B5F002CDE8D /* CustomMessageType.swift in Sources */,
+				9BDECD752C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.swift in Sources */,
+				9BDECDD42C8A2F73002CDE8D /* InputNoteViewController.swift in Sources */,
+				9BDECD8D2C8A2DB2002CDE8D /* OwnMessageCollectionViewStickerCell.swift in Sources */,
 				9BDECCC92C8A2405002CDE8D /* DiffableDataSourceChatBootcampUITests.swift in Sources */,
+				9BDECDC72C8A2F6B002CDE8D /* MessagePopMenuViewController.swift in Sources */,
+				9BDECD242C8A2D4B002CDE8D /* NoteBubbleView.swift in Sources */,
 				9BDECCF62C8A2B3A002CDE8D /* MessageSendModel.swift in Sources */,
 				9BDECCEA2C8A2B0A002CDE8D /* MessageSection.swift in Sources */,
 				9BDECCCB2C8A2405002CDE8D /* DiffableDataSourceChatBootcampUITestsLaunchTests.swift in Sources */,
 				9BDECCEE2C8A2B20002CDE8D /* Message.swift in Sources */,
+				9BDECD122C8A2D4B002CDE8D /* MessageListTableViewCell.swift in Sources */,
+				9BDECDA82C8A2F61002CDE8D /* StickerKeyboardChildCell.swift in Sources */,
+				9BDECD7B2C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.swift in Sources */,
+				9BDECDBA2C8A2F61002CDE8D /* StickerKeyboardViewCell.swift in Sources */,
 				9BDECCE62C8A2AE3002CDE8D /* Room.swift in Sources */,
+				9BDECDE02C8A2F73002CDE8D /* NotePreviewViewController.swift in Sources */,
+				9BDECD812C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.swift in Sources */,
+				9BDECDAE2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.swift in Sources */,
+				9BDECD662C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.swift in Sources */,
 				9BDECCE22C8A2AB3002CDE8D /* User.swift in Sources */,
+				9BDECD602C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.swift in Sources */,
+				9BDECD932C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.swift in Sources */,
 				9BDECCF22C8A2B2E002CDE8D /* MessageInputType.swift in Sources */,
+				9BDECDB42C8A2F61002CDE8D /* StickerKeyboardView.swift in Sources */,
+				9BDECD6C2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.swift in Sources */,
+				9BDECDDA2C8A2F73002CDE8D /* NoteIconView.swift in Sources */,
+				9BDECD542C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift in Sources */,
+				9BDECDCA2C8A2F6B002CDE8D /* MessagePopoverBackgroundView.swift in Sources */,
+				9BDECD992C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.swift in Sources */,
+				9BDECD5A2C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
