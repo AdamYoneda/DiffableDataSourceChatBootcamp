@@ -139,8 +139,6 @@
 				9BDECCA92C8A2403002CDE8D /* SceneDelegate.swift */,
 				9BDECCAB2C8A2403002CDE8D /* ViewController.swift */,
 				9BDECCAD2C8A2403002CDE8D /* Main.storyboard */,
-				9BDECCB02C8A2404002CDE8D /* Assets.xcassets */,
-				9BDECCB22C8A2404002CDE8D /* LaunchScreen.storyboard */,
 				9BDECCB52C8A2404002CDE8D /* Info.plist */,
 			);
 			path = DiffableDataSourceChatBootcamp;
@@ -173,6 +171,7 @@
 		9BDECCD82C8A2887002CDE8D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9BDECCB22C8A2404002CDE8D /* LaunchScreen.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -215,6 +214,7 @@
 		9BDECCDD2C8A28D9002CDE8D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9BDECCB02C8A2404002CDE8D /* Assets.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
