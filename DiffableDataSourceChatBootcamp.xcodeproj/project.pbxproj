@@ -232,6 +232,7 @@
 		9BDECE372C8B3BCB002CDE8D /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECE332C8B3BCB002CDE8D /* MainViewController.xib */; };
 		9BDECE382C8B3BCB002CDE8D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE322C8B3BCB002CDE8D /* MainViewController.swift */; };
 		9BDECE392C8B3BCB002CDE8D /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECE332C8B3BCB002CDE8D /* MainViewController.xib */; };
+		9BDECE3B2C8B6669002CDE8D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECE3A2C8B6669002CDE8D /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -335,6 +336,7 @@
 		9BDECE2A2C8A32EF002CDE8D /* UITextViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextViewExtension.swift; sourceTree = "<group>"; };
 		9BDECE322C8B3BCB002CDE8D /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		9BDECE332C8B3BCB002CDE8D /* MainViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
+		9BDECE3A2C8B6669002CDE8D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -395,6 +397,7 @@
 				9BDECCD82C8A2887002CDE8D /* View */,
 				9BDECCA72C8A2403002CDE8D /* AppDelegate.swift */,
 				9BDECCB52C8A2404002CDE8D /* Info.plist */,
+				9BDECE3A2C8B6669002CDE8D /* GoogleService-Info.plist */,
 			);
 			path = DiffableDataSourceChatBootcamp;
 			sourceTree = "<group>";
@@ -722,6 +725,7 @@
 				9BDECD6D2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.xib in Resources */,
 				9BDECD942C8A2DB2002CDE8D /* UnreadMessageCollectionViewCell.xib in Resources */,
 				9BDECD552C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.xib in Resources */,
+				9BDECE3B2C8B6669002CDE8D /* GoogleService-Info.plist in Resources */,
 				9BDECCB42C8A2404002CDE8D /* Base in Resources */,
 				9BDECDEF2C8A31C3002CDE8D /* MessageRoomView.storyboard in Resources */,
 				9BDECD7C2C8A2DB2002CDE8D /* OwnMessageCollectionViewImageCell.xib in Resources */,
