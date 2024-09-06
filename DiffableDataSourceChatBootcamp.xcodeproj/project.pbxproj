@@ -247,6 +247,7 @@
 		9BDECE552C8B6745002CDE8D /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9BDECE542C8B6745002CDE8D /* FirebaseStorage */; };
 		9BDECE582C8B6860002CDE8D /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 9BDECE572C8B6860002CDE8D /* Nuke */; };
 		9BDECE5A2C8B6860002CDE8D /* NukeExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 9BDECE592C8B6860002CDE8D /* NukeExtensions */; };
+		9BDECE5D2C8B693F002CDE8D /* NVActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 9BDECE5C2C8B693F002CDE8D /* NVActivityIndicatorView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -369,6 +370,7 @@
 				9BDECE452C8B6745002CDE8D /* FirebaseCrashlytics in Frameworks */,
 				9BDECE5A2C8B6860002CDE8D /* NukeExtensions in Frameworks */,
 				9BDECE432C8B6745002CDE8D /* FirebaseAuth in Frameworks */,
+				9BDECE5D2C8B693F002CDE8D /* NVActivityIndicatorView in Frameworks */,
 				9BDECE3F2C8B6745002CDE8D /* FirebaseAnalytics in Frameworks */,
 				9BDECE492C8B6745002CDE8D /* FirebaseFirestore in Frameworks */,
 				9BDECE582C8B6860002CDE8D /* Nuke in Frameworks */,
@@ -673,6 +675,7 @@
 				9BDECE542C8B6745002CDE8D /* FirebaseStorage */,
 				9BDECE572C8B6860002CDE8D /* Nuke */,
 				9BDECE592C8B6860002CDE8D /* NukeExtensions */,
+				9BDECE5C2C8B693F002CDE8D /* NVActivityIndicatorView */,
 			);
 			productName = DiffableDataSourceChatBootcamp;
 			productReference = 9BDECCA42C8A2403002CDE8D /* DiffableDataSourceChatBootcamp.app */;
@@ -749,6 +752,7 @@
 			packageReferences = (
 				9BDECE3C2C8B66D7002CDE8D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				9BDECE562C8B683E002CDE8D /* XCRemoteSwiftPackageReference "Nuke" */,
+				9BDECE5B2C8B6931002CDE8D /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */,
 			);
 			productRefGroup = 9BDECCA52C8A2403002CDE8D /* Products */;
 			projectDirPath = "";
@@ -1375,6 +1379,14 @@
 				minimumVersion = 12.8.0;
 			};
 		};
+		9BDECE5B2C8B6931002CDE8D /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ninjaprox/NVActivityIndicatorView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1447,6 +1459,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9BDECE562C8B683E002CDE8D /* XCRemoteSwiftPackageReference "Nuke" */;
 			productName = NukeExtensions;
+		};
+		9BDECE5C2C8B693F002CDE8D /* NVActivityIndicatorView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9BDECE5B2C8B6931002CDE8D /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */;
+			productName = NVActivityIndicatorView;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
