@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		9BDECCA82C8A2403002CDE8D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECCA72C8A2403002CDE8D /* AppDelegate.swift */; };
-		9BDECCAA2C8A2403002CDE8D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECCA92C8A2403002CDE8D /* SceneDelegate.swift */; };
 		9BDECCAC2C8A2403002CDE8D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECCAB2C8A2403002CDE8D /* ViewController.swift */; };
 		9BDECCAF2C8A2403002CDE8D /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECCAE2C8A2403002CDE8D /* Base */; };
 		9BDECCB12C8A2404002CDE8D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9BDECCB02C8A2404002CDE8D /* Assets.xcassets */; };
@@ -251,7 +250,6 @@
 /* Begin PBXFileReference section */
 		9BDECCA42C8A2403002CDE8D /* DiffableDataSourceChatBootcamp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiffableDataSourceChatBootcamp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BDECCA72C8A2403002CDE8D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9BDECCA92C8A2403002CDE8D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		9BDECCAB2C8A2403002CDE8D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		9BDECCAE2C8A2403002CDE8D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9BDECCB02C8A2404002CDE8D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -392,7 +390,6 @@
 				9BDECCD92C8A2897002CDE8D /* ViewModel */,
 				9BDECCD82C8A2887002CDE8D /* View */,
 				9BDECCA72C8A2403002CDE8D /* AppDelegate.swift */,
-				9BDECCA92C8A2403002CDE8D /* SceneDelegate.swift */,
 				9BDECCAB2C8A2403002CDE8D /* ViewController.swift */,
 				9BDECCAD2C8A2403002CDE8D /* Main.storyboard */,
 				9BDECCB52C8A2404002CDE8D /* Info.plist */,
@@ -834,7 +831,6 @@
 				9BDECD582C8A2DB2002CDE8D /* OtherMessageCollectionViewImageCell.swift in Sources */,
 				9BDECCF42C8A2B3A002CDE8D /* MessageSendModel.swift in Sources */,
 				9BDECDF22C8A31C3002CDE8D /* MessageRoomPreviewViewController.swift in Sources */,
-				9BDECCAA2C8A2403002CDE8D /* SceneDelegate.swift in Sources */,
 				9BDECDD22C8A2F73002CDE8D /* InputNoteViewController.swift in Sources */,
 				9BDECCE42C8A2AE3002CDE8D /* Room.swift in Sources */,
 				9BDECCF82C8A2B5F002CDE8D /* CustomMessageType.swift in Sources */,
