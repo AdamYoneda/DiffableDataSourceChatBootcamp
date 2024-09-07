@@ -461,10 +461,6 @@
 			isa = PBXGroup;
 			children = (
 				9BDECCB22C8A2404002CDE8D /* LaunchScreen.storyboard */,
-				9BDECE042C8A31EC002CDE8D /* MessageFeature */,
-				9BDECDD12C8A2F73002CDE8D /* Note */,
-				9BDECDC12C8A2F6B002CDE8D /* MenuView */,
-				9BDECDA52C8A2F61002CDE8D /* InputSticker */,
 				9BDECD092C8A2D4B002CDE8D /* RoomListCell */,
 				9BDECD4E2C8A2DB2002CDE8D /* MessageCell */,
 			);
@@ -484,11 +480,8 @@
 				9BDECE312C8B3B97002CDE8D /* MainViewController */,
 				9BDECDE52C8A31C3002CDE8D /* MessageListViewController.storyboard */,
 				9BDECDE82C8A31C3002CDE8D /* MessageListViewController.swift */,
-				9BDECDE72C8A31C3002CDE8D /* MessageRoomPreviewViewController.swift */,
-				9BDECDE62C8A31C3002CDE8D /* MessageRoomView.storyboard */,
-				9BDECDE42C8A31C3002CDE8D /* MessageRoomView.swift */,
-				9BDECE0E2C8A322C002CDE8D /* ImageDetailView.storyboard */,
-				9BDECE0D2C8A322C002CDE8D /* ImageDetailViewController.swift */,
+				9BDECE042C8A31EC002CDE8D /* MessageFeature */,
+				9BDECDD12C8A2F73002CDE8D /* Note */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -624,6 +617,13 @@
 				9BDECDFA2C8A31E1002CDE8D /* MessageRoomTitleView.xib */,
 				9BDECE062C8A3208002CDE8D /* TypingIndicatorView.swift */,
 				9BDECE052C8A3208002CDE8D /* TypingIndicatorView.xib */,
+				9BDECDE72C8A31C3002CDE8D /* MessageRoomPreviewViewController.swift */,
+				9BDECDE42C8A31C3002CDE8D /* MessageRoomView.swift */,
+				9BDECDE62C8A31C3002CDE8D /* MessageRoomView.storyboard */,
+				9BDECE0D2C8A322C002CDE8D /* ImageDetailViewController.swift */,
+				9BDECE0E2C8A322C002CDE8D /* ImageDetailView.storyboard */,
+				9BDECDC12C8A2F6B002CDE8D /* MenuView */,
+				9BDECDA52C8A2F61002CDE8D /* InputSticker */,
 			);
 			path = MessageFeature;
 			sourceTree = "<group>";
