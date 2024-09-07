@@ -1,6 +1,6 @@
 //
 //  OwnMessageCollectionViewStickerCell.swift
-//  Tauch
+// 
 //
 //  Created by Adam Yoneda on 2023/08/31.
 //

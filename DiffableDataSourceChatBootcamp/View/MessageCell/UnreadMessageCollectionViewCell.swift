@@ -1,6 +1,6 @@
 //
 //  UnreadMessageCollectionViewCell.swift
-//  Tauch
+//
 //
 //  Created by Apple on 2023/09/22.
 //

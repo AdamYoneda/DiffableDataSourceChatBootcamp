@@ -1,6 +1,6 @@
 //
 //  OwnMessageCollectionViewCell.swift
-//  Tauch
+//
 //
 //  Created by Apple on 2023/07/26.
 //
@@ -74,7 +74,7 @@ final class OwnMessageCollectionViewCell: UICollectionViewCell, UIGestureRecogni
         return attributedText
     }
     
-    func configure(_ user: User, message: Message, roomStatus: RoomStatus?, delegate: OwnMessageCollectionViewCellDelegate, indexPath: IndexPath) {
+    func configure(_ user: User, message: Message, delegate: OwnMessageCollectionViewCellDelegate, indexPath: IndexPath) {
         
         self.delegate = delegate
         self.indexPath = indexPath
@@ -116,26 +116,9 @@ final class OwnMessageCollectionViewCell: UICollectionViewCell, UIGestureRecogni
             textViewBottomConstraintWithReaction.isActive = true
         }
         
-        switch roomStatus {
-        case .normal:
-            textView.backgroundColor = .accentColor
-            textView.textColor = .white
-            heartIcon.isHidden = true
-            break
-        case .sBest, .ssBest, .sssBest:
-            if roomStatus == .sBest {
-                heartIcon.isHidden = true
-            } else {
-                heartIcon.isHidden = false
-            }
-            textView.backgroundColor = .white
-            textView.textColor = UIColor.MessageColor.heavyPink
-            textView.layer.borderColor = UIColor.MessageColor.standardPink.cgColor
-            textView.layer.borderWidth = 1.5
-            break
-        case .none:
-            break
-        }
+        textView.backgroundColor = .accentColor
+        textView.textColor = .white
+        heartIcon.isHidden = true
     }
     
     func animateReactionLabel(completion: @escaping (Bool) -> Void) {

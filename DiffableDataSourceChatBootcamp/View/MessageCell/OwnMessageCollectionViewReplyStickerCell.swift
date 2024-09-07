@@ -1,6 +1,6 @@
 //
 //  OwnMessageCollectionViewReplyStickerCell.swift
-//  Tauch
+//  
 //
 //  Created by Adam Yoneda on 2023/10/16.
 //
@@ -226,23 +226,8 @@ final class OwnMessageCollectionViewReplyStickerCell: UICollectionViewCell, UIGe
         }
         
         let isOwnMessage = message.creator == loginUser?.uid
-        switch room?.roomStatus {
-        case .normal:
-            messageView.backgroundColor = (isOwnMessage ? .accentColor : .systemGray6)
-            nickNameLabel.textColor = (isOwnMessage ? .white : .fontColor)
-            messageTextLabel.textColor = (isOwnMessage ? .white : .fontColor)
-            
-            break
-        case .sBest, .ssBest, .sssBest:
-            messageView.backgroundColor = (isOwnMessage ? .white : basePinkColor)
-            messageView.layer.borderColor = UIColor.MessageColor.heavyPink.cgColor
-            messageView.layer.borderWidth = 1.5
-            nickNameLabel.textColor = UIColor.MessageColor.heavyPink
-            messageTextLabel.textColor = UIColor.MessageColor.heavyPink
-            
-            break
-        case .none:
-            break
-        }
+        messageView.backgroundColor = (isOwnMessage ? .accentColor : .systemGray6)
+        nickNameLabel.textColor = (isOwnMessage ? .white : .fontColor)
+        messageTextLabel.textColor = (isOwnMessage ? .white : .fontColor)
     }
 }
