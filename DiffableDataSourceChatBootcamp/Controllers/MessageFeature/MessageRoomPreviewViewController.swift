@@ -1,6 +1,6 @@
 //
 //  MessageRoomPreviewViewController.swift
-//  Tauch
+
 //
 //  Created by Adam Yoneda on 2023/08/03.
 //
@@ -9,7 +9,7 @@
 import UIKit
 import FirebaseFirestore
 
-final class MessageRoomPreviewViewController: UIBaseViewController {
+final class MessageRoomPreviewViewController: UIViewController {
     
     private let room: Room
     private var roomMessages = [Message]()
@@ -65,40 +65,9 @@ final class MessageRoomPreviewViewController: UIBaseViewController {
         backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         backgroundImageView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
-        if GlobalVar.shared.loginUser?.is_friend_emoji == false {
-            self.room.roomStatus = .normal
-        }
-        
-        switch room.roomStatus {
-        case .normal:
-            // 背景
-            backgroundImageView.image = nil
-            backgroundImageView.backgroundColor = UIColor.white
-            
-            break
-        case .sBest:
-            // 背景
-            backgroundImageView.image = nil
-            backgroundImageView.backgroundColor = UIColor.white
-            
-            break
-        case .ssBest:
-            // 背景
-            backgroundImageView.image = nil
-            backgroundImageView.backgroundColor = UIColor.MessageColor.lightPink
-            
-            break
-        case .sssBest:
-            // 背景
-            backgroundImageView.image = UIImage(named: "message_background_image")
-            
-            break
-        }
-    }
-    
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        GlobalVar.shared.thisClassName = "MessageListViewController"  // 現在はMessageListViewControllerからの導線しかないのでここで上書き
-        super.dismiss(animated: flag, completion: completion)
+        // 背景
+        backgroundImageView.image = nil
+        backgroundImageView.backgroundColor = UIColor.white
     }
 }
 
@@ -119,8 +88,6 @@ extension MessageRoomPreviewViewController: UICollectionViewDataSource, UICollec
         registerCustomCell(nibName: UnreadMessageCollectionViewCell.nibName, cellIdentifier: UnreadMessageCollectionViewCell.cellIdentifier)
         registerCustomCell(nibName: OwnMessageCollectionViewReplyStickerCell.identifier, cellIdentifier: OwnMessageCollectionViewReplyStickerCell.identifier)
         registerCustomCell(nibName: OtherMessageCollectionViewReplyStickerCell.identifier, cellIdentifier: OtherMessageCollectionViewReplyStickerCell.identifier)
-        // Header Cell
-        registCustomHeaderCell(nibName: MessageHeaderCollectionReusableView.nibName, cellIdentifier: MessageHeaderCollectionReusableView.cellIdentifier)
     }
     
     private func registerCustomCell(nibName: String, cellIdentifier: String) {
@@ -217,7 +184,7 @@ extension MessageRoomPreviewViewController: UICollectionViewDataSource, UICollec
                 if message.photos.isEmpty {
                     let id = OwnMessageCollectionViewReplyCell.identifier
                     let messageReplyCell = collectionView.dequeueReusableCell(withReuseIdentifier: id, for: indexPath) as! OwnMessageCollectionViewReplyCell
-                    messageReplyCell.configure(message, roomStatus: room.roomStatus, delegate: self, indexPath: indexPath)
+                    messageReplyCell.configure(message, delegate: self, indexPath: indexPath)
                     
                     return messageReplyCell
                 } else {
@@ -243,7 +210,7 @@ extension MessageRoomPreviewViewController: UICollectionViewDataSource, UICollec
             } else {
                 let id = OwnMessageCollectionViewCell.identifier
                 let messageCell = collectionView.dequeueReusableCell(withReuseIdentifier: id, for: indexPath) as! OwnMessageCollectionViewCell
-                messageCell.configure(loginUser, message: message, roomStatus: room.roomStatus, delegate: self, indexPath: indexPath)
+                messageCell.configure(loginUser, message: message, delegate: self, indexPath: indexPath)
                 
                 return messageCell
             }
@@ -253,7 +220,7 @@ extension MessageRoomPreviewViewController: UICollectionViewDataSource, UICollec
                     let id = OtherMessageCollectionViewReplyCell.identifier
                     let messageReplyCell = collectionView.dequeueReusableCell(withReuseIdentifier: id, for: indexPath) as! OtherMessageCollectionViewReplyCell
                     messageReplyCell.messageStackViewTrailingConstraint.constant = 100
-                    messageReplyCell.configure(message, partnerUser: partnerUser, roomStatus: room.roomStatus, delegate: self, indexPath: indexPath)
+                    messageReplyCell.configure(message, partnerUser: partnerUser, delegate: self, indexPath: indexPath)
                     
                     return messageReplyCell
                 } else {
@@ -279,7 +246,7 @@ extension MessageRoomPreviewViewController: UICollectionViewDataSource, UICollec
             } else {
                 let id = OtherMessageCollectionViewCell.cellIdentifier
                 let messageCell = collectionView.dequeueReusableCell(withReuseIdentifier: id, for: indexPath) as! OtherMessageCollectionViewCell
-                messageCell.configure(partnerUser, message: message, roomStatus: room.roomStatus, delegate: self, indexPath: indexPath)
+                messageCell.configure(partnerUser, message: message, delegate: self, indexPath: indexPath)
                 
                 return messageCell
             }
@@ -306,7 +273,7 @@ extension MessageRoomPreviewViewController: UICollectionViewDataSource, UICollec
 extension MessageRoomPreviewViewController {
     // メッセージ情報を取得
     private func fetchMessageRoomInfoFromFirestore() {
-        
+        let db = Firestore.firestore()
         guard let roomID = room.document_id else { return }
         var messages: [Message] = []
         

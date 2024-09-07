@@ -251,6 +251,7 @@
 		9BDECE5F2C8C5FAD002CDE8D /* ElapsedTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE5E2C8C5FAD002CDE8D /* ElapsedTime.swift */; };
 		9BDECE612C8C6068002CDE8D /* DateConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE602C8C6068002CDE8D /* DateConst.swift */; };
 		9BDECE632C8C6393002CDE8D /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE622C8C6393002CDE8D /* ArrayExtension.swift */; };
+		9BDECE652C8CA499002CDE8D /* UIViewContrllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE642C8CA499002CDE8D /* UIViewContrllerExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -358,6 +359,7 @@
 		9BDECE5E2C8C5FAD002CDE8D /* ElapsedTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElapsedTime.swift; sourceTree = "<group>"; };
 		9BDECE602C8C6068002CDE8D /* DateConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateConst.swift; sourceTree = "<group>"; };
 		9BDECE622C8C6393002CDE8D /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
+		9BDECE642C8CA499002CDE8D /* UIViewContrllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewContrllerExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -534,6 +536,7 @@
 				9BDECE292C8A32EF002CDE8D /* UITextFieldExtension.swift */,
 				9BDECE2A2C8A32EF002CDE8D /* UITextViewExtension.swift */,
 				9BDECE622C8C6393002CDE8D /* ArrayExtension.swift */,
+				9BDECE642C8CA499002CDE8D /* UIViewContrllerExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -892,6 +895,7 @@
 			files = (
 				9BDECCF02C8A2B2E002CDE8D /* MessageInputType.swift in Sources */,
 				9BDECE342C8B3BCB002CDE8D /* MainViewController.swift in Sources */,
+				9BDECE652C8CA499002CDE8D /* UIViewContrllerExtension.swift in Sources */,
 				9BDECDB82C8A2F61002CDE8D /* StickerKeyboardViewCell.swift in Sources */,
 				9BDECE232C8A32CB002CDE8D /* UIViewExtension.swift in Sources */,
 				9BDECDFE2C8A31E1002CDE8D /* MessageRoomTitleView.swift in Sources */,

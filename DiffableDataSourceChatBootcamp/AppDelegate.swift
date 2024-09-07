@@ -35,7 +35,7 @@ class GlobalVar {
     static var shared = GlobalVar()
     
     var loginUser: User?
-    
+    var specificRoomMessages: [String: [Message]] = ["":[]]
     // スタンプのUIImage
     let defaultStickers = [
         UIImage(named: "default1"), UIImage(named: "default2"), UIImage(named: "default3"),
