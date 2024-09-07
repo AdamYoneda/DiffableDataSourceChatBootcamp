@@ -163,22 +163,3 @@ final class OwnMessageCollectionViewCell: UICollectionViewCell, UIGestureRecogni
     }
 }
 
-//extension OwnMessageCollectionViewCell: UIContextMenuInteractionDelegate {
-//
-//    private func setUpContextMenu() {
-//        let interaction = UIContextMenuInteraction(delegate: self)
-//        textView.addInteraction(interaction)
-//    }
-//
-//    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-//        let action = UIAction(title: "コピー") { _ in
-//            let pasteboard = UIPasteboard.general
-//            pasteboard.string = self.textView.text
-//        }
-//        let menu = UIMenu(title: "", children: [action])
-//
-//        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
-//            return menu
-//        }
-//    }
-//}

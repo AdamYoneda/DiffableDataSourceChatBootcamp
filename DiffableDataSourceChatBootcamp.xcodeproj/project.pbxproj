@@ -250,6 +250,7 @@
 		9BDECE5D2C8B693F002CDE8D /* NVActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 9BDECE5C2C8B693F002CDE8D /* NVActivityIndicatorView */; };
 		9BDECE5F2C8C5FAD002CDE8D /* ElapsedTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE5E2C8C5FAD002CDE8D /* ElapsedTime.swift */; };
 		9BDECE612C8C6068002CDE8D /* DateConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE602C8C6068002CDE8D /* DateConst.swift */; };
+		9BDECE632C8C6393002CDE8D /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE622C8C6393002CDE8D /* ArrayExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -356,6 +357,7 @@
 		9BDECE3A2C8B6669002CDE8D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		9BDECE5E2C8C5FAD002CDE8D /* ElapsedTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElapsedTime.swift; sourceTree = "<group>"; };
 		9BDECE602C8C6068002CDE8D /* DateConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateConst.swift; sourceTree = "<group>"; };
+		9BDECE622C8C6393002CDE8D /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -531,6 +533,7 @@
 				9BDECE182C8A32CB002CDE8D /* UIViewExtension.swift */,
 				9BDECE292C8A32EF002CDE8D /* UITextFieldExtension.swift */,
 				9BDECE2A2C8A32EF002CDE8D /* UITextViewExtension.swift */,
+				9BDECE622C8C6393002CDE8D /* ArrayExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -905,6 +908,7 @@
 				9BDECD522C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift in Sources */,
 				9BDECDD82C8A2F73002CDE8D /* NoteIconView.swift in Sources */,
 				9BDECDB22C8A2F61002CDE8D /* StickerKeyboardView.swift in Sources */,
+				9BDECE632C8C6393002CDE8D /* ArrayExtension.swift in Sources */,
 				9BDECDC52C8A2F6B002CDE8D /* MessagePopMenuViewController.swift in Sources */,
 				9BDECD642C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.swift in Sources */,
 				9BDECD222C8A2D4B002CDE8D /* NoteBubbleView.swift in Sources */,
