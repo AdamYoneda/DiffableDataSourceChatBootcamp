@@ -3,7 +3,7 @@ import UIKit
 import Foundation
 import FirebaseFirestore
 
-final class Room {
+struct Room {
     var members: [String]
     var latest_message_id: String
     var latest_message: String?
