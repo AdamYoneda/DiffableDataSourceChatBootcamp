@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Image references" minToolsVersion="12.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MessageRoomTitleView" customModule="Touch" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MessageRoomTitleView" customModule="DiffableDataSourceChatBootcamp" customModuleProvider="target">
             <connections>
-                <outlet property="consectiveCountLabel" destination="QgH-3x-z1G" id="IFe-xt-byE"/>
                 <outlet property="editNameButton" destination="wi3-HG-sqq" id="d2x-uP-lWP"/>
                 <outlet property="iconImageView" destination="70X-Al-rwy" id="11A-ag-Pdk"/>
                 <outlet property="nameLabel" destination="elb-lR-LOR" id="fOo-xO-Zrs"/>
@@ -31,16 +30,16 @@
                     <rect key="frame" x="35" y="5" width="160" height="30"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tW7-Lf-4sY">
-                            <rect key="frame" x="0.0" y="0.0" width="160" height="15"/>
+                            <rect key="frame" x="0.0" y="0.0" width="160" height="30"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="elb-lR-LOR">
-                                    <rect key="frame" x="0.0" y="0.0" width="37.666666666666664" height="15"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="37.666666666666664" height="30"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wi3-HG-sqq">
-                                    <rect key="frame" x="37.666666666666671" y="0.0" width="20" height="15"/>
+                                    <rect key="frame" x="37.666666666666671" y="0.0" width="20" height="30"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="20" id="n6Q-bK-hcN"/>
@@ -53,17 +52,11 @@
                                     </buttonConfiguration>
                                 </button>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WxW-7W-H6P">
-                                    <rect key="frame" x="57.666666666666679" y="0.0" width="102.33333333333331" height="15"/>
+                                    <rect key="frame" x="57.666666666666679" y="0.0" width="102.33333333333331" height="30"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </view>
                             </subviews>
                         </stackView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QgH-3x-z1G">
-                            <rect key="frame" x="0.0" y="15" width="160" height="15"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                     </subviews>
                 </stackView>
             </subviews>
