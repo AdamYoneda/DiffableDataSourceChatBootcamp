@@ -252,6 +252,9 @@
 		9BDECE612C8C6068002CDE8D /* DateConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE602C8C6068002CDE8D /* DateConst.swift */; };
 		9BDECE632C8C6393002CDE8D /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE622C8C6393002CDE8D /* ArrayExtension.swift */; };
 		9BDECE652C8CA499002CDE8D /* UIViewContrllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE642C8CA499002CDE8D /* UIViewContrllerExtension.swift */; };
+		9BDECE6E2C96182F002CDE8D /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE6D2C96182F002CDE8D /* UIButtonExtension.swift */; };
+		9BDECE6F2C96182F002CDE8D /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE6D2C96182F002CDE8D /* UIButtonExtension.swift */; };
+		9BDECE702C96182F002CDE8D /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE6D2C96182F002CDE8D /* UIButtonExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -360,6 +363,7 @@
 		9BDECE602C8C6068002CDE8D /* DateConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateConst.swift; sourceTree = "<group>"; };
 		9BDECE622C8C6393002CDE8D /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		9BDECE642C8CA499002CDE8D /* UIViewContrllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewContrllerExtension.swift; sourceTree = "<group>"; };
+		9BDECE6D2C96182F002CDE8D /* UIButtonExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -527,6 +531,7 @@
 		9BDECCDE2C8A28E8002CDE8D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				9BDECE6D2C96182F002CDE8D /* UIButtonExtension.swift */,
 				9BDECE172C8A32CB002CDE8D /* UIColorExtension.swift */,
 				9BDECE152C8A32CB002CDE8D /* UIImageExtension.swift */,
 				9BDECE162C8A32CB002CDE8D /* UIImageViewExtension.swift */,
@@ -950,6 +955,7 @@
 				9BDECD5E2C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyCell.swift in Sources */,
 				9BDECD972C8A2DB2002CDE8D /* UnsendMessageCollectionViewCell.swift in Sources */,
 				9BDECD7F2C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.swift in Sources */,
+				9BDECE6E2C96182F002CDE8D /* UIButtonExtension.swift in Sources */,
 				9BDECDAC2C8A2F61002CDE8D /* StickerKeyboardPagerTabCell.swift in Sources */,
 				9BDECD732C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.swift in Sources */,
 				9BDECE2E2C8A32EF002CDE8D /* UITextViewExtension.swift in Sources */,
@@ -992,6 +998,7 @@
 				9BDECDDF2C8A2F73002CDE8D /* NotePreviewViewController.swift in Sources */,
 				9BDECCF12C8A2B2E002CDE8D /* MessageInputType.swift in Sources */,
 				9BDECE2F2C8A32EF002CDE8D /* UITextViewExtension.swift in Sources */,
+				9BDECE6F2C96182F002CDE8D /* UIButtonExtension.swift in Sources */,
 				9BDECD802C8A2DB2002CDE8D /* OwnMessageCollectionViewReplyCell.swift in Sources */,
 				9BDECD742C8A2DB2002CDE8D /* OwnMessageCollectionViewCell.swift in Sources */,
 				9BDECDF62C8A31C3002CDE8D /* MessageListViewController.swift in Sources */,
@@ -1060,6 +1067,7 @@
 				9BDECDB42C8A2F61002CDE8D /* StickerKeyboardView.swift in Sources */,
 				9BDECDF42C8A31C3002CDE8D /* MessageRoomPreviewViewController.swift in Sources */,
 				9BDECD6C2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.swift in Sources */,
+				9BDECE702C96182F002CDE8D /* UIButtonExtension.swift in Sources */,
 				9BDECDEB2C8A31C3002CDE8D /* MessageRoomView.swift in Sources */,
 				9BDECDDA2C8A2F73002CDE8D /* NoteIconView.swift in Sources */,
 				9BDECD542C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift in Sources */,
