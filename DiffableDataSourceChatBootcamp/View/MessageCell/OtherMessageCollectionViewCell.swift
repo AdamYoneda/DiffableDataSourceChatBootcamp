@@ -1,9 +1,5 @@
 //
-//  OtherMessageCollectionViewCell.swift
-//  Tauch
-//
-//  Created by Apple on 2023/07/26.
-//
+
 
 import UIKit
 
@@ -93,7 +89,7 @@ final class OtherMessageCollectionViewCell: UICollectionViewCell, UIGestureRecog
         iconImageView.addGestureRecognizer(iconImageViewTapGesture)
     }
     
-    func configure(_ user: User, message: Message, roomStatus: RoomStatus?, delegate: OtherMessageCollectionViewCellDelegate, indexPath: IndexPath) {
+    func configure(_ user: User, message: Message, delegate: OtherMessageCollectionViewCellDelegate, indexPath: IndexPath) {
         
         self.delegate = delegate
         self.indexPath = indexPath
@@ -138,20 +134,8 @@ final class OtherMessageCollectionViewCell: UICollectionViewCell, UIGestureRecog
             textViewBottomConstraintWithReaction.isActive = true
         }
         
-        switch roomStatus {
-        case .normal:
-            textView.backgroundColor = .systemGray6
-            textView.textColor = .fontColor
-            break
-        case .sBest, .ssBest, .sssBest:
-            textView.backgroundColor = UIColor.MessageColor.cellPink
-            textView.textColor = UIColor.MessageColor.heavyPink
-            textView.layer.borderColor = UIColor.MessageColor.standardPink.cgColor
-            textView.layer.borderWidth = 1.5
-            break
-        case .none:
-            break
-        }
+        textView.backgroundColor = .systemGray6
+        textView.textColor = .fontColor
     }
     
     func animateReactionLabel(completion: @escaping (Bool) -> Void) {

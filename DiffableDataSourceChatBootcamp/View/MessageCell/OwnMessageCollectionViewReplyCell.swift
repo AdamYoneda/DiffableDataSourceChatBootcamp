@@ -1,6 +1,6 @@
 //
 //  OwnMessageCollectionViewReplyCell.swift
-//  Tauch
+//  
 //
 //  Created by Apple on 2023/08/23.
 //
@@ -108,7 +108,7 @@ final class OwnMessageCollectionViewReplyCell: UICollectionViewCell, UIGestureRe
         return attributedText
     }
     
-    func configure(_ message: Message, roomStatus: RoomStatus?, delegate: OwnMessageCollectionViewReplyCellDelegate, indexPath: IndexPath) {
+    func configure(_ message: Message, delegate: OwnMessageCollectionViewReplyCellDelegate, indexPath: IndexPath) {
         
         self.delegate = delegate
         self.indexPath = indexPath
@@ -123,30 +123,12 @@ final class OwnMessageCollectionViewReplyCell: UICollectionViewCell, UIGestureRe
         let loginUID = loginUser?.uid ?? ""
         let isOwnMessage = (messageSender == loginUID)
         
-        switch roomStatus {
-        case .normal:
-            messageStackView.backgroundColor = (isOwnMessage ? .accentColor : .systemGray6)
-            messageView.backgroundColor = (isOwnMessage ? .accentColor : .systemGray6)
-            replyView.backgroundColor = (isOwnMessage ? .accentColor : .systemGray6)
-            nickNameLabel.textColor = (isOwnMessage ? .white : .fontColor)
-            messageTextLabel.textColor = (isOwnMessage ? .white : .fontColor)
-            replyMessageTextView.textColor = (isOwnMessage ? .white : .fontColor)
-            
-            break
-        case .sBest, .ssBest, .sssBest:
-            messageStackView.backgroundColor = (isOwnMessage ? .white : basePinkColor)
-            messageView.backgroundColor = (isOwnMessage ? .white : basePinkColor)
-            replyView.backgroundColor = (isOwnMessage ? .white : basePinkColor)
-            messageStackView.layer.borderColor = UIColor.MessageColor.heavyPink.cgColor
-            messageStackView.layer.borderWidth = 1.5
-            nickNameLabel.textColor = UIColor.MessageColor.heavyPink
-            messageTextLabel.textColor = UIColor.MessageColor.heavyPink
-            replyMessageTextView.textColor = UIColor.MessageColor.heavyPink
-            
-            break
-        case .none:
-            break
-        }
+        messageStackView.backgroundColor = (isOwnMessage ? .accentColor : .systemGray6)
+        messageView.backgroundColor = (isOwnMessage ? .accentColor : .systemGray6)
+        replyView.backgroundColor = (isOwnMessage ? .accentColor : .systemGray6)
+        nickNameLabel.textColor = (isOwnMessage ? .white : .fontColor)
+        messageTextLabel.textColor = (isOwnMessage ? .white : .fontColor)
+        replyMessageTextView.textColor = (isOwnMessage ? .white : .fontColor)
         
         replyMessageTextView.attributedText = setAttributedText(messageText)
         replyMessageTextView.font = .systemFont(ofSize: 15)

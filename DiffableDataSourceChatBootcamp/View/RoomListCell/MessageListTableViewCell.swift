@@ -61,14 +61,6 @@ final class MessageListTableViewCell: UITableViewCell {
             }
         }
     }
-    
-    var friendEmoji: String? {
-        didSet {
-            if let emoji = friendEmoji {
-                setFriendEmoji(emoji)
-            }
-        }
-    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -98,51 +90,13 @@ final class MessageListTableViewCell: UITableViewCell {
     
     private func setMessageLabel(_ room: Room) {
         let latestMessage = room.latest_message
-        let isRoomOpend = room.is_room_opened
         guard let uid = GlobalVar.shared.loginUser?.uid else {
             return
         }
-        let isTalkGuide = room.talk_guide_users.contains(uid) == true
-        let isTalkGuideUnread = isTalkGuide && talkGuideStatus(room: room)
-        let isAutoMatching = room.is_auto_matchig
-        let isForceCreateRoom = room.room_match_status == RoomMatchStatusType.force.rawValue
         let isCreater = room.creator == GlobalVar.shared.loginUser?.uid
         
         messageLabel.text = room.latest_message
         messageLabel.textColor = .darkGray
-        
-        // 特定の条件でテキストを上書き
-        if latestMessage == "" && isAutoMatching {
-            messageLabel.text = "Touchからおすすめのマッチングがありました！"
-        } else if latestMessage == "" && isRoomOpend == false {
-            messageLabel.text = "マッチングが成立しました！"
-        } else if latestMessage == "" && isRoomOpend == true {
-            messageLabel.text = "トークしてみよう！"
-        } else if isTalkGuide {
-            messageLabel.text = "Touchからあなたへのガイドが届きました。"
-        }
-        
-        // マッチ前強制生成ルームはテキストを上書き
-        if isForceCreateRoom && isCreater {
-            messageLabel.text = "いいね！の承認を待っています。"
-        } else if isForceCreateRoom && !isCreater {
-            messageLabel.text = "友達じゃないユーザーのリクエストです。"
-        }
-        
-        // 上書きしたテキストに対して配色を設定
-        if messageLabel.text == "Touchからおすすめのマッチングがありました！"  {
-            messageLabel.textColor = .messageHightLightColor
-        } else if messageLabel.text == "マッチングが成立しました！" {
-            messageLabel.textColor = .messageHightLightColor
-        } else if messageLabel.text == "トークしてみよう！" {
-            messageLabel.textColor = .darkGray
-        } else if messageLabel.text == "Touchからあなたへのガイドが届きました。" {
-            if isTalkGuideUnread {
-                messageLabel.textColor = .messageHightLightColor
-            } else {
-                messageLabel.textColor = .darkGray
-            }
-        }
     }
     
     private func setUnreadView(_ room: Room) {
@@ -250,19 +204,6 @@ extension MessageListTableViewCell {
             if diffEposhTime >= minPeriodEpochTime && diffEposhTime <= maxPeriodEpochTime {
                 limitIcon.isHidden = false
             }
-        }
-    }
-    
-    private func setFriendEmoji(_ emoji: String) {
-        guard let loginUser = GlobalVar.shared.loginUser else {
-            return
-        }
-        
-        if loginUser.is_friend_emoji {
-            friendEmojiIcon.isHidden = false
-            friendEmojiIcon.text = emoji
-        } else {
-            friendEmojiIcon.text = ""
         }
     }
 }

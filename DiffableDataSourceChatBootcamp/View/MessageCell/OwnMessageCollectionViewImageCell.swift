@@ -1,9 +1,5 @@
 //
-//  OwnMessageCollectionViewImageCell.swift
-//  Tauch
-//
-//  Created by sasaki.ken on 2023/08/10.
-//
+
 
 import UIKit
 

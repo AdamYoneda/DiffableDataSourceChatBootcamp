@@ -1,9 +1,4 @@
-//
-//  OtherMessageCollectionViewStickerCell.swift
-//  Tauch
-//
-//  Created by Adam Yoneda on 2023/08/31.
-//
+
 
 import UIKit
 
