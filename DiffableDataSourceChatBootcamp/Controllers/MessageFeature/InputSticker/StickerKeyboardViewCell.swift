@@ -1,6 +1,5 @@
 //
 //  StickerKeyboardViewCell.swift
-//  Tauch
 //
 //  Created by Adam Yoneda on 2023/07/24.
 //
