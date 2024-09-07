@@ -28,3 +28,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+// グローバル変数 (シングルトン)
+class GlobalVar {
+    
+    private init() {}
+    static var shared = GlobalVar()
+    
+    var loginUser: User?
+}
