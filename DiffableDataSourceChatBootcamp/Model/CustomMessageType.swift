@@ -1,9 +1,3 @@
-//
-//  CustomMessageType.swift
-//  Tauch
-//
-//  Created by Musa Yazuju on 2022/09/11.
-//
 
 import Foundation
 

@@ -1,9 +1,3 @@
-//
-//  MessageSendModel.swift
-//  Tauch
-//
-//  Created by sasaki.ken on 2023/08/22.
-//
 
 import UIKit
 
