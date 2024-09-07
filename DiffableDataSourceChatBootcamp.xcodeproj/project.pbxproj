@@ -486,8 +486,7 @@
 			isa = PBXGroup;
 			children = (
 				9BDECE312C8B3B97002CDE8D /* MainViewController */,
-				9BDECDE52C8A31C3002CDE8D /* MessageListViewController.storyboard */,
-				9BDECDE82C8A31C3002CDE8D /* MessageListViewController.swift */,
+				9BDECE682C96182F002CDE8D /* RoomList */,
 				9BDECE042C8A31EC002CDE8D /* MessageFeature */,
 				9BDECDD12C8A2F73002CDE8D /* Note */,
 			);
@@ -662,6 +661,15 @@
 				9BDECE0E2C8A322C002CDE8D /* ImageDetailView.storyboard */,
 			);
 			path = MessageRoomFeature;
+			sourceTree = "<group>";
+		};
+		9BDECE682C96182F002CDE8D /* RoomList */ = {
+			isa = PBXGroup;
+			children = (
+				9BDECDE52C8A31C3002CDE8D /* MessageListViewController.storyboard */,
+				9BDECDE82C8A31C3002CDE8D /* MessageListViewController.swift */,
+			);
+			path = RoomList;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
