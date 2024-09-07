@@ -2,7 +2,7 @@
 import Foundation
 import FirebaseFirestore
 
-final class User {
+struct User {
     
     var uid: String
     var nick_name: String

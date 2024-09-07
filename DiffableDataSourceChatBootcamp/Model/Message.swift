@@ -3,7 +3,7 @@
 import Foundation
 import FirebaseFirestore
 
-final class Message: Identifiable {
+struct Message: Identifiable {
     var id: UUID
     var room_id: String
     var text: String
@@ -27,7 +27,7 @@ final class Message: Identifiable {
     var document_id: String?
     
     init(room_id: String, text: String, photos: [String], sticker: UIImage?, stickerIdentifier: String, read: Bool, creator: String, members: [String],
-         type: CustomMessageType, created_at: Timestamp, updated_at: Timestamp, is_deleted: Bool,
+         type: CustomMessageType, created_at: Timestamp, updated_at: Timestamp, is_deleted: Bool, is_unread: Bool = false,
          reactionEmoji: String, reply_message_id: String?, reply_message_text: String?, reply_message_creator: String?, reply_message_image_urls: [String]?, reply_message_type: CustomMessageType?, document_id: String?) {
         guard let document_id else { fatalError("Message.document_idが存在しない") }
         self.document_id              = document_id
@@ -44,6 +44,7 @@ final class Message: Identifiable {
         self.created_at               = created_at
         self.updated_at               = updated_at
         self.is_deleted               = is_deleted
+        self.is_unread                = is_unread
         self.reactionEmoji            = reactionEmoji
         self.reply_message_id         = reply_message_id
         self.reply_message_text       = reply_message_text
@@ -116,6 +117,7 @@ final class Message: Identifiable {
             created_at: timestamp,
             updated_at: timestamp,
             is_deleted: false,
+            is_unread: true,
             reactionEmoji: "",
             reply_message_id: nil,
             reply_message_text: nil,
@@ -124,7 +126,6 @@ final class Message: Identifiable {
             reply_message_type: nil,
             document_id: UUID().uuidString
         )
-        message.is_unread = true
         
         return message
     }
