@@ -1,6 +1,5 @@
 //
 //  TypingIndicatorView.swift
-//  Tauch
 //
 //  Created by Adam Yoneda on 2023/08/21.
 //
@@ -45,13 +44,6 @@ final class TypingIndicatorView: UIView {
             indicatorLabel.text = "入力中..."
         }
         
-        switch room.roomStatus {
-        case .normal, .sBest:
-            backgroundColor = .white
-        case .ssBest:
-            backgroundColor = UIColor.MessageColor.lightPink
-        case .sssBest:
-            backgroundColor = UIColor.MessageColor.lightPink
-        }
+        backgroundColor = .white
     }
 }
