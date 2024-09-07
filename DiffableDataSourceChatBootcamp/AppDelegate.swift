@@ -49,4 +49,6 @@ class GlobalVar {
         "default1", "default2", "default3", "default4", "default5",
         "default6", "default7", "default8", "default9", "default10"
     ]
+    
+    var messageListTableView: UITableView = UITableView()
 }

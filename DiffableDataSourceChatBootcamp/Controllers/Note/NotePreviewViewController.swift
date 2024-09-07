@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
-final class NotePreviewViewController: UIBaseViewController {
+final class NotePreviewViewController: UIViewController {
 
     @IBOutlet weak var iconImageView: UIImageView!
     @IBOutlet weak var shadowView: UIView!
@@ -53,6 +54,7 @@ final class NotePreviewViewController: UIBaseViewController {
     
     @IBAction func deleteNote(_ sender: UIButton) {
         if let uid = GlobalVar.shared.loginUser?.uid {
+            let db = Firestore.firestore()
             db.collection("users").document(uid).updateData(["note": ""]) { [weak self] error in
                 guard let self, error == nil else {
                     self?.alertWithDismiss(title: "失敗", message: "ひとことの削除に失敗しました。時間をおいて再度お試しください。", actiontitle: "OK")
@@ -62,12 +64,6 @@ final class NotePreviewViewController: UIBaseViewController {
                 MessageListViewController.noteIconView?.configure()
                 dismiss(animated: true)
             }
-        }
-    }
-    
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        super.dismiss(animated: flag) {
-            GlobalVar.shared.thisClassName = "MessageListViewController" // 「やりとり」画面に戻る導線しかないので、ここで更新
         }
     }
 }
