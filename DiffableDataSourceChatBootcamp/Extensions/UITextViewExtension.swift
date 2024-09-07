@@ -1,9 +1,3 @@
-//
-//  UIView+Extension.swift
-//  Tauch
-//
-//  Created by Musa Yazuju on 2022/06/05.
-//
 
 import UIKit
 
@@ -20,7 +14,7 @@ extension UITextView {
             attributedOriginalText.addAttribute(NSAttributedString.Key.paragraphStyle, value: style, range: fullRange)
         }
         self.linkTextAttributes = [
-            NSAttributedString.Key.foregroundColor: UIColor().setColor(colorType: "accentColor", alpha: 1.0),
+            NSAttributedString.Key.foregroundColor: UIColor.accentColor, alpha: 1.0),
             NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue,
         ]
         self.attributedText = attributedOriginalText

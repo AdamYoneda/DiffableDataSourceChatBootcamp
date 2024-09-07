@@ -1,9 +1,3 @@
-//
-//  UILabelExtension.swift
-//  Tauch
-//
-//  Created by Apple on 2023/09/08.
-//
 
 import UIKit
 

@@ -1,13 +1,5 @@
-//
-//  CustomUIView.swift
-//  Tatibanashi
-//
-//  Created by Apple on 2022/03/15.
-//
 
 import UIKit
-import FirebaseFirestore
-import FirebaseAnalytics
 
 extension UIView {
 
@@ -72,10 +64,6 @@ extension UIView {
         customView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
     
-    func autoLayout(top: Int, Left: Int, Right: Int, bottom: Int) {
-        
-    }
-    
     func customUp() {
         layer.cornerRadius = 8
         layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -123,93 +111,6 @@ extension UIView {
     // サブビューを全て削除
     func removeAllSubviews(){
         subviews.forEach({ $0.removeFromSuperview() })
-    }
-    
-    func talkGuideStatus(room: Room) -> Bool {
-        
-        guard let loginUID = GlobalVar.shared.loginUser?.uid else { return false }
-        
-        let topicReplyReceived = room.topic_reply_received
-        let isTopicReplyReceived = (topicReplyReceived.contains(loginUID) == true)
-        
-        let topicReplyReceivedRead = room.topic_reply_received_read
-        let isTopicReplyReceivedUnread = (topicReplyReceivedRead.contains(loginUID) == false)
-        
-        let unreadTopicReplyReceived = (isTopicReplyReceived && isTopicReplyReceivedUnread)
-        
-        let leaveMessageReceived = room.leave_message_received
-        let isLeaveMessageReceived = (leaveMessageReceived.contains(loginUID) == true)
-        
-        let leaveMessageReceivedRead = room.leave_message_received_read
-        let isLeaveMessageReceivedUnread = (leaveMessageReceivedRead.contains(loginUID) == false)
-        
-        let unreadLeaveReplyReceived = (isLeaveMessageReceived && isLeaveMessageReceivedUnread)
-
-        if unreadTopicReplyReceived || unreadLeaveReplyReceived {
-            return true
-        }
-        return false
-    }
-    
-    func checkNotActive(user: User) -> Bool {
-        
-        let isNotActivated = (user.is_activated == false)
-        let isDeleted = (user.is_deleted == true)
-        let isRested = (user.is_rested == true)
-        
-        let isNotActive = (isNotActivated || isDeleted || isRested)
-        if isNotActive { return true }
-        
-        return false
-    }
-    
-    func checkApproaches(user: User) -> Bool {
-        
-        guard let loginUser = GlobalVar.shared.loginUser else { return false }
-        let uid = user.uid
-        
-        let approachs = loginUser.approaches
-        
-        let approachContains = (approachs.contains(uid) == true)
-        if approachContains { return true }
-        
-        return false
-    }
-    
-    func checkApproacheds(user: User) -> Bool {
-        
-        guard let loginUser = GlobalVar.shared.loginUser else { return false }
-        let uid = user.uid
-        
-        let approaches = loginUser.approaches
-        let approacheds = loginUser.approacheds
-        let replyApproacheds = loginUser.reply_approacheds
-        
-        let approachOrMatch = approaches + replyApproacheds
-        let filterApproacheds = approacheds.filter({ approachOrMatch.contains($0) == false })
-        
-        let approachedContains = (filterApproacheds.contains(uid) == true)
-        if approachedContains { return true }
-        
-        return false
-    }
-    
-    /// Determine if specific user is a partner user
-    /// - Parameter user :A specific user, not a loging in user.
-    /// - Returns: Determine if the user is a partner user and return it with Bool type.
-    func determineUserIsPartner(user: User) -> Bool {
-        
-        guard let loginUser = GlobalVar.shared.loginUser else { return false }
-        let uid = user.uid
-        var specificMembers: Set<String> = []
-        let rooms = loginUser.rooms
-        
-        rooms.forEach { room in
-            let members = Set(room.members)
-            specificMembers = specificMembers.union(members)
-        }
-        
-        return specificMembers.contains(uid)
     }
 }
 

@@ -1,9 +1,3 @@
-//
-//  UIImageViewExtension.swift
-//  Tauch
-//
-//  Created by Musa Yazuju on 2022/06/07.
-//
 
 import UIKit
 

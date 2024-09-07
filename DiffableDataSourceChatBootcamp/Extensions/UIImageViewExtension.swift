@@ -1,9 +1,4 @@
-//
-//  UIImageViewExtension.swift
-//  Tauch
-//
-//  Created by Apple on 2022/06/14.
-//
+
 
 import UIKit
 import Nuke
