@@ -248,6 +248,8 @@
 		9BDECE582C8B6860002CDE8D /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 9BDECE572C8B6860002CDE8D /* Nuke */; };
 		9BDECE5A2C8B6860002CDE8D /* NukeExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 9BDECE592C8B6860002CDE8D /* NukeExtensions */; };
 		9BDECE5D2C8B693F002CDE8D /* NVActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = 9BDECE5C2C8B693F002CDE8D /* NVActivityIndicatorView */; };
+		9BDECE5F2C8C5FAD002CDE8D /* ElapsedTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE5E2C8C5FAD002CDE8D /* ElapsedTime.swift */; };
+		9BDECE612C8C6068002CDE8D /* DateConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE602C8C6068002CDE8D /* DateConst.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -352,6 +354,8 @@
 		9BDECE322C8B3BCB002CDE8D /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		9BDECE332C8B3BCB002CDE8D /* MainViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		9BDECE3A2C8B6669002CDE8D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		9BDECE5E2C8C5FAD002CDE8D /* ElapsedTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElapsedTime.swift; sourceTree = "<group>"; };
+		9BDECE602C8C6068002CDE8D /* DateConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateConst.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -496,6 +500,8 @@
 				9BDECCEF2C8A2B2E002CDE8D /* MessageInputType.swift */,
 				9BDECCE72C8A2B0A002CDE8D /* MessageSection.swift */,
 				9BDECCF32C8A2B3A002CDE8D /* MessageSendModel.swift */,
+				9BDECE5E2C8C5FAD002CDE8D /* ElapsedTime.swift */,
+				9BDECE602C8C6068002CDE8D /* DateConst.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -894,6 +900,7 @@
 				9BDECD102C8A2D4B002CDE8D /* MessageListTableViewCell.swift in Sources */,
 				9BDECE1D2C8A32CB002CDE8D /* UIImageViewExtension.swift in Sources */,
 				9BDECCE02C8A2AB3002CDE8D /* User.swift in Sources */,
+				9BDECE5F2C8C5FAD002CDE8D /* ElapsedTime.swift in Sources */,
 				9BDECDDE2C8A2F73002CDE8D /* NotePreviewViewController.swift in Sources */,
 				9BDECD522C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift in Sources */,
 				9BDECDD82C8A2F73002CDE8D /* NoteIconView.swift in Sources */,
@@ -927,6 +934,7 @@
 				9BDECDF52C8A31C3002CDE8D /* MessageListViewController.swift in Sources */,
 				9BDECD6A2C8A2DB2002CDE8D /* OtherMessageCollectionViewStickerCell.swift in Sources */,
 				9BDECE0F2C8A322C002CDE8D /* ImageDetailViewController.swift in Sources */,
+				9BDECE612C8C6068002CDE8D /* DateConst.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
