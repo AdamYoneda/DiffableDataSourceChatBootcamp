@@ -10,7 +10,7 @@ import PhotosUI
 import FirebaseFirestore
 import FirebaseFunctions
 
-final class MessageRoomView: UIBaseViewController {
+final class MessageRoomView: UIViewController {
     
     @IBOutlet weak var talkView: UIStackView!
     @IBOutlet weak var talkCellsStackView: UIStackView!
