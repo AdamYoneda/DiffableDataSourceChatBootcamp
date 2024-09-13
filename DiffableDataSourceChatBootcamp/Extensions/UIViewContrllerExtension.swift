@@ -42,4 +42,27 @@ extension UIViewController {
         
         windowFirst.addSubview(loadingView)
     }
+    
+    // 確認ダイアログ
+    func dialog(title: String, subTitle: String, confirmTitle: String, completion: @escaping (Bool) -> Void) {
+        //UIAlertControllerのスタイルがalert
+        let alert: UIAlertController = UIAlertController(title: title, message:  subTitle, preferredStyle:  UIAlertController.Style.alert)
+        // 継続処理
+        let confirmAction: UIAlertAction = UIAlertAction(title: confirmTitle, style: UIAlertAction.Style.default, handler:{
+            [weak self] (action: UIAlertAction!) -> Void in
+            guard let _ = self else { return }
+            completion(true)
+        })
+        // キャンセル処理
+        let cancelAction: UIAlertAction = UIAlertAction(title: "キャンセル", style: UIAlertAction.Style.cancel, handler:{
+            [weak self] (action: UIAlertAction!) -> Void in
+            guard let _ = self else { return }
+            completion(false)
+        })
+        // UIAlertControllerに継続とキャンセル時のActionを追加
+        alert.addAction(cancelAction)
+        alert.addAction(confirmAction)
+        
+        present(alert, animated: true, completion: nil)
+    }
 }
