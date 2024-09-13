@@ -1229,11 +1229,17 @@ extension MessageListViewController {
             specificMessageRoomMove(specificRoom: specificRoom)
             
             if indexPath.section == Section.pinRoomList.rawValue {
-                GlobalVar.shared.loginUser?.rooms.filter({ pinnedRoomFilter(room: $0, loginUid: loginUID) })[indexPath.row].unreadCount = 0
-                GlobalVar.shared.loginUser?.rooms.filter({ pinnedRoomFilter(room: $0, loginUid: loginUID) })[indexPath.row].unread = 0
+                if let room = GlobalVar.shared.loginUser?.rooms.filter({ pinnedRoomFilter(room: $0, loginUid: loginUID) })[indexPath.row],
+                   let index = GlobalVar.shared.loginUser?.rooms.firstIndex(where: { $0.document_id == room.document_id }){
+                    GlobalVar.shared.loginUser?.initRoomUnreadCount(index: index, room: room)
+                }
             } else if indexPath.section == Section.roomList.rawValue {
-                GlobalVar.shared.loginUser?.rooms.filter({ messageListFilter(room: $0, loginUid: loginUID) })[indexPath.row].unreadCount = 0
-                GlobalVar.shared.loginUser?.rooms.filter({ messageListFilter(room: $0, loginUid: loginUID) })[indexPath.row].unread = 0
+                if let room = GlobalVar.shared.loginUser?.rooms.filter({ pinnedRoomFilter(room: $0, loginUid: loginUID) })[indexPath.row],
+                   let index = GlobalVar.shared.loginUser?.rooms.firstIndex(where: { $0.document_id == room.document_id }){
+                    GlobalVar.shared.loginUser?.initRoomUnreadCount(index: index, room: room)
+                }
+                
+                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             }
             
             UIImpactFeedbackGenerator(style: .soft).impactOccurred()

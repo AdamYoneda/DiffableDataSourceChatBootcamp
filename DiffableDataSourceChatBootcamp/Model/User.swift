@@ -36,4 +36,8 @@ struct User {
         created_at                     = data?["created_at"] as? Timestamp ?? Timestamp()
         note_updated_at                = data?["note_updated_at"] as? Timestamp
     }
+    
+    mutating func initRoomUnreadCount(index: Int, room: Room) {
+        self.rooms[index] = room
+    }
 }
