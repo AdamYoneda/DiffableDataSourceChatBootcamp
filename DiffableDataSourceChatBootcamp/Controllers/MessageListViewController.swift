@@ -158,7 +158,6 @@ final class MessageListViewController: UIViewController {
         DispatchQueue.main.async { 
             GlobalVar.shared.messageListTableView.reloadData()
             GlobalVar.shared.messageListTableView.refreshControl?.endRefreshing()
-            self.fetchFriendList()
         }
     }
     
