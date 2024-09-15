@@ -131,4 +131,8 @@ struct Room {
              ]
         )
     }
+    
+    mutating func updateSendMessageText(_ text: String) {
+        self.send_message = text
+    }
 }

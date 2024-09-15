@@ -18,7 +18,7 @@
 					<key>StartingLineNumber</key>
 					<string>2386</string>
 					<key>Timestamp</key>
-					<string>747446146.657221</string>
+					<string>748091321.336146</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -34,11 +34,11 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>            rooms?[index].send_message = text
+				<string>            rooms?[index].updateSendMessageText(text)
 </string>
 				<key>leading</key>
 				<string>        
-        if let index = rooms?.firstIndex(where: { $0.document_id == room?.document_id }) {
+        if let index = rooms?.firstIndex(where: { $0.document_id == room?.document_id }), let text {
 </string>
 				<key>trailing</key>
 				<string>            textView.text = text
@@ -59,11 +59,11 @@
 					<key>EndingLineNumber</key>
 					<string>2463</string>
 					<key>StartingColumnNumber</key>
-					<string>58</string>
+					<string>0</string>
 					<key>StartingLineNumber</key>
 					<string>2462</string>
 					<key>Timestamp</key>
-					<string>747446222.394892</string>
+					<string>748091321.33647</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -79,12 +79,12 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>
+				<string>        await itemProviders.asyncForEach { itemProvider in
 </string>
 				<key>leading</key>
 				<string>        var selectPickerImages = [UIImage]()
         
-        await itemProviders.asyncForEach { itemProvider in</string>
+</string>
 				<key>trailing</key>
 				<string>            do {
                 let itemProviderImage = try await itemProvider.loadObject(ofClass: UIImage.self)
@@ -104,11 +104,11 @@
 					<key>EndingLineNumber</key>
 					<string>2815</string>
 					<key>StartingColumnNumber</key>
-					<string>73</string>
+					<string>0</string>
 					<key>StartingLineNumber</key>
 					<string>2814</string>
 					<key>Timestamp</key>
-					<string>747446353.5750149</string>
+					<string>748091321.33483</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -124,12 +124,12 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>
+				<string>        if !active &amp;&amp; GlobalVar.shared.messageRoomTypingListener == nil {
 </string>
 				<key>leading</key>
 				<string>        replyMessageType = (active == true ? replyMessageType : nil)
         
-        if !active &amp;&amp; GlobalVar.shared.messageRoomTypingListener == nil {</string>
+</string>
 				<key>trailing</key>
 				<string>            observeTypingState()
         }
@@ -149,11 +149,11 @@
 					<key>EndingLineNumber</key>
 					<string>3089</string>
 					<key>StartingColumnNumber</key>
-					<string>65</string>
+					<string>0</string>
 					<key>StartingLineNumber</key>
 					<string>3088</string>
 					<key>Timestamp</key>
-					<string>747446370.724105</string>
+					<string>748091321.336377</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -169,12 +169,12 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>
+				<string>        roomMessages[safe: unsendMessageIndex]?.is_deleted = true
 </string>
 				<key>leading</key>
 				<string>        // メッセージの送信取り消しフラグを更新
         db.collection("rooms").document(roomId).collection("messages").document(messageId).updateData(["is_deleted" : true])
-        roomMessages[safe: unsendMessageIndex]?.is_deleted = true</string>
+</string>
 				<key>trailing</key>
 				<string>        
         // 送信取り消ししたメッセージが未読の場合は相手の未読数も更新

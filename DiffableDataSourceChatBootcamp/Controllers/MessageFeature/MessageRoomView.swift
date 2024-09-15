@@ -2381,10 +2381,10 @@ extension MessageRoomView {
     
     private func setMessageStorage(_ text: String?) {
         let user = GlobalVar.shared.loginUser
-        let rooms = user?.rooms
+        var rooms = user?.rooms
         
-        if let index = rooms?.firstIndex(where: { $0.document_id == room?.document_id }) {
-            rooms?[index].send_message = text
+        if let index = rooms?.firstIndex(where: { $0.document_id == room?.document_id }), let text {
+            rooms?[index].updateSendMessageText(text)
             textView.text = text
         }
     }
