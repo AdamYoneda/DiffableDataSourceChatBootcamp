@@ -3086,7 +3086,10 @@ extension MessageRoomView: UIPopoverPresentationControllerDelegate, MessagePopMe
         }
         // メッセージの送信取り消しフラグを更新
         db.collection("rooms").document(roomId).collection("messages").document(messageId).updateData(["is_deleted" : true])
-        roomMessages[safe: unsendMessageIndex]?.is_deleted = true
+        if var unsendMessage = roomMessages[safe: unsendMessageIndex] {
+            unsendMessage.setMessageUnsend()
+            self.room?.unsendMessage(index: unsendMessageIndex, message: unsendMessage)
+        }
         
         // 送信取り消ししたメッセージが未読の場合は相手の未読数も更新
         let unreadCount = roomMessages.filter({

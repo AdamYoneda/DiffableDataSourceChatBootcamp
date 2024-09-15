@@ -135,4 +135,8 @@ struct Room {
     mutating func updateSendMessageText(_ text: String) {
         self.send_message = text
     }
+    
+    mutating func unsendMessage(index: Int, message unsendedMessage: Message) {
+        self.messages?[index] = unsendedMessage
+    }
 }
