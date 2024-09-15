@@ -14,7 +14,7 @@ extension UITextView {
             attributedOriginalText.addAttribute(NSAttributedString.Key.paragraphStyle, value: style, range: fullRange)
         }
         self.linkTextAttributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.accentColor, alpha: 1.0),
+            NSAttributedString.Key.foregroundColor: UIColor.accentColor,
             NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue,
         ]
         self.attributedText = attributedOriginalText
