@@ -115,6 +115,7 @@ final class MessageRoomView: UIViewController {
     private var lastDocumentSnapshot: QueryDocumentSnapshot?
     private var isConsecutiveCoundUpdate = false
     private var typingIndicatorView: TypingIndicatorView?
+    private var messageRoomTypingListener: ListenerRegistration?
     private let sectionCount = 1
     private var isScrollToBottomAfterKeyboardShowed = false
     private var beforeTextViewHeight: CGFloat = 0.0
@@ -191,6 +192,7 @@ final class MessageRoomView: UIViewController {
     
     deinit {
         updateTypingState(isTyping: false)
+        removeMessageRoomTypingListener()
     }
     
     override func viewDidLoad() {
@@ -2812,7 +2814,7 @@ extension MessageRoomView: MessageInputViewReplyDelegate {
         replyMessageImageUrls = (active == true ? replyMessageImageUrls : nil)
         replyMessageType = (active == true ? replyMessageType : nil)
         
-        if !active {
+        if !active && messageRoomTypingListener == nil {
             observeTypingState()
         }
     }
@@ -3146,8 +3148,8 @@ extension MessageRoomView: UIPopoverPresentationControllerDelegate, MessagePopMe
 extension MessageRoomView {
     
     func removeMessageRoomTypingListener() {
-        GlobalVar.shared.messageRoomTypingListener?.remove()
-        GlobalVar.shared.messageRoomTypingListener = nil
+        messageRoomTypingListener?.remove()
+        messageRoomTypingListener = nil
         changeTypingIndicatorState(false)
     }
     /// 特定のRoomの is_typing_user.uid: Bool'を更新
@@ -3167,7 +3169,7 @@ extension MessageRoomView {
         
         removeMessageRoomTypingListener()
         
-        GlobalVar.shared.messageRoomTypingListener = db.collection("rooms").document(roomId).addSnapshotListener { [weak self] querySnapshot, error in
+        messageRoomTypingListener = db.collection("rooms").document(roomId).addSnapshotListener { [weak self] querySnapshot, error in
             guard let self else { return }
             if let err = error { print("Room情報の監視に失敗: \(err)"); return }
             guard let _querySnapshot = querySnapshot,

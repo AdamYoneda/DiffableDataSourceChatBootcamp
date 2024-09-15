@@ -12,13 +12,13 @@
 					<key>EndingColumnNumber</key>
 					<string>0</string>
 					<key>EndingLineNumber</key>
-					<string>2387</string>
+					<string>2388</string>
 					<key>StartingColumnNumber</key>
 					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>2386</string>
+					<string>2387</string>
 					<key>Timestamp</key>
-					<string>748091321.336146</string>
+					<string>748117011.72624</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -57,13 +57,13 @@
 					<key>EndingColumnNumber</key>
 					<string>0</string>
 					<key>EndingLineNumber</key>
-					<string>2463</string>
+					<string>2464</string>
 					<key>StartingColumnNumber</key>
 					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>2462</string>
+					<string>2463</string>
 					<key>Timestamp</key>
-					<string>748091321.33647</string>
+					<string>748117011.72609</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -102,13 +102,13 @@
 					<key>EndingColumnNumber</key>
 					<string>0</string>
 					<key>EndingLineNumber</key>
-					<string>2815</string>
+					<string>2816</string>
 					<key>StartingColumnNumber</key>
 					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>2814</string>
+					<string>2815</string>
 					<key>Timestamp</key>
-					<string>748091321.33483</string>
+					<string>748117011.725502</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -124,7 +124,7 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>        if !active {
+				<string>        if !active &amp;&amp; messageRoomTypingListener == nil {
 </string>
 				<key>leading</key>
 				<string>        replyMessageType = (active == true ? replyMessageType : nil)
@@ -147,13 +147,13 @@
 					<key>EndingColumnNumber</key>
 					<string>0</string>
 					<key>EndingLineNumber</key>
-					<string>3092</string>
+					<string>3090</string>
 					<key>StartingColumnNumber</key>
 					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>3088</string>
+					<string>3089</string>
 					<key>Timestamp</key>
-					<string>748116875.247087</string>
+					<string>748117011.7263581</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -170,18 +170,15 @@
 			<dict>
 				<key>focused</key>
 				<string>        if var unsendMessage = roomMessages[safe: unsendMessageIndex] {
-            unsendMessage.setMessageUnsend()
-            self.room?.unsendMessage(index: unsendMessageIndex, message: unsendMessage)
-        }
 </string>
 				<key>leading</key>
 				<string>        // メッセージの送信取り消しフラグを更新
         db.collection("rooms").document(roomId).collection("messages").document(messageId).updateData(["is_deleted" : true])
 </string>
 				<key>trailing</key>
-				<string>        
-        // 送信取り消ししたメッセージが未読の場合は相手の未読数も更新
-        let unreadCount = roomMessages.filter({
+				<string>            unsendMessage.setMessageUnsend()
+            self.room?.unsendMessage(index: unsendMessageIndex, message: unsendMessage)
+        }
 </string>
 			</dict>
 			<key>type</key>
