@@ -409,9 +409,9 @@ extension MessageRoomView {
         messageRoomTitleView.addGestureRecognizer(profileTapGesture)
         navigationItem.titleView = messageRoomTitleView
         
-        rightStackButton.addTarget(self, action: #selector(onEllipsisButtonTapped), for: .touchUpInside)
-        guideButton.addTarget(self, action: #selector(onTalkGuideButtonTapped), for: .touchUpInside)
-        callButton.addTarget(self, action: #selector(onCallButtonTapped), for: .touchUpInside)
+        //        rightStackButton.addTarget(self, action: #selector(onEllipsisButtonTapped), for: .touchUpInside)
+        //        guideButton.addTarget(self, action: #selector(onTalkGuideButtonTapped), for: .touchUpInside)
+        //        callButton.addTarget(self, action: #selector(onCallButtonTapped), for: .touchUpInside)
     }
     
     @objc private func messageListBack() {
