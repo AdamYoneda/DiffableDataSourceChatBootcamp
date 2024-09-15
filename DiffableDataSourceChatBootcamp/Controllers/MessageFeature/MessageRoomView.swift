@@ -115,6 +115,7 @@ final class MessageRoomView: UIViewController {
     private var lastDocumentSnapshot: QueryDocumentSnapshot?
     private var isConsecutiveCoundUpdate = false
     private var typingIndicatorView: TypingIndicatorView?
+    private var messageRoomTypingListener: ListenerRegistration?
     private let sectionCount = 1
     private var isScrollToBottomAfterKeyboardShowed = false
     private var beforeTextViewHeight: CGFloat = 0.0
@@ -191,6 +192,7 @@ final class MessageRoomView: UIViewController {
     
     deinit {
         updateTypingState(isTyping: false)
+        removeMessageRoomTypingListener()
     }
     
     override func viewDidLoad() {
@@ -409,9 +411,9 @@ extension MessageRoomView {
         messageRoomTitleView.addGestureRecognizer(profileTapGesture)
         navigationItem.titleView = messageRoomTitleView
         
-        rightStackButton.addTarget(self, action: #selector(onEllipsisButtonTapped), for: .touchUpInside)
-        guideButton.addTarget(self, action: #selector(onTalkGuideButtonTapped), for: .touchUpInside)
-        callButton.addTarget(self, action: #selector(onCallButtonTapped), for: .touchUpInside)
+        //        rightStackButton.addTarget(self, action: #selector(onEllipsisButtonTapped), for: .touchUpInside)
+        //        guideButton.addTarget(self, action: #selector(onTalkGuideButtonTapped), for: .touchUpInside)
+        //        callButton.addTarget(self, action: #selector(onCallButtonTapped), for: .touchUpInside)
     }
     
     @objc private func messageListBack() {
@@ -2381,10 +2383,10 @@ extension MessageRoomView {
     
     private func setMessageStorage(_ text: String?) {
         let user = GlobalVar.shared.loginUser
-        let rooms = user?.rooms
+        var rooms = user?.rooms
         
-        if let index = rooms?.firstIndex(where: { $0.document_id == room?.document_id }) {
-            rooms?[index].send_message = text
+        if let index = rooms?.firstIndex(where: { $0.document_id == room?.document_id }), let text {
+            rooms?[index].updateSendMessageText(text)
             textView.text = text
         }
     }
@@ -2456,20 +2458,35 @@ extension MessageRoomView: PHPickerViewControllerDelegate, UIImagePickerControll
         picker.present(alert, animated: true)
     }
     
-    /// UIImageへの変換・アップロード
-    private func dealWithImage(_ picker: PHPickerViewController, itemProviders: [NSItemProvider]) async {
-        var selectPickerImages = [UIImage]()
+    private func convertIntoUIImage(itemProvider: NSItemProvider) async throws -> UIImage {
         
-        await itemProviders.asyncForEach { itemProvider in
-            do {
-                let itemProviderImage = try await itemProvider.loadObject(ofClass: UIImage.self)
-                if let image = itemProviderImage as? UIImage {
+        return await withCheckedContinuation { continuation in
+            itemProvider.loadObject(ofClass: UIImage.self) { item, error in
+                if let error {
+                    continuation.resume(throwing: error as! Never)
+                } else {
+                    guard let image = item as? UIImage else {
+                        continuation.resume(throwing: NSError() as! Never)
+                    }
                     if let resizedImage = image.resized(size: CGSize(width: 400, height: 400)) {
-                        selectPickerImages.append(resizedImage)
+                        continuation.resume(returning: resizedImage)
                     } else {
-                        selectPickerImages.append(image)
+                        continuation.resume(returning: image)
                     }
                 }
+            }
+        }
+    }
+    
+    /// UIImageへの変換・アップロード
+    private func dealWithImage(_ picker: PHPickerViewController, itemProviders: [NSItemProvider]) async {
+        
+        var selectPickerImages = [UIImage]()
+        
+        for itemProvider in itemProviders {
+            do {
+                let image = try await convertIntoUIImage(itemProvider: itemProvider)
+                selectPickerImages.append(image)
             } catch {
                 print("Failure to get Image with", error)
                 picker.dismiss(animated: true)
@@ -2812,7 +2829,7 @@ extension MessageRoomView: MessageInputViewReplyDelegate {
         replyMessageImageUrls = (active == true ? replyMessageImageUrls : nil)
         replyMessageType = (active == true ? replyMessageType : nil)
         
-        if !active && GlobalVar.shared.messageRoomTypingListener == nil {
+        if !active && messageRoomTypingListener == nil {
             observeTypingState()
         }
     }
@@ -3086,7 +3103,10 @@ extension MessageRoomView: UIPopoverPresentationControllerDelegate, MessagePopMe
         }
         // メッセージの送信取り消しフラグを更新
         db.collection("rooms").document(roomId).collection("messages").document(messageId).updateData(["is_deleted" : true])
-        roomMessages[safe: unsendMessageIndex]?.is_deleted = true
+        if var unsendMessage = roomMessages[safe: unsendMessageIndex] {
+            unsendMessage.setMessageUnsend()
+            self.room?.unsendMessage(index: unsendMessageIndex, message: unsendMessage)
+        }
         
         // 送信取り消ししたメッセージが未読の場合は相手の未読数も更新
         let unreadCount = roomMessages.filter({
@@ -3143,8 +3163,8 @@ extension MessageRoomView: UIPopoverPresentationControllerDelegate, MessagePopMe
 extension MessageRoomView {
     
     func removeMessageRoomTypingListener() {
-        GlobalVar.shared.messageRoomTypingListener?.remove()
-        GlobalVar.shared.messageRoomTypingListener = nil
+        messageRoomTypingListener?.remove()
+        messageRoomTypingListener = nil
         changeTypingIndicatorState(false)
     }
     /// 特定のRoomの is_typing_user.uid: Bool'を更新
@@ -3164,7 +3184,7 @@ extension MessageRoomView {
         
         removeMessageRoomTypingListener()
         
-        GlobalVar.shared.messageRoomTypingListener = db.collection("rooms").document(roomId).addSnapshotListener { [weak self] querySnapshot, error in
+        messageRoomTypingListener = db.collection("rooms").document(roomId).addSnapshotListener { [weak self] querySnapshot, error in
             guard let self else { return }
             if let err = error { print("Room情報の監視に失敗: \(err)"); return }
             guard let _querySnapshot = querySnapshot,

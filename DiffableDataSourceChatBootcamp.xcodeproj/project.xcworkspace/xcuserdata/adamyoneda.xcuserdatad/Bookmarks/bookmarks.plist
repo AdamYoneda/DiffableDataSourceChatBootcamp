@@ -10,15 +10,15 @@
 				<key>location-parameters</key>
 				<dict>
 					<key>EndingColumnNumber</key>
-					<string>0</string>
+					<string>9</string>
 					<key>EndingLineNumber</key>
-					<string>2387</string>
+					<string>2495</string>
 					<key>StartingColumnNumber</key>
-					<string>0</string>
+					<string>9</string>
 					<key>StartingLineNumber</key>
-					<string>2386</string>
+					<string>2495</string>
 					<key>Timestamp</key>
-					<string>747446146.657221</string>
+					<string>748124420.327641</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -34,151 +34,15 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>            rooms?[index].send_message = text
-</string>
+				<string></string>
 				<key>leading</key>
-				<string>        
-        if let index = rooms?.firstIndex(where: { $0.document_id == room?.document_id }) {
-</string>
+				<string>                return
+            }
+        }</string>
 				<key>trailing</key>
-				<string>            textView.text = text
-        }
-    }
-</string>
-			</dict>
-			<key>type</key>
-			<string>bookmark</string>
-		</dict>
-		<dict>
-			<key>destination</key>
-			<dict>
-				<key>location-parameters</key>
-				<dict>
-					<key>EndingColumnNumber</key>
-					<string>0</string>
-					<key>EndingLineNumber</key>
-					<string>2463</string>
-					<key>StartingColumnNumber</key>
-					<string>58</string>
-					<key>StartingLineNumber</key>
-					<string>2462</string>
-					<key>Timestamp</key>
-					<string>747446222.394892</string>
-				</dict>
-				<key>rebasable-url</key>
-				<dict>
-					<key>base</key>
-					<string>workspace</string>
-					<key>payload</key>
-					<dict>
-						<key>relative-path</key>
-						<string>DiffableDataSourceChatBootcamp/Controllers/MessageFeature/MessageRoomView.swift</string>
-					</dict>
-				</dict>
-			</dict>
-			<key>text-context</key>
-			<dict>
-				<key>focused</key>
 				<string>
-</string>
-				<key>leading</key>
-				<string>        var selectPickerImages = [UIImage]()
         
-        await itemProviders.asyncForEach { itemProvider in</string>
-				<key>trailing</key>
-				<string>            do {
-                let itemProviderImage = try await itemProvider.loadObject(ofClass: UIImage.self)
-                if let image = itemProviderImage as? UIImage {
-</string>
-			</dict>
-			<key>type</key>
-			<string>bookmark</string>
-		</dict>
-		<dict>
-			<key>destination</key>
-			<dict>
-				<key>location-parameters</key>
-				<dict>
-					<key>EndingColumnNumber</key>
-					<string>0</string>
-					<key>EndingLineNumber</key>
-					<string>2815</string>
-					<key>StartingColumnNumber</key>
-					<string>73</string>
-					<key>StartingLineNumber</key>
-					<string>2814</string>
-					<key>Timestamp</key>
-					<string>747446353.5750149</string>
-				</dict>
-				<key>rebasable-url</key>
-				<dict>
-					<key>base</key>
-					<string>workspace</string>
-					<key>payload</key>
-					<dict>
-						<key>relative-path</key>
-						<string>DiffableDataSourceChatBootcamp/Controllers/MessageFeature/MessageRoomView.swift</string>
-					</dict>
-				</dict>
-			</dict>
-			<key>text-context</key>
-			<dict>
-				<key>focused</key>
-				<string>
-</string>
-				<key>leading</key>
-				<string>        replyMessageType = (active == true ? replyMessageType : nil)
-        
-        if !active &amp;&amp; GlobalVar.shared.messageRoomTypingListener == nil {</string>
-				<key>trailing</key>
-				<string>            observeTypingState()
-        }
-    }
-</string>
-			</dict>
-			<key>type</key>
-			<string>bookmark</string>
-		</dict>
-		<dict>
-			<key>destination</key>
-			<dict>
-				<key>location-parameters</key>
-				<dict>
-					<key>EndingColumnNumber</key>
-					<string>0</string>
-					<key>EndingLineNumber</key>
-					<string>3089</string>
-					<key>StartingColumnNumber</key>
-					<string>65</string>
-					<key>StartingLineNumber</key>
-					<string>3088</string>
-					<key>Timestamp</key>
-					<string>747446370.724105</string>
-				</dict>
-				<key>rebasable-url</key>
-				<dict>
-					<key>base</key>
-					<string>workspace</string>
-					<key>payload</key>
-					<dict>
-						<key>relative-path</key>
-						<string>DiffableDataSourceChatBootcamp/Controllers/MessageFeature/MessageRoomView.swift</string>
-					</dict>
-				</dict>
-			</dict>
-			<key>text-context</key>
-			<dict>
-				<key>focused</key>
-				<string>
-</string>
-				<key>leading</key>
-				<string>        // メッセージの送信取り消しフラグを更新
-        db.collection("rooms").document(roomId).collection("messages").document(messageId).updateData(["is_deleted" : true])
-        roomMessages[safe: unsendMessageIndex]?.is_deleted = true</string>
-				<key>trailing</key>
-				<string>        
-        // 送信取り消ししたメッセージが未読の場合は相手の未読数も更新
-        let unreadCount = roomMessages.filter({
+        if selectPickerImages.isEmpty {
 </string>
 			</dict>
 			<key>type</key>

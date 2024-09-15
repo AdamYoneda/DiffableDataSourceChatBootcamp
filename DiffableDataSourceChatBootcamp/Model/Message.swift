@@ -129,4 +129,9 @@ struct Message: Identifiable {
         
         return message
     }
+    
+    mutating func setMessageUnsend() {
+        guard self.is_deleted == false else { return }
+        self.is_deleted = true
+    }
 }
