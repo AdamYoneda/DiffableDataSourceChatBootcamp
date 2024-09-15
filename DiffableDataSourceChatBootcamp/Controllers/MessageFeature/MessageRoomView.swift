@@ -2812,7 +2812,7 @@ extension MessageRoomView: MessageInputViewReplyDelegate {
         replyMessageImageUrls = (active == true ? replyMessageImageUrls : nil)
         replyMessageType = (active == true ? replyMessageType : nil)
         
-        if !active && GlobalVar.shared.messageRoomTypingListener == nil {
+        if !active {
             observeTypingState()
         }
     }
