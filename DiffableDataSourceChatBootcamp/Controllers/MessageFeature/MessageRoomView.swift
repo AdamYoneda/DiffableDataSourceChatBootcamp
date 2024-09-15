@@ -2458,20 +2458,35 @@ extension MessageRoomView: PHPickerViewControllerDelegate, UIImagePickerControll
         picker.present(alert, animated: true)
     }
     
-    /// UIImageへの変換・アップロード
-    private func dealWithImage(_ picker: PHPickerViewController, itemProviders: [NSItemProvider]) async {
-        var selectPickerImages = [UIImage]()
+    private func convertIntoUIImage(itemProvider: NSItemProvider) async throws -> UIImage {
         
-        await itemProviders.asyncForEach { itemProvider in
-            do {
-                let itemProviderImage = try await itemProvider.loadObject(ofClass: UIImage.self)
-                if let image = itemProviderImage as? UIImage {
+        return await withCheckedContinuation { continuation in
+            itemProvider.loadObject(ofClass: UIImage.self) { item, error in
+                if let error {
+                    continuation.resume(throwing: error as! Never)
+                } else {
+                    guard let image = item as? UIImage else {
+                        continuation.resume(throwing: NSError() as! Never)
+                    }
                     if let resizedImage = image.resized(size: CGSize(width: 400, height: 400)) {
-                        selectPickerImages.append(resizedImage)
+                        continuation.resume(returning: resizedImage)
                     } else {
-                        selectPickerImages.append(image)
+                        continuation.resume(returning: image)
                     }
                 }
+            }
+        }
+    }
+    
+    /// UIImageへの変換・アップロード
+    private func dealWithImage(_ picker: PHPickerViewController, itemProviders: [NSItemProvider]) async {
+        
+        var selectPickerImages = [UIImage]()
+        
+        for itemProvider in itemProviders {
+            do {
+                let image = try await convertIntoUIImage(itemProvider: itemProvider)
+                selectPickerImages.append(image)
             } catch {
                 print("Failure to get Image with", error)
                 picker.dismiss(animated: true)
