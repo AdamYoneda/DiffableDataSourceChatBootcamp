@@ -1,6 +1,6 @@
 //
 //  ImageDetailViewController.swift
-//  Tauch
+
 //
 //  Created by Apple on 2022/08/15.
 //
@@ -12,7 +12,7 @@ protocol ImageDetailViewControllerDelegate: AnyObject {
     func deletePostPhoto(_ viewController: ImageDetailViewController, photoId: String)
 }
 
-final class ImageDetailViewController: UIBaseViewController {
+final class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var imageScrollView: UIScrollView!
     @IBOutlet weak var pickedImageView: UIImageView!
@@ -71,7 +71,6 @@ extension ImageDetailViewController {
         } else {
             imageScrollView.zoom(to: imageScrollView.frame, animated: true)
         }
-        Log.event(name: "messageImageZoom")
     }
     
     @objc private func handleSwipe(_ sender: UITapGestureRecognizer) {
@@ -113,6 +112,7 @@ extension ImageDetailViewController {
         do {
             guard let profiletUser = profiletUser else { return }
             guard let photoId = photoId else { return }
+            let db = Firestore.firestore()
             let userDocument = db.collection("users").document(profiletUser.uid)
             let postPhotoDocument = userDocument.collection("post_photos").document(photoId)
             
@@ -140,7 +140,6 @@ extension ImageDetailViewController {
             alert(title: "画像の保存に失敗しました", message: "再度ダウンロードをしてください。\nうまくいかない場合は、アプリを再起動して再度実行してください", actiontitle: "OK")
         } else {
             alert(title: "画像を保存しました", message: "", actiontitle: "OK")
-            Log.event(name: "messageImageSave")
         }
     }
 }

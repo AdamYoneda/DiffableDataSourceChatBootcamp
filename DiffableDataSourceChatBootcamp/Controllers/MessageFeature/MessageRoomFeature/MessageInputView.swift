@@ -1,6 +1,5 @@
 //
 //  MessageInputView.swift
-//  Tauch
 //
 //  Created by Adam Yoneda on 2023/09/02.
 //
@@ -47,27 +46,14 @@ final class MessageInputView: UIView {
 
     private var room: Room?
     
-    var roomStatus: RoomStatus = .normal {
-        didSet {
-            switch roomStatus {
-            case .normal, .sBest:
-                backgroundColor = .white
-                replyPreview.backgroundColor = .white
-            case .ssBest:
-                backgroundColor = UIColor.MessageColor.lightPink
-                replyPreview.backgroundColor = UIColor.MessageColor.lightPink
-            case .sssBest:
-                backgroundColor = .clear
-                replyPreview.backgroundColor = .clear
-            }
-        }
-    }
-    
     init() {
         stickerPreviewFrame = .zero
         replyPreviewFrame = .zero
         noticePreviewFrame = .zero
         super.init(frame: .zero)
+        
+        backgroundColor = .white
+        replyPreview.backgroundColor = .white
     }
     
     init(frame: CGRect, replyPreviewFrame: CGRect, stickerPreviewFrame: CGRect, noticePreviewFrame: CGRect, room: Room) {
@@ -77,13 +63,15 @@ final class MessageInputView: UIView {
         self.noticePreviewFrame = noticePreviewFrame
         self.room = room
         
-        roomStatus = room.roomStatus
         super.init(frame: frame)
         
         configurePreviewStackView()
         configureStickerPreview()
         configureReplyPreview(room: room)
         configureMessageNoticeView()
+        
+        backgroundColor = .white
+        replyPreview.backgroundColor = .white
     }
     
     required init?(coder: NSCoder) {

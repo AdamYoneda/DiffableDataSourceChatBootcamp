@@ -9,8 +9,9 @@ import UIKit
 import PhotosUI
 import FirebaseFirestore
 import FirebaseFunctions
+import FirebaseStorage
 
-final class MessageRoomView: UIBaseViewController {
+final class MessageRoomView: UIViewController {
     
     @IBOutlet weak var talkView: UIStackView!
     @IBOutlet weak var talkCellsStackView: UIStackView!
@@ -56,7 +57,11 @@ final class MessageRoomView: UIBaseViewController {
     @IBOutlet weak var notMatchApprovalButton: UIButton!
     @IBOutlet weak var notmatchUserProfileButton: UIButton!
     
+    let loadingView = UIView(frame: UIScreen.main.bounds)
+    
     var room: Room?
+    
+    private let db = Firestore.firestore()
     
     private var roomMessages = [Message]() {
         didSet {
@@ -69,7 +74,6 @@ final class MessageRoomView: UIBaseViewController {
     }
     private var roomMessageIDs = [Message.ID]()
     private var pastMessages = [Message]()
-    private var callViewController: CallViewController?
     private var listener: ListenerRegistration?
     private var skywayToken: String?
     private var popoverItem: (indexPath:IndexPath?, image: UIImage?)
@@ -134,41 +138,14 @@ final class MessageRoomView: UIBaseViewController {
     private var selectedSticker: (sticker: UIImage?, identifier: String?)
     private var keyboardIsShown: Bool = false
     
-    private var adminIdCheckStatusType: AdminIdCheckStatusType = .unknown {
-        didSet {
-            switch adminIdCheckStatusType {
-            case .approved:
-                return
-            case .unRequest:
-                popUpIdentificationView {
-                    self.tabBarController?.tabBar.isHidden = true
-                }
-            case .rejected:
-                let alert = UIAlertController(
-                    title: "本人確認失敗しました",
-                    message: "提出していただいた写真又は生年月日に不備がありました\n再度本人確認書類を提出してください",
-                    preferredStyle: .alert
-                )
-                let ok = UIAlertAction(title: "OK", style: .default) { _ in
-                    self.popUpIdentificationView {
-                        self.tabBarController?.tabBar.isHidden = true
-                    }
-                }
-                alert.addAction(ok)
-                present(alert, animated: true)
-            case .pendAppro:
-                let alert = UIAlertController(
-                    title: "本人確認中です",
-                    message: "現在本人確認中\n（12時間以内に承認が完了します）",
-                    preferredStyle: .alert
-                )
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
-                present(alert, animated: true)
-            case .unknown:
-                return
-            }
-        }
-    }
+    private var elaspedTime: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "ja_JP")
+        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+        formatter.dateFormat = "yyyy年M月d日(E)" // default dateFormat
+        return formatter
+    }()
     
     private enum ReactionTypes {
         case delayedUpdate
@@ -221,11 +198,8 @@ final class MessageRoomView: UIBaseViewController {
         
         initGlobalRoomMessages()
         setMessageRoomInfo()
-        setRoomStatus()
         setUpNavigation()
-        setConsectiveRallyRecord()
         setUpMessageInputViewContainer()
-        fetchSkyWayToken()
         configureTalkView()
         configureMessageCollectionView()
         configureDataSource()
@@ -247,14 +221,8 @@ final class MessageRoomView: UIBaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if GlobalVar.shared.showTalkGuide {
-            onTalkGuideButtonTapped()
-        }
-        cheackLaunchRoomCount()
-        autoMessageAction()
         messageUnreadID()
         messageRead()
-        receiveCallNotification()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -295,19 +263,7 @@ final class MessageRoomView: UIBaseViewController {
         }
     }
     
-    private func setRoomStatus() {
-        if GlobalVar.shared.loginUser?.is_friend_emoji == false {
-            self.room?.roomStatus = .normal
-        }
-    }
-    
     private func setUpNotification() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(closedTutorial),
-            name: NSNotification.Name(NotificationName.ClosedTutorial.rawValue),
-            object: nil
-        )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardWillShow(_:)),
@@ -383,9 +339,6 @@ final class MessageRoomView: UIBaseViewController {
         }
         let shared = GlobalVar.shared
         let rooms = shared.loginUser?.rooms
-        shared.specificRoom = room
-        shared.messageCollectionView = messageCollectionView
-        shared.talkView = talkView
         
         if let index = rooms?.firstIndex(where: { $0.document_id == room.document_id }) {
             if let sendMessage = rooms?[index].send_message {
@@ -417,211 +370,6 @@ final class MessageRoomView: UIBaseViewController {
             }
         }
     }
-    
-    private func adminIdCheckStatusTypeForMessageRoom() -> AdminIdCheckStatusType {
-        guard let room = room else { return .unknown }
-        guard let loginUser = GlobalVar.shared.loginUser else { return .unknown }
-        let adminIdCheckStatus = loginUser.admin_checks?.admin_id_check_status
-        
-        if room.is_auto_matchig {
-            // 本人確認未リクエスト
-            if adminIdCheckStatus == nil {
-                return .unRequest
-            }
-            // 本人確認承認済み
-            else if adminIdCheckStatus == 1 {
-                return .approved
-            }
-            // 本人確認拒否
-            else if adminIdCheckStatus == 2 {
-                return .rejected
-            } else {
-                return .pendAppro
-            }
-        }
-        
-        return .unknown
-    }
-}
-
-// 自動マッチング
-extension MessageRoomView {
-    
-    private func setUpAutoMatchingHeaderView(_ isHeaderShow: Bool) {
-        if isHeaderShow {
-            autoMatchingHeaderView.isHidden = false
-            talkViewTopConstraint.constant = 50
-            messageCollectionViewTopConstraint.constant = 50
-            loadingLabelConstraint.constant = 55
-        } else {
-            autoMatchingHeaderView.isHidden = true
-            talkViewTopConstraint.constant = 0
-            messageCollectionViewTopConstraint.constant = 0
-            loadingLabelConstraint.constant = 5
-        }
-    }
-    
-    private func setUpAutoMatchingView() {
-        if let room = room, let partnerUser = room.partnerUser {
-            let isAutoMatching = room.is_auto_matchig
-            let isNormalStatus = room.roomStatus == .normal
-            
-            if isAutoMatching && isNormalStatus {
-                setUpAutoMatchingHeaderView(true)
-                
-                guard let loginUser = GlobalVar.shared.loginUser else { return }
-                if loginUser.admin_checks?.admin_id_check_status != 1 {
-                    autoMatchingRoomViewCloseButton.isHidden = true
-                }
-                
-                if roomMessages.count == 0 {
-                    autoMatchingRoomView.isHidden = false
-                    
-                    let profileTapGesture = UITapGestureRecognizer(target: self, action: #selector(showProfilePage))
-                    let waveIconTapGesture = UITapGestureRecognizer(target: self, action: #selector(onAutoMatchingWaveButtonTapped))
-                    
-                    autoMatchingPartnerUserImageView.addGestureRecognizer(profileTapGesture)
-                    autoMatchingPartnerUserImageView.setImage(withURLString: partnerUser.profile_icon_img, isFade: true)
-                    autoMatchingLabel.text = partnerUser.nick_name + "さんにウェーブを送信しよう。"
-                    autoMatchingWaveIcon.addGestureRecognizer(waveIconTapGesture)
-                    
-                    let isPartnerLogin = partnerUser.is_logined
-                    let partnerLogoutDate = partnerUser.logouted_at.dateValue()
-                    let elaspedTime = elapsedTime(isLogin: isPartnerLogin, logoutTime: partnerLogoutDate)
-                    if let elaspedTimeDay = elaspedTime[4], elaspedTimeDay > 5 {
-                        autoMatchingPartnerUserOnlineStatusIcon.isHidden = true
-                    } else {
-                        autoMatchingPartnerUserOnlineStatusIcon.isHidden = false
-                    }
-                } else {
-                    autoMatchingRoomView.isHidden = true
-                }
-            } else {
-                setUpAutoMatchingHeaderView(false)
-                autoMatchingRoomView.isHidden = true
-            }
-        }
-    }
-    
-    @IBAction private func onAutoMatchingWaveButtonTapped(_ sender: UIButton) {
-        let waveIconMessageModel = getSendMessageModel(
-            text: "👋",
-            inputType: .message,
-            messageType: .text,
-            sourceType: .none,
-            imageUrls: nil,
-            messageId: UUID().uuidString
-        )
-        sendMessageToFirestore(waveIconMessageModel)
-        
-        let waveTextMessageModel = getSendMessageModel(
-            text: "ウェーブが送信されました！",
-            inputType: .message,
-            messageType: .text,
-            sourceType: .none,
-            imageUrls: nil,
-            messageId: UUID().uuidString
-        )
-        sendMessageToFirestore(waveTextMessageModel)
-        
-        onAutoMatchingRoomViewCloseButtonTapped(sender)
-    }
-    
-    @IBAction func onAutoMatchingRoomViewCloseButtonTapped(_ sender: UIButton) {
-        autoMatchingRoomView.isHidden = true
-        
-        if roomMessages.count == 0 {
-            talkView.isHidden = false
-        }
-    }
-}
-
-// 強制ルーム生成後の未マッチユーザー関連
-extension MessageRoomView {
-    
-    private func setUpNotMatchView() {
-        let isNotCreater = room?.creator != GlobalVar.shared.loginUser?.uid
-        let isForceCreateRoomFromProfile = room?.room_match_status == RoomMatchStatusType.force.rawValue
-        
-        if isNotCreater && isForceCreateRoomFromProfile {
-            if let partnerUser = room?.partnerUser {
-                messageInputView.isHidden = true // 承認前は入力部分非表示
-                notMatchUserView.isHidden = false
-                notMatchUserImageView.setImage(withURLString: partnerUser.profile_icon_img)
-                notMatchUserNameLabel.text = partnerUser.nick_name
-                notMatchUserAdressLabel.text = partnerUser.address + partnerUser.address2
-                
-                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onNotMatchUserImageViewTapped))
-                notMatchUserImageView.addGestureRecognizer(tapGesture)
-                messageCollectionViewTopConstraint.constant = notMatchUserView.frame.height
-            }
-        }
-    }
-    
-    private func approval(_ room: Room, loginUser: User, partnerUser: User) {
-        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-        
-        showLoadingView(loadingView)
-        
-        firebaseController.approachedReply(
-            loginUID: loginUser.uid,
-            targetUID: partnerUser.uid,
-            status: 1,
-            actionType: "click"
-        ) { [weak self] result in
-            guard let self = self else { return }
-            if result {
-                if let roomId = room.document_id {
-                    let updateData: [String: Any] = [
-                        "creator": partnerUser.uid,
-                        "room_match_status": RoomMatchStatusType.matched.rawValue,
-                        "updated_at": Timestamp()
-                    ]
-                    db.collection("rooms").document(roomId).updateData(updateData) { error in
-                        if error != nil {
-                            self.alert(title: "失敗", message: "承認に失敗しました。時間をおいて再度お試しください。", actiontitle: "OK")
-                            return
-                        }
-                        
-                        self.loadingView.removeFromSuperview()
-                        
-                        print("\(partnerUser.nick_name)さんのリクエストを承認しました！😆👍")
-                        GlobalVar.shared.loginUser?.approaches.append(partnerUser.nick_name)
-                        self.alert(title: "確認", message: "\(partnerUser.nick_name)さんのリクエストを承認しました！", actiontitle: "OK")
-                        self.messageInputView.isHidden = false
-                        self.notMatchUserView.isHidden = true
-                        self.messageCollectionViewTopConstraint.constant = 0
-                        
-                        GlobalVar.shared.cardApproachedUsers.enumerated().forEach { index, user in
-                            if user.uid == partnerUser.uid {
-                                GlobalVar.shared.cardApproachedUsers.remove(at: index)
-                                self.setApproachedTabBadges()
-                            }
-                        }
-                    }
-                }
-            } else {
-                self.loadingView.removeFromSuperview()
-                self.alert(title: "失敗", message: "承認に失敗しました。時間をおいて再度お試しください。", actiontitle: "OK")
-            }
-        }
-    }
-    
-    @objc private func onNotMatchUserImageViewTapped() {
-        if let image = notMatchUserImageView.image {
-            moveImageDetail(image: image)
-        }
-    }
-    
-    @IBAction func onNotMatchUserApprovalButtonTapped(_ sender: UIButton) {
-        if let room = room, let loginUser = GlobalVar.shared.loginUser, let partnerUser = room.partnerUser {
-            approval(room, loginUser: loginUser, partnerUser: partnerUser)
-        }
-    }
-    
-    @IBAction func onNotMatchUserProfileButtonTapped(_ sender: UIButton) {
-        showProfilePage()
-    }
 }
 
 // navigation関連
@@ -638,28 +386,20 @@ extension MessageRoomView {
         // ナビゲーションの戻るボタンを消す
         navigationItem.setHidesBackButton(true, animated: true)
         // ナビゲーションバーの設定
-        hideNavigationBarBorderAndShowTabBarBorder()
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithTransparentBackground()
+        
+        navigationBarAppearance.backgroundColor = .white
+        navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.backgroundColor = .systemBackground
         // ナビゲーションバー左ボタンを設定
         let backImage = UIImage(systemName: "chevron.backward")
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action:#selector(messageListBack))
         navigationItem.leftBarButtonItem?.tintColor = .fontColor
         navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        
-        let partnerUID = partnerUser.uid
-        let deleteUsers = GlobalVar.shared.loginUser?.deleteUsers ?? [String]()
-        let isDeleteUser = (deleteUsers.firstIndex(of: partnerUID) != nil)
-        
-        let deactivateUsers = GlobalVar.shared.loginUser?.deactivateUsers ?? [String]()
-        let isDeactivatedUser = (deactivateUsers.firstIndex(of: partnerUID) != nil)
-        
-        let isNotActivatedForPartner = partnerUser.is_activated == false
-        let isDeletedForPartner = partnerUser.is_deleted == true
-        
-        let isNotUseful = isDeleteUser || isDeactivatedUser || isNotActivatedForPartner || isDeletedForPartner
-        
-        if isNotUseful {
-            return
-        }
         
         // navigationItem.titleView
         let messageRoomTitleView = MessageRoomTitleView(frame: CGRect(x: 0, y: 0, width: 200, height: 35))
@@ -672,65 +412,14 @@ extension MessageRoomView {
         rightStackButton.addTarget(self, action: #selector(onEllipsisButtonTapped), for: .touchUpInside)
         guideButton.addTarget(self, action: #selector(onTalkGuideButtonTapped), for: .touchUpInside)
         callButton.addTarget(self, action: #selector(onCallButtonTapped), for: .touchUpInside)
-        
-        switch room.roomStatus {
-        case .normal:
-            setNavigationBarColor(.accentColor)
-            navigationItem.leftBarButtonItem?.tintColor = .white
-            setRightBarButtonItems(background: .white, foreground: .accentColor)
-            backgroundImageView.image = nil
-            backgroundImageView.backgroundColor = UIColor.white
-        case .sBest:
-            setNavigationBarColor(.white)
-            navigationItem.leftBarButtonItem?.tintColor = UIColor.MessageColor.standardPink
-            setRightBarButtonItems(background: UIColor.MessageColor.standardPink, foreground: .white)
-            backgroundImageView.image = nil
-            backgroundImageView.backgroundColor = UIColor.white
-        case .ssBest:
-            setNavigationBarColor(UIColor.MessageColor.standardPink)
-            navigationItem.leftBarButtonItem?.tintColor = .white
-            setRightBarButtonItems(background: .white, foreground: UIColor.MessageColor.standardPink)
-            backgroundImageView.image = nil
-            backgroundImageView.backgroundColor = UIColor.MessageColor.lightPink
-        case .sssBest:
-            setNavigationBarColor(UIColor.MessageColor.standardPink)
-            navigationItem.leftBarButtonItem?.tintColor = UIColor.MessageColor.heavyPink
-            setRightBarButtonItems(background: .white, foreground: UIColor.MessageColor.standardPink)
-            backgroundImageView.image = UIImage(named: "message_background_image")
-        }
     }
     
     @objc private func messageListBack() {
-        NotificationCenter.default.post(
-            name: Notification.Name(NotificationName.MessageListBack.rawValue),
-            object: self
-        )
-        GlobalVar.shared.messageListTableView.reloadData()
         navigationController?.popViewController(animated: true)
     }
     
     @objc private func editPartnerName() {
-        
-        guard let thisRoom = room else { return }
-        guard let partnerUser = thisRoom.partnerUser else { return }
-        
-        let editNameVC = EditPartnerNameViewController.init(room: thisRoom, partnerUser: partnerUser)
-        editNameVC.modalPresentationStyle = .custom
-        editNameVC.transitioningDelegate = self
-        editNameVC.presentationController?.delegate = self
-        present(editNameVC, animated: true) {
-            self.tabBarController?.tabBar.isHidden = true
-        }
-    }
-    
-    /// Inherit from UIViewControllerTransitioningDelegate.
-    /// Asks your delegate for the custom presentation controller to use for managing the view hierarchy when presenting a view controller.
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return CustomPresentationController(presentedViewController: presented, presenting: presenting)
-    }
-    
-    override func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        setUpNavigation()
+        print(#function)
     }
     
     private func setNavigationBarColor(_ color: UIColor) {
@@ -760,7 +449,7 @@ extension MessageRoomView {
         callButton.heightAnchor.constraint(equalToConstant: 28.0).isActive = true
         
         let guideButtonConfig = UIImage.SymbolConfiguration(pointSize: 13.0).applying(
-            UIImage.SymbolConfiguration(paletteColors: [isUnreadTalkGuide() ? .red : foreground])
+            UIImage.SymbolConfiguration(paletteColors: [.red])
         )
         guideButton.configuration = nil
         guideButton.frame = CGRect(x: 0, y: 0, width: 50, height: 28)
@@ -888,563 +577,13 @@ extension MessageRoomView {
             return false
         }
     }
-    
-    // 連続記録に必要なepochtimeと連続カウントを取得更新している
-    private func setConsectiveRallyRecord() {
-        guard let room = room else { return }
-        guard let roomId = room.document_id else { return }
-        guard let partnerUserId = room.partnerUser?.uid else { return }
-        guard let loginUserId = GlobalVar.shared.loginUser?.uid else { return }
-        
-        Task {
-            do {
-                let collection = db.collection("rooms")
-                let document = try await collection.document(roomId).getDocument()
-                let documentData = document.data()
-                
-                guard let lastCountAt = documentData?["last_consective_count_at"] as? Int else {
-                    try await collection.document(roomId).updateData([
-                        "last_consective_count_at": 0,
-                        "consective_count": 0
-                    ])
-                    GlobalVar.shared.consectiveCountDictionary[roomId] = 0
-                    return
-                }
-                guard let count = documentData?["consective_count"] as? Int else {
-                    try await collection.document(roomId).updateData([
-                        "last_consective_count_at": 0,
-                        "consective_count": 0
-                    ])
-                    GlobalVar.shared.consectiveCountDictionary[roomId] = 0
-                    return
-                }
-                
-                let minPeriodEpochTime = lastCountAt + DateConst.dayInSeconds
-                let periodEpochTime = DateConst.hourInSeconds * 48
-                let limitEposhTime = lastCountAt + periodEpochTime
-                let currentEpochTime = Int(Date().timeIntervalSince1970)
-                let diffEposhTime = currentEpochTime - periodEpochTime
-                
-                var updateData: [String: Int] = [:]
-                var _createdAtArray: [Int] = []
-                var _creators: [String] = []
-                
-                // 連続記録が0の場合ラリーを検索して初期化
-                if count == 0 {
-                    roomMessages.forEach { message in
-                        if diffEposhTime <= message.created_at.seconds {
-                            _createdAtArray.append(Int(message.created_at.seconds))
-                            _creators.append(message.creator)
-                        }
-                    }
-                    
-                    if _creators.contains(loginUserId) && _creators.contains(partnerUserId) {
-                        guard let lastConsectiveCountAt = _createdAtArray.max() else {
-                            return
-                        }
-                        let consectiveCount = 1
-                        updateData["last_consective_count_at"] = lastConsectiveCountAt
-                        updateData["consective_count"] = consectiveCount
-                        try await db.collection("rooms").document(roomId).updateData(updateData)
-                        GlobalVar.shared.consectiveCountDictionary[roomId] = consectiveCount
-                        return
-                    }
-                }
-                
-                // 最後のラリーから48h超えていたら連続記録をリセット
-                if currentEpochTime >= limitEposhTime {
-                    let consectiveCount = 0
-                    updateData["last_consective_count_at"] = 0
-                    updateData["consective_count"] = consectiveCount
-                    try await db.collection("rooms").document(roomId).updateData(updateData)
-                    GlobalVar.shared.consectiveCountDictionary[roomId] = consectiveCount
-                    return
-                }
-                
-                // 24h〜48hの間にラリーしているかを検索
-                roomMessages.forEach { message in
-                    if minPeriodEpochTime <= message.created_at.seconds && limitEposhTime >= message.created_at.seconds {
-                        _createdAtArray.append(Int(message.created_at.seconds))
-                        _creators.append(message.creator)
-                    }
-                }
-                
-                // 24h〜48hの間にラリーされていたら連続記録を更新
-                if _creators.contains(loginUserId) && _creators.contains(partnerUserId) {
-                    guard let lastConsectiveCountAt = _createdAtArray.max() else {
-                        return
-                    }
-                    let consectiveCount = count + 1
-                    updateData["last_consective_count_at"] = lastConsectiveCountAt
-                    updateData["consective_count"] = consectiveCount
-                    try await db.collection("rooms").document(roomId).updateData(updateData)
-                    GlobalVar.shared.consectiveCountDictionary[roomId] = consectiveCount
-                    return
-                }
-            } catch {
-                print("🔥アイコン表示データ取得に失敗")
-            }
-        }
-    }
-}
-
-// 通話関連
-extension MessageRoomView: CallViewControllerDelegate {
-    
-    private func receiveCallNotification() {
-        if GlobalVar.shared.receivedCallNotificaition == true {
-            onCallButtonTapped()
-            GlobalVar.shared.receivedCallNotificaition = false
-        }
-    }
-    
-    @objc private func onCallButtonTapped() {
-        
-        updateTypingState(isTyping: false)
-        
-        if let callData = createCallData() {
-            Task {
-                do {
-                    let enabled = try await callFunctionEnabled(callData.loginUser, partnerUser: callData.partnerUser, rallyNum: 5)
-                    if !enabled {
-                        showCallFunctionAlert(.notFunctionEnabled)
-                        return
-                    }
-                    
-                    print("callData", callData.partnerName)
-                    print("callData", callData.skywayToken)
-                    
-                    NotificationCenter.default.addObserver(
-                        self,
-                        selector: #selector(endCall),
-                        name: NSNotification.Name(NotificationName.EndCall.rawValue),
-                        object: nil
-                    )
-                    showCallViewController(
-                        callData.partnerName,
-                        partnerIcon: callData.partnerIcon,
-                        roomName: callData.roomName,
-                        skywayToken: callData.skywayToken,
-                        callData: callData
-                    )
-                } catch {
-                    showCallFunctionAlert(.missingData)
-                }
-            }
-        }
-    }
-    
-    private func createCallData() -> CallData? {
-        guard let loginUser = GlobalVar.shared.loginUser else {
-            showCallFunctionAlert(.missingData)
-            return nil
-        }
-        guard let room = room else {
-            showCallFunctionAlert(.missingData)
-            return nil
-        }
-        guard let partnerUser = room.partnerUser else {
-            showCallFunctionAlert(.missingData)
-            return nil
-        }
-        guard let partnerIconUrl = URL(string: partnerUser.profile_icon_img) else {
-            showCallFunctionAlert(.missingData)
-            return nil
-        }
-        guard let roomName = room.document_id else {
-            showCallFunctionAlert(.missingData)
-            return nil
-        }
-        guard let skywayToken = skywayToken else {
-            showCallFunctionAlert(.missingData)
-            return nil
-        }
-        let imageView = UIImageView()
-        imageView.setImage(withURL: partnerIconUrl)
-        
-        var partnerNickName = partnerUser.nick_name
-        
-        if let nickName = room.partnerNickname { partnerNickName = nickName }
-        
-        let data = CallData(
-            loginUser: loginUser,
-            partnerUser: partnerUser,
-            partnerName: partnerNickName,
-            partnerIcon: imageView,
-            roomName: roomName,
-            skywayToken: skywayToken
-        )
-        
-        return data
-    }
-    
-    private func callFunctionEnabled(_ loginUser: User, partnerUser: User, rallyNum: Int) async throws -> Bool {
-        guard let roomId = room?.document_id else {
-            throw NSError()
-        }
-        
-        do {
-            let collection = db.collection("rooms").document(roomId).collection("messages")
-            let documents = try await collection.getDocuments(source: .default).documents
-            var messages = [Message]()
-            
-            documents.forEach { document in
-                let message = Message(document: document)
-                messages.append(message)
-            }
-            
-            let ownMessages = messages.filter({
-                $0.creator == loginUser.uid
-            })
-            let otherMessages = messages.filter({
-                $0.creator != loginUser.uid
-            })
-            let result = ownMessages.count >= rallyNum && otherMessages.count >= rallyNum
-            
-            return result
-        } catch {
-            throw error
-        }
-    }
-    
-    private func fetchSkyWayToken() {
-        callButton.isEnabled = false
-        let functions = Functions.functions()
-        let currentEpochTime = Int(Date().timeIntervalSince1970)
-        let dayInSeconds = 86400
-        var updateData: [String: Any] = [:]
-        guard let room = room else {
-            return
-        }
-        
-        // print("last_updated_at_for_skyway_token:", room.lastUpdatedAtForSkyWayToken)
-        // print("next_update_at_for_skyway_token:", room.lastUpdatedAtForSkyWayToken + dayInSeconds)
-        
-        if (room.lastUpdatedAtForSkyWayToken + dayInSeconds) <= currentEpochTime {
-            functions.httpsCallable("generateSkyWayAuthToken").call { result, error in
-                if let error = error {
-                    print("Fail fetchSkyWayToken.")
-                    print(error)
-                    print(error.localizedDescription)
-                } else {
-                    guard let token = result?.data as? String else {
-                        return
-                    }
-                    guard let roomID = self.room?.document_id else {
-                        return
-                    }
-                    let lastUpdatedAtForSkyWayToken = currentEpochTime
-                    
-                    updateData["skyway_token"] = token
-                    updateData["last_updated_at_for_skyway_token"] = lastUpdatedAtForSkyWayToken
-                    
-                    self.skywayToken = token
-                    self.room?.skywayToken = token
-                    self.room?.lastUpdatedAtForSkyWayToken = lastUpdatedAtForSkyWayToken
-                    self.db.collection("rooms").document(roomID).updateData(updateData)
-                    self.callButton.isEnabled = true
-                }
-            }
-        } else {
-            skywayToken = room.skywayToken
-            callButton.isEnabled = true
-        }
-    }
-    
-    private func showCallViewController(_ partnerName: String, partnerIcon: UIImageView, roomName: String, skywayToken: String, callData: CallData) {
-        callViewController = CallViewController(callData: callData)
-        guard let callViewController = callViewController,
-              let partnerUserID = self.room?.partnerUser?.uid,
-              let partnerUserIconUrl = self.room?.partnerUser?.profile_icon_img,
-              let roomID = self.room?.document_id else {
-            return
-        }
-        callViewController.delegate = self
-        callViewController.partnerUserIconUrl = partnerUserIconUrl
-        callViewController.partnerName = partnerName
-        callViewController.skywayToken = skywayToken
-        callViewController.roomName = roomName
-        callViewController.partnerUserID = partnerUserID
-        callViewController.roomID = roomID
-        callViewController.modalPresentationStyle = .fullScreen
-        
-        present(callViewController, animated: true)
-    }
-    
-    private func showCallFunctionAlert(_ type: CallAlertType) {
-        switch type {
-        case .missingData:
-            let alert = UIAlertController(title: "確認", message: "通話情報の取得に失敗しました。\n時間をおいて再度やり直してください。", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default)
-            alert.addAction(ok)
-            present(alert, animated: true)
-        case .notFunctionEnabled:
-            let alert = UIAlertController(title: "確認", message: "通話機能はトークを5往復以上おこなってから利用することができます。", preferredStyle: .alert)
-            let ok = UIAlertAction(title: "OK", style: .default)
-            alert.addAction(ok)
-            present(alert, animated: true)
-        }
-    }
-    
-    @objc private func endCall() {
-        callViewController?.dismiss(animated: true) {
-            self.callViewController = nil
-            self.messageInputView.isHidden = false
-            self.messageCollectionView.reloadData()
-        }
-    }
-    
-    @objc private func closedTutorial() {
-        textView.resignFirstResponder()
-    }
-    
-    func setEndCallMessage() {
-        DispatchQueue.main.async {
-            self.messageInputView.isHidden = false
-            self.endCallMessageModel = self.getSendMessageModel(
-                text: "通話しました📞",
-                inputType: .message,
-                messageType: .text,
-                sourceType: nil,
-                imageUrls: nil,
-                messageId: UUID().uuidString
-            )
-        }
-    }
-    
-    func setEndVideoCallMessage() {
-        DispatchQueue.main.async {
-            self.messageInputView.isHidden = false
-            self.endCallMessageModel = self.getSendMessageModel(
-                text: "ビデオ通話しました🎥",
-                inputType: .message,
-                messageType: .text,
-                sourceType: nil,
-                imageUrls: nil,
-                messageId: UUID().uuidString
-            )
-        }
-    }
-    
-    private func sendEndCallMessage() {
-        guard let endCallMessageModel else { return }
-        sendMessageToFirestore(endCallMessageModel)
-        self.endCallMessageModel = nil
-    }
-}
-
-// 自動メッセージ関連
-extension MessageRoomView {
-    // 自動メッセージ送信
-    @objc private func autoMessageAction() {
-        
-        let autoMessage = (GlobalVar.shared.loginUser?.is_auto_message == true)
-        let displayAutoMessage = (GlobalVar.shared.displayAutoMessage == true)
-        let displayAutoMessageNum = UserDefaults.standard.integer(forKey: "display_auto_message_num")
-        let displayAutoMessageRange = (displayAutoMessageNum < 2)
-        let showAutoMessage = (autoMessage && displayAutoMessage && displayAutoMessageRange)
-        if showAutoMessage {
-            GlobalVar.shared.displayAutoMessage = false
-            
-            let displayAutoMessageNum = UserDefaults.standard.integer(forKey: "display_auto_message_num")
-            
-            UserDefaults.standard.set(displayAutoMessageNum + 1, forKey: "display_auto_message_num")
-            UserDefaults.standard.synchronize()
-            
-            autoMessageMove()
-        }
-    }
-}
-
-// お話ガイド関連
-extension MessageRoomView {
-    
-    @objc private func onTalkGuideButtonTapped() {
-        updateTypingState(isTyping: false)
-        
-        let storyboard = UIStoryboard.init(name: "TalkGuideView", bundle: nil)
-        guard let viewController = storyboard.instantiateViewController(withIdentifier: "TalkGuideView") as? TalkGuideViewController else {
-            return
-        }
-        let navigationController = UINavigationController(rootViewController: viewController)
-        
-        present(navigationController, animated: true) {
-            if let room = GlobalVar.shared.specificRoom {
-                switch room.roomStatus {
-                case .normal:
-                    self.setRightBarButtonItems(background: .white, foreground: .accentColor)
-                case .sBest:
-                    self.setRightBarButtonItems(background: UIColor.MessageColor.standardPink, foreground: .white)
-                case .ssBest, .sssBest:
-                    self.setRightBarButtonItems(background: .white, foreground: UIColor.MessageColor.standardPink)
-                }
-            }
-        }
-    }
-}
-
-// 違反勧誘関連
-extension MessageRoomView {
-    
-    @objc private func onEllipsisButtonTapped() {
-        updateTypingState(isTyping: false)
-        showAlertList()
-    }
-    
-    private func showAlertList() {
-        var block = UIAlertAction(title: "ブロック", style: .default) { action in
-            self.block()
-        }
-        var report = UIAlertAction(title: "違反報告", style: .default) { action in
-            self.report()
-        }
-        var stop = UIAlertAction(title: "勧誘専用の報告", style: .default) { action in
-            self.stop()
-        }
-        let cancel = UIAlertAction(title: "キャンセル", style: .cancel)
-        
-        block = customAlertAction(block, image: "nosign", color: .black)
-        report = customAlertAction(report, image: "megaphone", color: .black)
-        stop = customAlertAction(stop, image: "megaphone.fill", color: .red)
-        
-        let actions = [block, report, stop, cancel]
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
-        actions.forEach { action in
-            alert.addAction(action)
-        }
-        
-        present(alert, animated: true)
-    }
-    
-    private func customAlertAction(_ action: UIAlertAction, image: String, color: UIColor) -> UIAlertAction {
-        action.setValue(UIImage(systemName: image), forKey: "image")
-        action.setValue(color, forKey: "imageTintColor")
-        action.setValue(color, forKey: "titleTextColor")
-        
-        return action
-    }
-    
-    private func block() {
-        guard let currentUid = GlobalVar.shared.loginUser?.uid else { return }
-        guard let partnerUser = room?.partnerUser else { return }
-        let partnerId = partnerUser.uid
-        let partnerName = partnerUser.nick_name
-        
-        let alert = UIAlertController(title: partnerName + "さんをブロックしますか？", message: "", preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "キャンセル", style: .cancel)
-        let block = UIAlertAction(title: "ブロック", style: .destructive, handler: { _ in
-            self.showLoadingView(self.loadingView)
-            self.firebaseController.block(loginUID: currentUid, targetUID: partnerId) { result in
-                self.loadingView.removeFromSuperview()
-                if result {
-                    self.navigationController?.popViewController(animated: true)
-                } else {
-                    self.alert(title: "ブロックに失敗しました", message: "不具合を運営に報告してください。", actiontitle: "OK")
-                }
-            }
-        })
-        
-        alert.addAction(cancel)
-        alert.addAction(block)
-        
-        present(alert, animated: true)
-    }
-    
-    private func report() {
-        guard let room = room else { return }
-        let storyBoard = UIStoryboard.init(name: "ViolationView", bundle: nil)
-        guard let viewController = storyBoard.instantiateViewController(withIdentifier: "ViolationView") as? ViolationViewController else {
-            fatalError("Failed to cast to ViolationViewController")
-        }
-        viewController.targetUser = room.partnerUser
-        viewController.category = "room"
-        viewController.violationedID = room.document_id ?? ""
-        viewController.closure = { (flag: Bool) -> Void in
-            if flag {
-                self.navigationController?.popViewController(animated: true)
-            }
-        }
-        
-        present(viewController, animated: true) {
-            self.tabBarController?.tabBar.isHidden = true
-        }
-    }
-    
-    private func stop() {
-        guard let room = room else { return }
-        let storyBoard = UIStoryboard.init(name: "StopView", bundle: nil)
-        guard let viewController = storyBoard.instantiateViewController(withIdentifier: "StopView") as? StopViewController else {
-            fatalError("Failed to cast to StopViewController")
-        }
-        viewController.targetUser = room.partnerUser
-        viewController.closure = { (flag: Bool) -> Void in
-            if flag {
-                self.navigationController?.popViewController(animated: true)
-            }
-        }
-        
-        present(viewController, animated: true) {
-            self.tabBarController?.tabBar.isHidden = true
-        }
-    }
-    
-    private func cheackLaunchRoomCount() {
-        guard let count = UserDefaults.standard.object(forKey: "roomLaunchedTimes") as? Int else {
-            return
-        }
-        if count > 30 {
-            presentReportAlert()
-        } else {
-            UserDefaults.standard.set(count + 1, forKey: "roomLaunchedTimes")
-        }
-    }
-    
-    private func presentReportAlert() {
-        let alert = UIAlertController(
-            title: "勧誘ユーザー通報のお願い",
-            message: "Touchは友達作りを目的にしているアプリです。勧誘やその他の目的を持っているユーザーを発見した場合「通報」をお願いします。運営にて厳しい処理を行います。",
-            preferredStyle: .alert
-        )
-        let ok = UIAlertAction(title: "OK", style: .default)
-        
-        let frame = CGRect(x: 10, y: 115, width: 250, height: 290)
-        let imageView = UIImageView()
-        imageView.frame = frame
-        imageView.image = UIImage(named: "BlockImage")
-        
-        alert.view.addConstraint(
-            NSLayoutConstraint(
-                item: alert.view as Any,
-                attribute: .height,
-                relatedBy: .equal,
-                toItem: nil,
-                attribute: .notAnAttribute,
-                multiplier: 1,
-                constant: 460
-            )
-        )
-        alert.view.addSubview(imageView)
-        alert.addAction(ok)
-        
-        present(alert, animated: true) {
-            guard let roomId = self.room?.document_id else {
-                return
-            }
-            guard let count = UserDefaults.standard.object(forKey: "roomLaunchedTimes") as? Int else {
-                return
-            }
-            let logEventData: [String: Any] = ["roomID": roomId, "roomLaunchedTimes": count]
-            Log.event(name: "showMessageRoomReportAlert", logEventData: logEventData)
-            UserDefaults.standard.set(0, forKey: "roomLaunchedTimes")
-        }
-    }
 }
 
 
 // MARK: - messageCollectionView, collectionViewCellDelegate
 
-extension MessageRoomView: OwnMessageCollectionViewImageCellDelegate,  OtherMessageCollectionViewCellDelegate,
+extension MessageRoomView: UICollectionViewDelegate,
+                           OwnMessageCollectionViewImageCellDelegate,  OtherMessageCollectionViewCellDelegate,
                            OtherMessageCollectionViewImageCellDelegate, OtherMessageCollectionViewReplyCellDelegate,
                            OwnMessageCollectionViewStickerCellDelegate, OtherMessageCollectionViewStickerCellDelegate,
                            OwnMessageCollectionViewReplyCellDelegate, OwnMessageCollectionViewCellDelegate,
@@ -1487,9 +626,6 @@ extension MessageRoomView: OwnMessageCollectionViewImageCellDelegate,  OtherMess
         
         guard let loginUser = GlobalVar.shared.loginUser, let partnerUser = room?.partnerUser else { return }
         
-        /* Global変数を代入 */
-        GlobalVar.shared.diffableDataSource = self.dataSource
-        
         /* セルの登録 */
         let unreadCellRegistration = UICollectionView.CellRegistration<UnreadMessageCollectionViewCell, Message>(
             cellNib: UnreadMessageCollectionViewCell.nib) { cell, indexPath, message in }
@@ -1501,7 +637,7 @@ extension MessageRoomView: OwnMessageCollectionViewImageCellDelegate,  OtherMess
         let ownTextCellRegistration = UICollectionView.CellRegistration<OwnMessageCollectionViewCell, Message>(
             cellNib: OwnMessageCollectionViewCell.nib
         ) { cell, indexPath, message in
-            cell.configure(loginUser, message: message, roomStatus: self.room?.roomStatus, delegate: self, indexPath: indexPath)
+            cell.configure(loginUser, message: message, delegate: self, indexPath: indexPath)
             if indexPath == self.reactionIndexPath {
                 cell.animateReactionLabel { _ in
                     self.animateReactionLabelCompletion(indexPath)
@@ -1511,7 +647,7 @@ extension MessageRoomView: OwnMessageCollectionViewImageCellDelegate,  OtherMess
         let otherTextCellRegistration = UICollectionView.CellRegistration<OtherMessageCollectionViewCell, Message>(
             cellNib: OtherMessageCollectionViewCell.nib
         ) { cell, indexPath, message in
-            cell.configure(partnerUser, message: message, roomStatus: self.room?.roomStatus, delegate: self, indexPath: indexPath)
+            cell.configure(partnerUser, message: message, delegate: self, indexPath: indexPath)
             if indexPath == self.reactionIndexPath {
                 cell.animateReactionLabel { _ in
                     self.animateReactionLabelCompletion(indexPath)
@@ -1561,7 +697,7 @@ extension MessageRoomView: OwnMessageCollectionViewImageCellDelegate,  OtherMess
         let ownReplyTextCellRegistration = UICollectionView.CellRegistration<OwnMessageCollectionViewReplyCell, Message>(
             cellNib: OwnMessageCollectionViewReplyCell.nib
         ) { cell, indexPath, message in
-            cell.configure(message, roomStatus: self.room?.roomStatus, delegate: self, indexPath: indexPath)
+            cell.configure(message, delegate: self, indexPath: indexPath)
             if indexPath == self.reactionIndexPath {
                 cell.animateReactionLabel { _ in
                     self.animateReactionLabelCompletion(indexPath)
@@ -1571,7 +707,7 @@ extension MessageRoomView: OwnMessageCollectionViewImageCellDelegate,  OtherMess
         let otherReplyTextCellRegistration = UICollectionView.CellRegistration<OtherMessageCollectionViewReplyCell, Message>(
             cellNib: OtherMessageCollectionViewReplyCell.nib
         ) { cell, indexPath, message in
-            cell.configure(message, partnerUser: partnerUser, roomStatus: self.room?.roomStatus, delegate: self, indexPath: indexPath)
+            cell.configure(message, partnerUser: partnerUser, delegate: self, indexPath: indexPath)
             if indexPath == self.reactionIndexPath {
                 cell.animateReactionLabel { _ in
                     self.animateReactionLabelCompletion(indexPath)
@@ -1709,7 +845,6 @@ extension MessageRoomView: OwnMessageCollectionViewImageCellDelegate,  OtherMess
                 isFetchPastMessages = false
                 messageCollectionView.isScrollEnabled = false
                 fetchPastMessagesFromFirestore()
-                Log.event(name: "reloadMessageList")
             }
         }
     }
@@ -1727,36 +862,7 @@ extension MessageRoomView: OwnMessageCollectionViewImageCellDelegate,  OtherMess
     }
     
     @objc private func showProfilePage() {
-        
-        updateTypingState(isTyping: false)
-        
-        guard let roomId = room?.document_id else {
-            return
-        }
-        guard let partner = room?.partnerUser else {
-            return
-        }
-        
-        if partner.is_deleted {
-            return
-        }
-        
-        let logEventData: [String: Any] = ["roomID": roomId, "target": partner.uid]
-        Log.event(name: "showAvatarProfile", logEventData: logEventData)
-        
-        textView.resignFirstResponder()
-        
-        let storyboard = UIStoryboard.init(name: "ProfileContainerViewController", bundle: nil)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "ProfileContainerViewController") as! ProfileContainerViewController
-        viewController.user = partner
-        viewController.previousClassName = "MessageRoomView"
-        let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.modalPresentationStyle = .overFullScreen
-        navigationController.modalTransitionStyle = .crossDissolve
-        
-        present(navigationController, animated: true) {
-            self.tabBarController?.tabBar.isHidden = true
-        }
+        print(#function)
     }
     
     // MARK: Cell TapEvent
@@ -1904,16 +1010,11 @@ extension MessageRoomView: OwnMessageCollectionViewImageCellDelegate,  OtherMess
 
 // MARK: - MessageInputView
 
-extension MessageRoomView {
+extension MessageRoomView: UITextViewDelegate {
     
     private func setUpMessageInputViewContainer() {
         
         setUpMessageInputView()
-        
-        if checkRoomActive(room: room) == false {
-            setUpDisableLabel()
-            return
-        }
         setUpTextView()
         setUpCameraButton()
         setUpStampButton()
@@ -1961,7 +1062,6 @@ extension MessageRoomView {
             messageInputView = MessageInputView.init(frame: frame, replyPreviewFrame: replyPreviewFrame, stickerPreviewFrame: stickerPreviewFrame, noticePreviewFrame: noticePreviewFrame, room: room)
             view.addSubview(messageInputView)
             messageInputViewFrame = messageInputView.frame
-            GlobalVar.shared.messageInputView = messageInputView
         }
     }
     
@@ -1993,16 +1093,7 @@ extension MessageRoomView {
         textView.font = UIFont.systemFont(ofSize: TEXT_VIEW_FONT_SIZE)
         textView.layer.cornerRadius = 10
         textView.delegate = self
-        switch room?.roomStatus {
-        case .normal, .sBest:
-            textView.backgroundColor = .textViewColor
-        case .ssBest, .sssBest:
-            textView.backgroundColor = .white
-            textView.layer.borderColor = UIColor.MessageColor.standardPink.cgColor
-            textView.layer.borderWidth = 1.5
-        case .none:
-            fatalError("room is nil")
-        }
+        textView.backgroundColor = .textViewColor
         messageInputView.addSubview(textView)
         
         let user = GlobalVar.shared.loginUser
@@ -2112,39 +1203,14 @@ extension MessageRoomView {
     }
     
     private func setButtonTintColor() {
-        switch room?.roomStatus {
-        case .normal:
-            cameraButton.tintColor = .accentColor
-            stampButton.tintColor = .accentColor
-            sendButton.tintColor = .accentColor
-        case .sBest, .ssBest:
-            cameraButton.tintColor = UIColor.MessageColor.standardPink
-            stampButton.tintColor = UIColor.MessageColor.standardPink
-            sendButton.tintColor = UIColor.MessageColor.standardPink
-        case .sssBest:
-            cameraButton.tintColor = UIColor.MessageColor.heavyPink
-            stampButton.tintColor = UIColor.MessageColor.heavyPink
-            sendButton.tintColor = UIColor.MessageColor.heavyPink
-        case .none:
-            fatalError("room is nil")
-        }
+        cameraButton.tintColor = .accentColor
+        stampButton.tintColor = .accentColor
+        sendButton.tintColor = .accentColor
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
-        let type = adminIdCheckStatusTypeForMessageRoom()
-        if type == .unRequest || type == .rejected || type == .pendAppro {
-            textView.resignFirstResponder()
-            adminIdCheckStatusType = type
-            return
-        }
-            
+          
         guard let room = room else { return }
-        if room.roomStatus == .sssBest {
-            // sssBestはkeyboard表示のときは背景画像と同系色にしてく
-            messageInputView.backgroundColor = UIColor.MessageColor.lightPink
-        } else {
-            messageInputView.roomStatus = room.roomStatus
-        }
         
         guard let userInfo = notification.userInfo else {
             return
@@ -2170,13 +1236,6 @@ extension MessageRoomView {
     
     @objc private func keyboardWillHide(_ notification: Notification?) {
         guard let room = room else { return }
-        if room.roomStatus == .sssBest {
-            // sssBestはkeyboard非表示のときは透明にする
-            messageInputView.backgroundColor = .clear
-        } else {
-            messageInputView.roomStatus = room.roomStatus
-        }
-        
         guard let messageInputViewFrame = messageInputViewFrame else {
             return
         }
@@ -2319,13 +1378,6 @@ extension MessageRoomView {
         textView.resignFirstResponder()
         updateTypingState(isTyping: false)
         
-        let type = adminIdCheckStatusTypeForMessageRoom()
-        if type == .unRequest || type == .rejected || type == .pendAppro {
-            textView.resignFirstResponder()
-            adminIdCheckStatusType = type
-            return
-        }
-        
         let selectAction = UIAlertAction(title: "ライブラリから写真を選ぶ", style: .default) { action in
             self.presentPicker()
         }
@@ -2344,23 +1396,12 @@ extension MessageRoomView {
     
     @objc private func onStampButtonTapped(_ sender: UIButton) {
         updateTypingState(isTyping: false)
-        
-        let type = adminIdCheckStatusTypeForMessageRoom()
-        if type == .unRequest || type == .rejected || type == .pendAppro {
-            textView.resignFirstResponder()
-            adminIdCheckStatusType = type
-            return
-        }
-        
         switchSelectedStateAction()
     }
     
     @objc private func onSendButtonTapped(_ sender: UIButton) {
         updateTypingState(isTyping: false)
-        /* (1) 本人確認しているかをチェック */
-        if adminCheckStatus() == false {
-            return
-        }
+        
         self.messageSending = true
         /* (2) リプライ返信/スタンプ送信/テキストメッセージ送信かを判定 */
         if replyIsSelected {
@@ -2668,7 +1709,7 @@ extension MessageRoomView: StickerKeyboardViewDelegate, MessageInputViewStickerD
             "file_id": fileId
         ]
         
-        firebaseController.uploadStickerToFireStorage(
+        uploadStickerToFireStorage(
             sticker: sticker,
             referenceName: referenceName,
             folderName: folderName,
@@ -2678,6 +1719,32 @@ extension MessageRoomView: StickerKeyboardViewDelegate, MessageInputViewStickerD
                 completion(result)
             }
         )
+    }
+    
+    /// スタンプをStorageへアップロードする。PNG画像として保存。
+    private func uploadStickerToFireStorage(sticker: UIImage, referenceName: String, folderName: String, fileName: String, customMetadata: [String:String], completion: @escaping (String) -> Void) {
+        guard let uploadSticker = sticker.pngData(), let loginUser = GlobalVar.shared.loginUser?.uid else { completion(""); return }
+        
+        var customMetaData = customMetadata
+        customMetaData.updateValue(loginUser, forKey: "creator")
+        
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/png"
+        metadata.customMetadata = customMetaData
+        
+        let storageRef = Storage.storage().reference().child(referenceName).child(folderName).child(fileName)
+        storageRef.putData(uploadSticker, metadata: metadata) { [weak self] (metadata, err) in
+            guard let _ = self else { return }
+            if let err = err { print("FireStorageへの保存失敗: \(err)"); completion(""); return }
+            
+            storageRef.downloadURL{ [weak self] (url, err) in
+                guard let _ = self else { return }
+                if let err = err { print("FireStorageからのダウンロード失敗: \(err)"); completion(""); return }
+                
+                guard let urlString = url?.absoluteString else { completion(""); return }
+                completion(urlString)
+            }
+        }
     }
 }
 
@@ -2761,13 +1828,6 @@ extension MessageRoomView {
                 self.setMessageUnread()
                 self.attachMessageRoomListener(room: room, roomId: roomId, from: self.lastDocumentSnapshot)
                 self.applySnapshot()
-                self.setUpAutoMatchingView()
-                if self.roomMessages.isEmpty {
-                    self.talkView.isHidden = self.isHiddenTalkView(room: room)
-                } else {
-                    self.talkView.isHidden = true
-                }
-                self.sendEndCallMessage()
                 self.scrollToBottom()
                 self.scrollToUnreadMessage()
             }
@@ -2804,13 +1864,6 @@ extension MessageRoomView {
                     self.setMessageUnread()
                     self.attachMessageRoomListener(room: room, roomId: roomId, from: self.lastDocumentSnapshot)
                     self.applySnapshot()
-                    self.setUpAutoMatchingView()
-                    if self.roomMessages.isEmpty {
-                        self.talkView.isHidden = self.isHiddenTalkView(room: room)
-                    } else {
-                        self.talkView.isHidden = true
-                    }
-                    self.sendEndCallMessage()
                     self.scrollToBottom()
                     self.scrollToUnreadMessage()
                 }
@@ -2963,10 +2016,7 @@ extension MessageRoomView {
         guard let currentUID = GlobalVar.shared.loginUser?.uid else { return }
         guard let roomID = GlobalVar.shared.specificRoom?.document_id else { return }
         
-        let isNotMessageRoom = (GlobalVar.shared.thisClassName != "MessageRoomView")
-        let isNotMessageRoomID = (roomID != room?.document_id)
-        let isNotSpecificRoom = (isNotMessageRoom || isNotMessageRoomID)
-        if isNotSpecificRoom { return }
+        if roomID != room?.document_id { return }
         
         let db = Firestore.firestore()
         
@@ -3004,10 +2054,7 @@ extension MessageRoomView {
     
     private func messageRead(force: Bool = true) {
         
-        let isNotMessageRoom = (GlobalVar.shared.thisClassName != "MessageRoomView")
-        let isNotMessageRoomID = (GlobalVar.shared.specificRoom?.document_id != room?.document_id)
-        let isNotSpecificRoom = (isNotMessageRoom || isNotMessageRoomID)
-        let isNotRead = (force == false && isNotSpecificRoom)
+        let isNotRead = (force == false && GlobalVar.shared.specificRoom?.document_id != room?.document_id)
         if isNotRead { return }
         
         guard let roomID = room?.document_id else { return }
@@ -3169,66 +2216,6 @@ extension MessageRoomView {
             "updated_at": sendTime
         ]
         db.collection("rooms").document(roomId).updateData(latestMessageData)
-        
-        var category = UserNoticeType.messageText.rawValue
-        
-        switch messageType {
-        case .image:
-            category = UserNoticeType.messageImage.rawValue
-            break
-        case .sticker:
-            category = UserNoticeType.messageStamp.rawValue
-            break
-        case .reply:
-            let stickerID = model.stickerIdentifier ?? ""
-            let replySticker = stickerID.count > 0
-            if replySticker {
-                category = UserNoticeType.messageReplyStamp.rawValue
-            }
-            break
-        default:
-            break
-        }
-        registNotificationEachUser(
-            category: category,
-            creator: loginUser.uid,
-            members: members,
-            roomID: roomId,
-            messageID: messageId
-        )
-        
-        let logEventData: [String: Any] = [
-            "room_id": roomId,
-            "message_id": messageId,
-            "text": model.text as Any,
-            "target": partnerUser.uid
-        ]
-        
-        switch model.inputType {
-        case .talk:
-            Log.event(name: "sendMessageFromTalkView", logEventData: logEventData)
-        case .camera:
-            if model.sourceType == .photoLibrary {
-                Log.event(name: "sendMessageFromPhotoLibraryInput", logEventData: logEventData)
-            } else if model.sourceType == .camera {
-                Log.event(name: "sendMessageFromCameraInput", logEventData: logEventData)
-            }
-        case .message:
-            Log.event(name: "sendMessageFromMessageInput", logEventData: logEventData)
-        case .reply:
-            Log.event(name: "sendMessageFromMessageReply", logEventData: logEventData)
-        case .sticker:
-            Log.event(name: "sendMessageFromMessageSticker", logEventData: logEventData)
-        }
-        
-#if PROD
-        Task {
-            let _ = try await callFunctionEnabled(loginUser, partnerUser: partnerUser, rallyNum: 1)
-            if room?.is_auto_matchig == false {
-                reviewAlert(alertType: "message")
-            }
-        }
-#endif
     }
     
     private func addLocalMessages(
@@ -3324,32 +2311,6 @@ extension MessageRoomView {
                 reply_message_type: replyMessageType,
                 document_id: messageId
             )
-            /*
-        case .movie:
-            guard let _imageUrls = imageUrls else {
-                return
-            }
-            message = Message(
-                room_id: roomId,
-                text: "動画が送信されました。",
-                photos: _imageUrls,
-                sticker: sticker,
-                read: false,
-                creator: loginUID,
-                members: members,
-                type: .image,
-                created_at: sendTime,
-                updated_at: sendTime,
-                is_deleted: false,
-                reactionEmoji: "",
-                reply_message_id: replyMessageId,
-                reply_message_text: replyMessageText,
-                reply_message_creator: replyMessageCreator,
-                reply_message_image_urls: replyMessageImageUrls,
-                reply_message_type: replyMessageType,
-                document_id: messageId
-            )
-             */
         case .reply:
             guard let _replyMessageId = replyMessageId,
                   let _replyMessageText = replyMessageText,
@@ -3432,7 +2393,7 @@ extension MessageRoomView {
 
 // MARK: - Media
 
-extension MessageRoomView: PHPickerViewControllerDelegate, UIImagePickerControllerDelegate {
+extension MessageRoomView: PHPickerViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     private func presentPicker() {
         self.textView.resignFirstResponder()
@@ -3610,7 +2571,7 @@ extension MessageRoomView: PHPickerViewControllerDelegate, UIImagePickerControll
                 "file_id": fileId
             ]
             
-            firebaseController.uploadImageToFireStorage(
+            uploadImageToFireStorage(
                 image: image,
                 referenceName: referenceName,
                 folderName: folderName,
@@ -3626,6 +2587,35 @@ extension MessageRoomView: PHPickerViewControllerDelegate, UIImagePickerControll
                     }
                 }
             )
+        }
+    }
+    
+    // 画像送信
+    func uploadImageToFireStorage(image: UIImage, referenceName: String, folderName: String, fileName: String, customMetadata: [String:String], completion: @escaping (String) -> Void) {
+       
+        guard let uploadImage = image.jpegData(compressionQuality: 0.8) else { completion(""); return }
+        
+        let loginUser = GlobalVar.shared.loginUser?.uid ?? ""
+        
+        var customMetaData = customMetadata
+        customMetaData.updateValue(loginUser, forKey: "creator")
+        
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        metadata.customMetadata = customMetaData
+        
+        let storageRef = Storage.storage().reference().child(referenceName).child(folderName).child(fileName)
+        storageRef.putData(uploadImage, metadata: metadata) { [weak self] (metadata, err) in
+            guard let _ = self else { return }
+            if let err = err { print("FireStorageへの保存失敗: \(err)"); completion(""); return }
+            
+            storageRef.downloadURL{ [weak self] (url, err) in
+                guard let _ = self else { return }
+                if let err = err { print("FireStorageからのダウンロード失敗: \(err)"); completion(""); return }
+                
+                guard let urlString = url?.absoluteString else { completion(""); return }
+                completion(urlString)
+            }
         }
     }
     
@@ -3670,7 +2660,7 @@ extension MessageRoomView {
         // is_deletedで判定
         guard message.is_deleted, let messageId = message.document_id else { return }
         
-        if let unsendedMessageIndex = roomMessages.firstIndex(where: {$0.document_id == messageId}), let localMessage = roomMessages[safe: unsendedMessageIndex] {
+        if let unsendedMessageIndex = roomMessages.firstIndex(where: {$0.document_id == messageId}), var localMessage = roomMessages[safe: unsendedMessageIndex] {
             // ローカルのMessageを更新
             localMessage.is_deleted = true
             roomMessages[unsendedMessageIndex] = localMessage
@@ -3756,7 +2746,7 @@ extension MessageRoomView {
         // Messageのdocument_idから該当のメッセージを検索し、更新したMessageと入れ替える
         if let messageId = message.document_id,
            let updateMessageIndex = roomMessages.firstIndex(where: {$0.document_id == messageId}),
-           let localMessage = roomMessages[safe: updateMessageIndex] {
+           var localMessage = roomMessages[safe: updateMessageIndex] {
             // ローカルに存在する変更前と同じ値ならここでスキップ
             if localMessage.reactionEmoji == message.reactionEmoji { return }
             // ローカルのMessageを更新
@@ -4128,24 +3118,6 @@ extension MessageRoomView: UIPopoverPresentationControllerDelegate, MessagePopMe
             let uploadReaction = (sameReaction == true ? "" : didSelectedReaction)
             // Firestoreへメッセージ情報の更新を行う
             db.collection("rooms").document(roomId).collection("messages").document(messageId).updateData(["reaction": uploadReaction])
-            // リアクションをつけた場合 (リアクションの取り消しは処理させない)
-            if sameReaction == false {
-                let messageCreator = selectedMessage.creator
-                let loginUID = GlobalVar.shared.loginUser?.uid ?? ""
-                let members = room?.members ?? [String]()
-                let category = UserNoticeType.messageReaction.rawValue
-                
-                let isOtherMessage = (messageCreator != loginUID)
-                if isOtherMessage {
-                    registNotificationEachUser(
-                        category: category,
-                        creator: loginUID,
-                        members: members,
-                        roomID: roomId,
-                        messageID: messageId
-                    )
-                }
-            }
         }
         initPopoverItem()
         messagePopMenuViewController.dismiss(animated: true)

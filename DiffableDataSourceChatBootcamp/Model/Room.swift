@@ -111,4 +111,24 @@ struct Room {
         }
         return nil  // パートナーの未読メッセージIDが見つからない場合
     }
+    
+    func initUnreadCount(room: Room, count: Int) -> Room {
+        Room(data:[
+                "room_id": room.document_id ?? "",
+                "members": room.members,
+                "latest_message_id": room.latest_message_id,
+                "latest_message": room.latest_message ?? "",
+                "latest_sender": room.latest_sender ?? "",
+                "send_message_\(GlobalVar.shared.loginUser?.uid ?? "")": room.send_message ?? "",
+                "creator": room.creator,
+                "unread_\(GlobalVar.shared.loginUser?.uid ?? "")": count,
+                "unread_ids": room.unread_ids,
+                "message_num": room.message_num,
+                "created_at": room.created_at,
+                "updated_at": room.updated_at,
+                "nicknames": room.nicknames,
+                "is_pinned_by_\(GlobalVar.shared.loginUser?.uid ?? "")": room.is_pinned
+             ]
+        )
+    }
 }

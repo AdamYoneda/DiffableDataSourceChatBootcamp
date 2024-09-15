@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseFirestore
 
-final class InputNoteViewController: UIBaseViewController {
+final class InputNoteViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var shadowView: UIView!
     @IBOutlet weak var frameView: UIView!
@@ -57,7 +57,15 @@ final class InputNoteViewController: UIBaseViewController {
         //ナビゲーションアイテムのタイトルを設定
         self.navigationItem.title = "新しいひとこと"
         // ナビゲーションバー設定
-        hideNavigationBarBorderAndShowTabBarBorder()
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithTransparentBackground()
+        
+        navigationBarAppearance.backgroundColor = .white
+        navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.backgroundColor = .systemBackground
         //ナビゲーションバー左ボタンを設定
         let backImage = UIImage(systemName: "xmark")
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(cancel))
@@ -84,6 +92,7 @@ final class InputNoteViewController: UIBaseViewController {
         if let inputText = inputTextField.text, let uid = GlobalVar.shared.loginUser?.uid {
             GlobalVar.shared.loginUser?.note = inputText
             MessageListViewController.noteIconView?.configure()
+            let db = Firestore.firestore()
             db.collection("users").document(uid).updateData(["note": inputText, "note_updated_at": Timestamp()]) { [weak self] error in
                 guard let self, error == nil else {
                     self?.alertWithDismiss(title: "失敗", message: "ひとことのシェアに失敗しました。時間をおいて再度お試しください。", actiontitle: "OK")
@@ -91,12 +100,6 @@ final class InputNoteViewController: UIBaseViewController {
                 }
                 dismiss(animated: true)
             }
-        }
-    }
-    
-    override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        super.dismiss(animated: flag) {
-            GlobalVar.shared.thisClassName = "MessageListViewController" // 「やりとり」画面に戻る導線しかないので、ここで更新
         }
     }
     
@@ -117,7 +120,7 @@ final class InputNoteViewController: UIBaseViewController {
     }
     
     // Returnを押すと編集が終わる（キーボードが閉じる）
-    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return false
     }
                             

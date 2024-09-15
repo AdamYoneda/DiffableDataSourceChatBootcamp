@@ -1,17 +1,13 @@
-//
-//  MessageListViewController.swift
-//  ChatLikeSampler
-//
-//  Created by Daichi Tsuchiya on 2021/10/21.
-//
+
 
 import UIKit
 import FirebaseFirestore
-import Typesense
 
-final class MessageListViewController: UIBaseViewController {
+final class MessageListViewController: UIViewController {
 
     @IBOutlet weak var messageListTableView: UITableView!
+    
+    private let db = Firestore.firestore()
     
     static let storyboardName = "MessageListViewController"
     static let identifier = "MessageListViewController"
@@ -24,6 +20,8 @@ final class MessageListViewController: UIBaseViewController {
     private var isFetchPastMessageList = true
     private var beforeScrollContentOffsetY = CGFloat(0)
     private let userDefaults = UserDefaults.standard
+    
+    private var lastRoomDocument: QueryDocumentSnapshot?
     
     private var indicatorStatus: IndicatorStatus = .hide {
         didSet {
@@ -49,10 +47,8 @@ final class MessageListViewController: UIBaseViewController {
     }
     
     private enum Section: Int {
-        case header = 0
-        case newMatch = 1
-        case pinRoomList = 2
-        case roomList = 3
+        case pinRoomList = 0
+        case roomList = 1
     }
     
     //MARK: - Life cycle
@@ -68,14 +64,11 @@ final class MessageListViewController: UIBaseViewController {
             self.setNavigationBarColor(.white)
             self.sortRoomsForPinnedAction()
             self.setUpRefreshControl()
-            self.prefetcher.isPaused = false
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        initLatestRoomIdAndLatestUnReadCount()
-        showTalkGuideDisplayRanking()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
             self.indicatorStatus = .hide
@@ -85,11 +78,9 @@ final class MessageListViewController: UIBaseViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         removeRefreshControl()
-        resetLatestRoomIdAndLatestUnReadCount()
         if messageListTableView != nil {
             GlobalVar.shared.messageListTableView = messageListTableView
         }
-        prefetcher.isPaused = true
         indicatorStatus = .hide
     }
     
@@ -99,7 +90,6 @@ final class MessageListViewController: UIBaseViewController {
         setUpTableView()
         setUpTableViewCell()
         setUpNotification()
-        playTutorial(key: "isShowedMessageTutorial", type: .message)
     }
     
     private func setUpNavigationBar() {
@@ -107,12 +97,6 @@ final class MessageListViewController: UIBaseViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
         // ナビゲーションの戻るボタンを消す
         navigationItem.setHidesBackButton(true, animated: true)
-        // ナビゲーションバーの右側にボタンを設定
-        let image = UIImage(systemName: "questionmark.circle")
-        let button = UIBarButtonItem(image: image, style: .plain, target: self, action:#selector(moveFriendEmoji))
-        navigationItem.rightBarButtonItem = button
-        navigationItem.rightBarButtonItem?.tintColor = .fontColor
-        navigationItem.rightBarButtonItem?.imageInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         // ナビゲーションバーの左側にボタンを設定
         guard let navigation = navigationController else { return }
         let leftBarButtonWidth = 150.0
@@ -129,7 +113,11 @@ final class MessageListViewController: UIBaseViewController {
         // ナビゲーションアイテムのタイトルを設定
         navigationItem.title = "メッセージ"
         // ナビゲーションバー設定
-        hideNavigationBarBorderAndShowTabBarBorder()
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithTransparentBackground()
+        navigationBarAppearance.backgroundColor = .white
+        navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
     }
     
     private func setNavigationBarColor(_ color: UIColor) {
@@ -150,13 +138,10 @@ final class MessageListViewController: UIBaseViewController {
         messageListTableView.delegate = self
         messageListTableView.dataSource = self
         messageListTableView.isPrefetchingEnabled = true
-        messageListTableView.prefetchDataSource = self
         GlobalVar.shared.messageListTableView = messageListTableView
     }
     
     private func setUpTableViewCell() {
-        messageListTableView.register(UINib(nibName: MessageListHeaderTableViewCell.nibName, bundle: nil), forCellReuseIdentifier: MessageListHeaderTableViewCell.cellIdentifier)
-        messageListTableView.register(UINib(nibName: NewMatchTableViewCell.nibName, bundle: nil), forCellReuseIdentifier: NewMatchTableViewCell.cellIdentifier)
         messageListTableView.register(UINib(nibName: MessageListTableViewCell.nibName, bundle: nil), forCellReuseIdentifier: MessageListTableViewCell.cellIdentifier)
     }
     
@@ -173,8 +158,6 @@ final class MessageListViewController: UIBaseViewController {
         DispatchQueue.main.async { 
             GlobalVar.shared.messageListTableView.reloadData()
             GlobalVar.shared.messageListTableView.refreshControl?.endRefreshing()
-            self.fetchFriendList()
-            Log.event(name: "reloadMessageList")
         }
     }
     
@@ -194,7 +177,7 @@ final class MessageListViewController: UIBaseViewController {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(setUpRefreshControl),
-            name: NSNotification.Name(NotificationName.MessageListBack.rawValue),
+            name: NSNotification.Name("MessageListBack"),
             object: nil
         )
     }
@@ -206,7 +189,6 @@ final class MessageListViewController: UIBaseViewController {
             self.indicatorStatus = .show
             GlobalVar.shared.messageListTableView.reloadData()
             self.setUpRefreshControl()
-            self.prefetcher.isPaused = false
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                 self.indicatorStatus = .hide
@@ -217,11 +199,9 @@ final class MessageListViewController: UIBaseViewController {
     @objc private func background(_ notification: Notification) {
         print("go to background.")
         removeRefreshControl()
-        resetLatestRoomIdAndLatestUnReadCount()
         if messageListTableView != nil {
             GlobalVar.shared.messageListTableView = messageListTableView
         }
-        prefetcher.isPaused = true
         indicatorStatus = .hide
     }
     
@@ -242,55 +222,17 @@ final class MessageListViewController: UIBaseViewController {
                 messageListFilter(room: $0, loginUid: uid)
             }
         }
-        
         if let specificRoom = filterRooms[safe: indexPath.row] {
-            let specificRoomID = specificRoom.document_id ?? ""
-            Log.event(name: "selectMessageRoom", logEventData: ["roomID": specificRoomID])
-        }
-        
-        let adminIdCheckStatus = loginUser.admin_checks?.admin_id_check_status
-        let isAutoMatching = filterRooms[safe: indexPath.row]?.is_auto_matchig ?? false
-        
-        if isAutoMatching {
-            if let specificRoom = filterRooms[safe: indexPath.row] {
-                specificMessageRoomMove(specificRoom: specificRoom)
+            if specificRoom.partnerUser == nil {
+                return
             }
-            return
-        }
-        
-        // 本人確認未リクエスト
-        if adminIdCheckStatus == nil {
-            popUpIdentificationView(nil)
-        }
-        // 本人確認承認済み
-        else if adminIdCheckStatus == 1 {
-            if let specificRoom = filterRooms[safe: indexPath.row] {
-                specificMessageRoomMove(specificRoom: specificRoom)
-            }
-        }
-        // 本人確認拒否
-        else if adminIdCheckStatus == 2 {
-            let alert = UIAlertController(
-                title: "本人確認失敗しました",
-                message: "提出していただいた写真又は生年月日に不備がありました\n再度本人確認書類を提出してください",
-                preferredStyle: .alert
-            )
-            let ok = UIAlertAction(title: "OK", style: .default) { _ in
-                self.popUpIdentificationView(nil)
-            }
-            alert.addAction(ok)
             
-            present(alert, animated: true)
-        } else {
-            let alert = UIAlertController(
-                title: "本人確認中です",
-                message: "現在本人確認中\n（12時間以内に承認が完了します）",
-                preferredStyle: .alert
-            )
-            let ok = UIAlertAction(title: "OK", style: .default)
-            alert.addAction(ok)
-            
-            present(alert, animated: true)
+            Task {
+                let storyBoard = UIStoryboard.init(name: "MessageRoomView", bundle: nil)
+                let messageRoomVC = storyBoard.instantiateViewController(withIdentifier: "MessageRoomView") as! MessageRoomView
+                messageRoomVC.room = specificRoom
+                navigationController?.pushViewController(messageRoomVC, animated: true)
+            }
         }
     }
     
@@ -309,6 +251,18 @@ final class MessageListViewController: UIBaseViewController {
             let inputVC = UINavigationController(rootViewController: InputNoteViewController())
             inputVC.modalPresentationStyle = .overFullScreen
             present(inputVC, animated: true, completion: nil)
+        }
+    }
+    
+    private func pinnedRoomFilter(room: Room, loginUid: String) -> Bool {
+        return room.is_pinned == true
+    }
+    
+    private func messageListFilter(room: Room, loginUid: String) -> Bool {
+        if pinnedRoomFilter(room: room, loginUid: loginUid) {
+            return false
+        } else {
+            return true
         }
     }
 }
@@ -341,7 +295,7 @@ extension MessageListViewController {
         }
         let loginUID = loginUser.uid
         
-        guard let beforeLastDocument = GlobalVar.shared.lastRoomDocument else {
+        guard let beforeLastDocument = lastRoomDocument else {
             isFetchPastMessageList = true
             return
         }
@@ -367,8 +321,8 @@ extension MessageListViewController {
             guard let lastDocument = documentChanges.last?.document else {
                 return
             }
-            GlobalVar.shared.lastRoomDocument = nil
-            GlobalVar.shared.lastRoomDocument = lastDocument
+            self.lastRoomDocument = nil
+            self.lastRoomDocument = lastDocument
             
             let lastDocumentID = lastDocument.documentID
             
@@ -380,6 +334,39 @@ extension MessageListViewController {
         }
     }
     
+    private func addRoom(roomDocument: QueryDocumentSnapshot, lastDocumentID: String) {
+        guard let loginUser = GlobalVar.shared.loginUser else { return }
+        let uid = loginUser.uid
+        let rooms = loginUser.rooms
+        var room = Room(document: roomDocument)
+        guard let roomID = room.document_id else { return }
+        // ルームやりとりユーザが存在しない場合、これ以降の処理をさせない
+        guard let partnerUID = room.members.filter({ $0 != uid }).first else { return }
+        // ルームが既に追加されていた場合、これ以降の処理をさせない
+        if rooms.firstIndex(where: { $0.document_id == roomID }) != nil { return }
+        
+        Task {
+            // メッセージ未読数を初期化
+            room = room.initUnreadCount(room: room, count: room.unread)
+            // メッセージルームの追加
+            GlobalVar.shared.loginUser?.rooms.append(room)
+            // 自分以外のルーム内のユーザー情報を取得
+            room.partnerUser = try await fetchUserInfo(uid: partnerUID)
+            // ルームの重複を取得
+            if let roomIndex = GlobalVar.shared.loginUser?.rooms.firstIndex(where: { $0.document_id == roomID }), GlobalVar.shared.loginUser?.rooms[safe: roomIndex] != nil {
+                GlobalVar.shared.loginUser?.rooms[roomIndex].partnerUser = room.partnerUser
+                GlobalVar.shared.loginUser?.rooms[roomIndex].is_pinned = room.is_pinned
+            }
+        }
+    }
+    
+    private func fetchUserInfo(uid: String) async throws -> User {
+        let db = Firestore.firestore()
+        let userDocument = try await db.collection("users").document(uid).getDocument()
+        let user = User(document: userDocument)
+        return user
+    }
+    
     private func hideLoadingLabelAnimationAndUpdateFlug() {
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseIn) {
             
@@ -387,224 +374,10 @@ extension MessageListViewController {
             self.isFetchPastMessageList = true
         }
     }
-
-    private func initLatestRoomIdAndLatestUnReadCount() {
-        guard let cell = GlobalVar.shared.messageListTableView.cellForRow(at: IndexPath(row: 0, section: 2)) as? MessageListTableViewCell else {
-            return
-        }
-        guard let room = cell.room else {
-            return
-        }
-        
-        if GlobalVar.shared.currentLatestRoomId == nil || GlobalVar.shared.unReadCountForCurrentLatestRoom == nil {
-            print("最新のRoomIDと未既読数をclassに保存")
-            GlobalVar.shared.currentLatestRoomId = room.document_id
-            GlobalVar.shared.unReadCountForCurrentLatestRoom = room.unreadCount
-        }
-    }
-    
-    private func resetLatestRoomIdAndLatestUnReadCount() {
-        GlobalVar.shared.currentLatestRoomId = nil
-        GlobalVar.shared.unReadCountForCurrentLatestRoom = nil
-    }
-}
-
-// フレンド絵文字関連
-extension MessageListViewController {
-    
-    private func getFriendEmoji(_ room: Room?) -> String? {
-        guard let room = room else { return nil }
-        guard let partnerUser = room.partnerUser else { return nil }
-        guard let loginUser = GlobalVar.shared.loginUser else { return nil }
-        let totalMessageNum = room.message_num
-        let ownMessageNum = room.own_message_num
-        let partnerMessageNum = totalMessageNum - ownMessageNum
-        let messsageRallyNum = (ownMessageNum > partnerMessageNum ? partnerMessageNum : ownMessageNum)
-
-//        print(
-//            "totalMessageNum :", totalMessageNum,
-//            "ownMessageNum :", ownMessageNum,
-//            "partnerMessageNum :", partnerMessageNum,
-//            "messsageRallyNum :", messsageRallyNum
-//        )
-
-        let nowDate = Date()
-        let roomCreatedAt = room.created_at.dateValue()
-
-        let sameAge = (loginUser.birth_date.calcAgeForInt() == partnerUser.birth_date.calcAgeForInt())
-        let sameAddress = (loginUser.address == partnerUser.address)
-        let hobbyTagMatches = loginUser.hobbies.filter({ partnerUser.hobbies.contains($0) })
-        let enoughHobbyTagMatches = (hobbyTagMatches.count >= 5)
-
-//        print(
-//            "ownBirthDate :", loginUser.birth_date,
-//            "ownAge :", loginUser.birth_date.calcAgeForInt(),
-//            "partnerBirthDate :", partnerUser.birth_date,
-//            "partnerAge :", partnerUser.birth_date.calcAgeForInt(),
-//            "sameAge :", sameAge
-//        )
-//        print(
-//            "ownAddress :", loginUser.address,
-//            "partnerAddress :", partnerUser.address,
-//            "sameAddress :", sameAddress
-//        )
-//        print(
-//            "ownHobbies :", loginUser.hobbies,
-//            "partnerHobbies :", partnerUser.hobbies,
-//            "hobbyTagMatches :", hobbyTagMatches,
-//            "enoughHobbyTagMatches :", enoughHobbyTagMatches
-//        )
-
-        let birthDateFormat = "YYYY年M月D日"
-        let loginUserBirthDate = loginUser.birth_date.dateFromString(format: birthDateFormat)
-        let partnerUserBirthDate = partnerUser.birth_date.dateFromString(format: birthDateFormat)
-
-        let sssBest = "🥰💕"
-        let ssBest = "❤️"
-        let sBest = "💛"
-        let best = "😊"
-        let common = "🎾"
-        let birthDay = "🎂🤝"
-        var emoji = ""
-
-        let birthDateElaspedDays = Calendar.current.dateComponents([.day], from: loginUserBirthDate, to: partnerUserBirthDate).day ?? 0
-
-//        print(
-//            "ownBirthDate :", loginUser.birth_date,
-//            "partnerBirthDate :", partnerUser.birth_date,
-//            "ownBirthDate (Date) :", loginUserBirthDate,
-//            "partnerBirthDate (Date) :", partnerUserBirthDate,
-//            "birthDateElaspedDays :", birthDateElaspedDays
-//        )
-
-        let roomElaspedDays = Calendar.current.dateComponents([.day], from: roomCreatedAt, to: nowDate).day ?? 0
-        let averageMessageRallyNum = (roomElaspedDays > 0 ? (Double(messsageRallyNum) / Double(roomElaspedDays)) : 0)
-
-//        print(
-//            "partner :", partnerUser.nick_name,
-//            "nowDate :", nowDate,
-//            "roomCreatedAt :", roomCreatedAt,
-//            "roomElaspedDays :", roomElaspedDays,
-//            "messsageRallyNum :", messsageRallyNum,
-//            "averageMessageRallyNum :", averageMessageRallyNum
-//        )
-
-        // SSSベストフレンド (5ラリー以上/1日, 150日以上)
-        let sssBestFriend = (averageMessageRallyNum >= 5.0 && roomElaspedDays >= 150)
-        // SSベストフレンド (3ラリー以上/1日, 100日以上)
-        let ssBestFriend = (averageMessageRallyNum >= 3.0 && roomElaspedDays >= 100)
-        // Sベストフレンド (1ラリー以上/1日, 50日以上)
-        let sBestFriend = (averageMessageRallyNum >= 1.0 && roomElaspedDays >= 50)
-        // ベストフレンド (0.5ラリー以上/1日, 14日以上)
-        let bestFriend = (averageMessageRallyNum >= 0.5 && roomElaspedDays >= 14)
-        // シークレット1 (年齢が一緒, よく行く場所が一緒, 共通の趣味タグが5個以上)
-        let commonFriend = (sameAge && sameAddress && enoughHobbyTagMatches)
-        // シークレット2 (相手との誕生日が一緒, 1日違いで表示)
-        let birthDayFriend = (-1 <= birthDateElaspedDays && birthDateElaspedDays <= 1)
-
-        if sssBestFriend {
-            emoji += sssBest
-        } else if ssBestFriend {
-            emoji += ssBest
-        } else if sBestFriend {
-            emoji += sBest
-        } else if bestFriend {
-            emoji += best
-        }
-        if commonFriend {
-            emoji += common
-        }
-        if birthDayFriend {
-            emoji += birthDay
-        }
-
-//        print(
-//            "roomElaspedDays :", roomElaspedDays,
-//            "messsageRallyNum :", messsageRallyNum,
-//            "averageMessageRallyNum :", averageMessageRallyNum,
-//            "sameAge :", sameAge,
-//            "sameAddress :", sameAddress,
-//            "enoughHobbyTagMatches :", enoughHobbyTagMatches,
-//            "birthDateElaspedDays :", birthDateElaspedDays
-//        )
-//        print(
-//            "sssBestFriend :", sssBestFriend,
-//            "ssBestFriend :", ssBestFriend,
-//            "sBestFriend :", sBestFriend,
-//            "bestFriend :", bestFriend,
-//            "commonFriend :", commonFriend,
-//            "birthDayFriend :", birthDayFriend
-//        )
-
-        return emoji
-    }
-}
-
-// マッチ関連
-extension MessageListViewController {
-    
-    private func matchElapsedTime(created_at: Timestamp) -> Bool {
-        let date = Date()
-        let span = date.timeIntervalSince(created_at.dateValue())
-        let hourSpan = Int(floor(span / 60 / 60))
-        
-        if hourSpan < 24 {
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    private func newMatchFilter(room: Room, loginUID: String) -> Bool {
-        let isLatestMessage = room.latest_message == ""
-        let isMatchElapsedTime = matchElapsedTime(created_at: room.created_at) == true
-        let isContainRemovedUser = room.removed_user.contains(loginUID) == false
-        let isAutoMatching = room.is_auto_matchig == true
-        let isForceCreateRoom = room.room_match_status == RoomMatchStatusType.force.rawValue
-        let isRoomFilter = isLatestMessage && isMatchElapsedTime && isContainRemovedUser && !isAutoMatching && !isForceCreateRoom
-        
-        return isRoomFilter
-    }
-    
-    private func pinnedRoomFilter(room: Room, loginUid: String) -> Bool {
-        let isNewMatch = newMatchFilter(room: room, loginUID: loginUid) == true
-        let isPinnedFilter = room.is_pinned == true
-        
-        if isNewMatch {
-            return false
-        }
-        
-        return isPinnedFilter
-    }
-    
-    private func messageListFilter(room: Room, loginUid: String) -> Bool {
-        let isNewMatch = newMatchFilter(room: room, loginUID: loginUid) == true
-        let isPinned = pinnedRoomFilter(room: room, loginUid: loginUid) == true
-        
-        if isNewMatch || isPinned {
-            return false
-        }
-        
-        let isContainRemovedUser = room.removed_user.contains(loginUid) == false
-        let isRoomFilter = isContainRemovedUser
-        
-        return isRoomFilter
-    }
-    
-    private func newMatchRooms() -> [Room]? {
-        guard let loginUser = GlobalVar.shared.loginUser else {
-            return nil
-        }
-        let uid = loginUser.uid
-        let rooms = loginUser.rooms
-        let newMatchRooms = rooms.filter({ newMatchFilter(room: $0, loginUID: uid) })
-        
-        return newMatchRooms
-    }
 }
 
 // TableView関連 --- 表示設定 ---
-extension MessageListViewController: UITableViewDataSource, MessageListTableViewCellDelegate {
+extension MessageListViewController: UITableViewDelegate, UITableViewDataSource, MessageListTableViewCellDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 4
@@ -616,18 +389,6 @@ extension MessageListViewController: UITableViewDataSource, MessageListTableView
         }
         
         switch indexPath.section {
-        case Section.header.rawValue:
-            return MessageListHeaderTableViewCell.height
-        case Section.newMatch.rawValue:
-            if let newMatchRooms = newMatchRooms() {
-                if newMatchRooms.count > 0 {
-                    return NewMatchTableViewCell.height
-                } else {
-                    return defaultCellheight
-                }
-            } else {
-                return defaultCellheight
-            }
         case Section.pinRoomList.rawValue:
             let uid = loginUser.uid
             let rooms = loginUser.rooms
@@ -663,18 +424,6 @@ extension MessageListViewController: UITableViewDataSource, MessageListTableView
         }
         
         switch indexPath.section {
-        case Section.header.rawValue:
-            return MessageListHeaderTableViewCell.height
-        case Section.newMatch.rawValue:
-            if let newMatchRooms = newMatchRooms() {
-                if newMatchRooms.count > 0 {
-                    return NewMatchTableViewCell.height
-                } else {
-                    return defaultCellheight
-                }
-            } else {
-                return defaultCellheight
-            }
         case Section.pinRoomList.rawValue:
             let uid = loginUser.uid
             let rooms = loginUser.rooms
@@ -710,10 +459,6 @@ extension MessageListViewController: UITableViewDataSource, MessageListTableView
         }
         
         switch section {
-        case Section.header.rawValue:
-            return 1
-        case Section.newMatch.rawValue:
-            return 1
         case Section.pinRoomList.rawValue:
             let uid = loginUser.uid
             let rooms = loginUser.rooms
@@ -740,22 +485,9 @@ extension MessageListViewController: UITableViewDataSource, MessageListTableView
         guard let loginUser = GlobalVar.shared.loginUser else {
             return cell
         }
-        guard let newMatchRooms = newMatchRooms() else {
-            return cell
-        }
         
-        if indexPath.section == Section.header.rawValue {
-            let cell = tableView.dequeueReusableCell(withIdentifier: MessageListHeaderTableViewCell.cellIdentifier) as! MessageListHeaderTableViewCell
-            return cell
-        } else if indexPath.section == Section.newMatch.rawValue {
-            if newMatchRooms.count > 0 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: NewMatchTableViewCell.cellIdentifier, for: indexPath) as! NewMatchTableViewCell
-                cell.configure(with: newMatchRooms)
-                return cell
-            } else {
-                return cell
-            }
-        } else if indexPath.section == Section.pinRoomList.rawValue {
+        switch indexPath.section {
+        case Section.pinRoomList.rawValue:
             let uid = loginUser.uid
             let rooms = loginUser.rooms
             let cell = tableView.dequeueReusableCell(withIdentifier: MessageListTableViewCell.identifier, for: indexPath) as! MessageListTableViewCell
@@ -765,17 +497,10 @@ extension MessageListViewController: UITableViewDataSource, MessageListTableView
             }
             if pinnedRooms[safe: indexPath.row] != nil {
                 cell.room = pinnedRooms[indexPath.row]
-                if let roomId = pinnedRooms[indexPath.row].document_id {
-                    if roomId == cell.room?.document_id {
-                        // 🥰💕etc...をここでセット
-                        cell.friendEmoji = getFriendEmoji(cell.room)
-                        // ⌛️をここでセット非同期のため'fetchConsectiveCount'で事前取得している
-                        cell.consectiveCount = GlobalVar.shared.consectiveCountDictionary[roomId]
-                    }
-                }
+                
                 return cell
             }
-        } else if indexPath.section == Section.roomList.rawValue {
+        case Section.roomList.rawValue:
             let uid = loginUser.uid
             let rooms = loginUser.rooms
             let cell = tableView.dequeueReusableCell(withIdentifier: MessageListTableViewCell.identifier, for: indexPath) as! MessageListTableViewCell
@@ -786,18 +511,13 @@ extension MessageListViewController: UITableViewDataSource, MessageListTableView
             }
             if filterRooms[safe: indexPath.row] != nil {
                 cell.room = filterRooms[indexPath.row]
-                if let roomId = filterRooms[indexPath.row].document_id {
-                    if roomId == cell.room?.document_id {
-                        // 🥰💕etc...をここでセット
-                        cell.friendEmoji = getFriendEmoji(cell.room)
-                        // ⌛️をここでセット非同期のため'fetchConsectiveCount'で事前取得している
-                        cell.consectiveCount = GlobalVar.shared.consectiveCountDictionary[roomId]
-                    }
-                }
+                
                 return cell
             } else {
                 return cell
             }
+        default:
+            fatalError("MessageListViewController: \(#function)")
         }
         
         return cell
@@ -807,12 +527,6 @@ extension MessageListViewController: UITableViewDataSource, MessageListTableView
         tableView.deselectRow(at: indexPath, animated: true)
         
         switch indexPath.section {
-        case Section.header.rawValue:
-            let storyboard = UIStoryboard(name: BusinessSolicitationCrackdownViewController.storyboardName, bundle: nil)
-            let viewcontroller = storyboard.instantiateViewController(withIdentifier: BusinessSolicitationCrackdownViewController.storyboardId)
-            navigationController?.pushViewController(viewcontroller, animated: true)
-        case Section.newMatch.rawValue:
-            return
         case Section.pinRoomList.rawValue:
             moveMessageRoom(indexPath)
         case Section.roomList.rawValue:
@@ -823,7 +537,7 @@ extension MessageListViewController: UITableViewDataSource, MessageListTableView
     }
     
     func onUserImageViewTapped(_ cell: MessageListTableViewCell, user: User) {
-        profileDetailMove(user: user, className: MessageListViewController.storyboardName)
+        print(#function)
     }
 }
 
@@ -832,10 +546,6 @@ extension MessageListViewController {
     
     private func isRoomListCell(_ indexPath: IndexPath) -> Bool {
         switch indexPath.section {
-        case Section.header.rawValue:
-            return false
-        case Section.newMatch.rawValue:
-            return false
         case Section.pinRoomList.rawValue:
             return true
         case Section.roomList.rawValue:
@@ -959,45 +669,10 @@ extension MessageListViewController {
             let title = "本当に削除しますか？"
             let subTitle = "1度削除するとお相手からメッセージが来ない限り復元しませんが\n本当にトークルームを削除しますか？"
             
-            dialog(title: title, subTitle: subTitle, confirmTitle: "OK", completion: { [weak self] confirm in
-                guard let self else { return }
+            dialog(title: title, subTitle: subTitle, confirmTitle: "OK", completion: { confirm in
                 
                 if confirm {
-                    indicatorStatus = .show
-                    
-                    guard let roomId = filterRooms[indexPath.row].document_id else {
-                        return
-                    }
-                    let document = db.collection("rooms").document(roomId)
-                    let updateData: [String: Any] = [
-                        "removed_user": FieldValue.arrayUnion([loginUser.uid]),
-                        "unread_\(loginUser.uid)": 0,
-                    ]
-                    
-                    document.updateData(updateData) { error in
-                        if let error = error {
-                            print("セルの削除に失敗:", error)
-                            self.alert(title: "失敗", message: "ルームの削除に失敗しました。時間をおいてもう一度お試しください。", actiontitle: "OK")
-                            self.indicatorStatus = .hide
-                            return
-                        }
-                        
-                        GlobalVar.shared.loginUser?.rooms.enumerated().forEach { index, room in
-                            if room.document_id == filterRooms[safe: indexPath.row]?.document_id {
-                                GlobalVar.shared.loginUser?.rooms[index].removed_user.append(loginUser.uid)
-                                GlobalVar.shared.loginUser?.rooms.remove(at: index)
-                                GlobalVar.shared.loginUser?.room_removed_user_id_list.append(room.partnerUser?.uid ?? "")
-                                
-                                self.messageListTableView.beginUpdates()
-                                self.messageListTableView.deleteRows(at: [indexPath], with: .fade)
-                                self.messageListTableView.endUpdates()
-                                self.sortRoomsForPinnedAction()
-                            }
-                        }
-                        
-                        Log.event(name: "removeMessageRoom", logEventData: ["roomID": roomId])
-                        self.indicatorStatus = .hide
-                    }
+                    print(#function)
                 }
             })
         }
@@ -1015,7 +690,7 @@ extension MessageListViewController {
             messageListFilter(room: $0, loginUid: loginUser.uid)
         }
         
-        if let room = filterRooms[safe: indexPath.row], let roomID = room.document_id {
+        if var room = filterRooms[safe: indexPath.row], let roomID = room.document_id {
             indicatorStatus = .show
             
             let document = db.collection("rooms").document(roomID)
@@ -1048,7 +723,7 @@ extension MessageListViewController {
             pinnedRoomFilter(room: $0, loginUid: loginUser.uid)
         }
         
-        if let room = pinnedRooms[safe: indexPath.row], let roomID = room.document_id {
+        if var room = pinnedRooms[safe: indexPath.row], let roomID = room.document_id {
             indicatorStatus = .show
             
             let document = db.collection("rooms").document(roomID)
@@ -1089,55 +764,6 @@ extension MessageListViewController {
     }
 }
 
-// TableView関連 --- prefetch ---
-extension MessageListViewController: UITableViewDataSourcePrefetching {
-    
-    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        guard let loginUser = GlobalVar.shared.loginUser else {
-            return
-        }
-        let uid = loginUser.uid
-        let rooms = loginUser.rooms
-        let filterRooms = rooms.filter {
-            if $0.is_pinned {
-                pinnedRoomFilter(room: $0, loginUid: uid)
-            } else {
-                messageListFilter(room: $0, loginUid: uid)
-            }
-        }
-        let urls = indexPaths.compactMap {
-            getPartnerIconImgURL(filterRooms, index: $0.section)
-        }
-        prefetcher.startPrefetching(with: urls)
-    }
-    
-    func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        guard let loginUser = GlobalVar.shared.loginUser else {
-            return
-        }
-        let uid = loginUser.uid
-        let rooms = loginUser.rooms
-        let filterRooms = rooms.filter {
-            if $0.is_pinned {
-                pinnedRoomFilter(room: $0, loginUid: uid)
-            } else {
-                messageListFilter(room: $0, loginUid: uid)
-            }
-        }
-        let urls = indexPaths.compactMap {
-            getPartnerIconImgURL(filterRooms, index: $0.section)
-        }
-        prefetcher.stopPrefetching(with: urls)
-    }
-    
-    func getPartnerIconImgURL(_ rooms: [Room], index: Int) -> URL? {
-        let partnerUser = rooms[index].partnerUser
-        let profileIconImg = partnerUser?.profile_icon_img ?? ""
-        let iconImgURL = URL(string: profileIconImg)
-        
-        return iconImgURL
-    }
-}
 
 // MARK: - Context Menus -- 長押しでプレビューを表示
 extension MessageListViewController {
@@ -1145,56 +771,42 @@ extension MessageListViewController {
     /// Returns a context menu configuration for the row at a point.
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         guard let loginUser = GlobalVar.shared.loginUser else { return nil }
+        var filterRooms: [Room] = []
         
-        let loginUID = loginUser.uid
-        //本人確認していない場合は確認ページを表示
-        guard let adminIDCheckStatus = loginUser.admin_checks?.admin_id_check_status else {
-            popUpIdentificationView(nil)
+        if indexPath.section == Section.pinRoomList.rawValue {
+            filterRooms = loginUser.rooms.filter {
+                pinnedRoomFilter(room: $0, loginUid: loginUser.uid)
+            }
+        } else if indexPath.section == Section.roomList.rawValue {
+            filterRooms = loginUser.rooms.filter {
+                messageListFilter(room: $0, loginUid: loginUser.uid)
+            }
+        }
+        
+        guard let specificRoom = filterRooms[safe: indexPath.row] else {
+            return nil
+        }
+        // 1. identifierの定義
+        let identifier = indexPath as NSCopying
+        // 2. プレビューの定義
+        let previewProvider: () -> MessageRoomPreviewViewController? = { [unowned self] in
+            let _ = self
+            let preview = MessageRoomPreviewViewController(room: specificRoom)
+            let screenSize = UIScreen.main.bounds.size
+            preview.preferredContentSize = CGSize(width: screenSize.width * 0.9, height: screenSize.height * 0.7)
+            return preview
+        }
+        
+        // 3. メニューの定義
+        let actionProvider: ([UIMenuElement]) -> UIMenu? = { _ in
             return nil
         }
         
-        if adminIDCheckStatus == 1 {
-            let rooms = loginUser.rooms
-            var filterRooms: [Room] = []
-            
-            if indexPath.section == Section.pinRoomList.rawValue {
-                filterRooms = rooms.filter {
-                    pinnedRoomFilter(room: $0, loginUid: loginUID)
-                }
-            } else if indexPath.section == Section.roomList.rawValue {
-                filterRooms = rooms.filter {
-                    messageListFilter(room: $0, loginUid: loginUID)
-                }
-            }
-            
-            guard let specificRoom = filterRooms[safe: indexPath.row] else { 
-                return nil
-            }
-            // 1. identifierの定義
-            let identifier = indexPath as NSCopying
-            // 2. プレビューの定義
-            let previewProvider: () -> MessageRoomPreviewViewController? = { [unowned self] in
-                let _ = self
-                let preview = MessageRoomPreviewViewController(room: specificRoom)
-                let screenSize = UIScreen.main.bounds.size
-                preview.preferredContentSize = CGSize(width: screenSize.width * 0.9, height: screenSize.height * 0.7)
-                return preview
-            }
-            
-            // 3. メニューの定義
-            let actionProvider: ([UIMenuElement]) -> UIMenu? = { _ in
-                return nil
-            }
-            
-            return UIContextMenuConfiguration(
-                identifier: identifier,
-                previewProvider: previewProvider,
-                actionProvider: actionProvider
-            )
-        } else {
-            // adminIDCheckStatus != 1の場合は、nilを返してインタラクションを開始しない
-            return nil
-        }
+        return UIContextMenuConfiguration(
+            identifier: identifier,
+            previewProvider: previewProvider,
+            actionProvider: actionProvider
+        )
     }
     
     /// Informs the delegate when a user triggers a commit by tapping the preview.
@@ -1218,84 +830,34 @@ extension MessageListViewController {
         }
         
         if let specificRoom = filterRooms[safe: indexPath.row] {
-            let specificRoomID = specificRoom.document_id ?? ""
-            let logEventData = [
-                "roomID": specificRoomID
-            ] as [String : Any]
-            Log.event(name: "selectMessageRoom", logEventData: logEventData)
-        }
-        
-        if let specificRoom = filterRooms[safe: indexPath.row] {
             specificMessageRoomMove(specificRoom: specificRoom)
             
             if indexPath.section == Section.pinRoomList.rawValue {
-                GlobalVar.shared.loginUser?.rooms.filter({ pinnedRoomFilter(room: $0, loginUid: loginUID) })[indexPath.row].unreadCount = 0
-                GlobalVar.shared.loginUser?.rooms.filter({ pinnedRoomFilter(room: $0, loginUid: loginUID) })[indexPath.row].unread = 0
+                if let room = GlobalVar.shared.loginUser?.rooms.filter({ pinnedRoomFilter(room: $0, loginUid: loginUID) })[indexPath.row],
+                   let index = GlobalVar.shared.loginUser?.rooms.firstIndex(where: { $0.document_id == room.document_id }){
+                    GlobalVar.shared.loginUser?.initRoomUnreadCount(index: index, room: room)
+                }
             } else if indexPath.section == Section.roomList.rawValue {
-                GlobalVar.shared.loginUser?.rooms.filter({ messageListFilter(room: $0, loginUid: loginUID) })[indexPath.row].unreadCount = 0
-                GlobalVar.shared.loginUser?.rooms.filter({ messageListFilter(room: $0, loginUid: loginUID) })[indexPath.row].unread = 0
+                if let room = GlobalVar.shared.loginUser?.rooms.filter({ pinnedRoomFilter(room: $0, loginUid: loginUID) })[indexPath.row],
+                   let index = GlobalVar.shared.loginUser?.rooms.firstIndex(where: { $0.document_id == room.document_id }){
+                    GlobalVar.shared.loginUser?.initRoomUnreadCount(index: index, room: room)
+                }
+                
+                UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             }
-            
-            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
         }
     }
-}
-
-// MARK: - マッチ済みユーザの再取得
-extension MessageListViewController {
-    private func fetchFriendList() {
-        guard let loginUser = GlobalVar.shared.loginUser, let messageRooms = GlobalVar.shared.loginUser?.rooms else { return }
+    
+    private func specificMessageRoomMove(specificRoom: Room) {
+        if specificRoom.partnerUser == nil {
+            return
+        }
+        
         Task {
-            do {
-                let filterMessageRooms = messageRooms.filter({
-                    let room = $0
-                    let containRemovedUser = room.removed_user.firstIndex(of: loginUser.uid) == nil
-                    return containRemovedUser
-                })
-                
-                let roomPartnerUsers = filterMessageRooms.map(
-                    { $0.members.filter({ $0 != loginUser.uid }).first ?? "" }).filter({ $0 != "" }
-                    )
-                
-                try await getUsers(partnerUsers: roomPartnerUsers, rooms: filterMessageRooms)
-            } catch {
-                print("Fail getMessageRooms:", error)
-                alert(title: "失敗", message: "情報の読み込みに失敗しました。時間をおいて再度お試しください。", actiontitle: "OK")
-            }
-        }
-    }
-    
-    private func getUsers(partnerUsers: [String], rooms: [Room]) async throws {
-        guard let loginUser = GlobalVar.shared.loginUser else { return }
-        do {
-            let perPage = partnerUsers.count
-            let searchFilterBy = "uid: \(partnerUsers)"
-            let searchParameters = SearchParameters(q: "*", queryBy: "", filterBy: searchFilterBy, perPage: perPage)
-            let typesenseClient = GlobalVar.shared.typesenseClient
-            let documents = typesenseClient.collection(name: "users").documents()
-            let (searchResult, _) = try await documents.search(searchParameters, for: CardUserQuery.self)
-            
-            guard let hits = searchResult?.hits, hits.count != 0 else { return }
-            
-            let users = hits.map({ User(cardUserQuery: $0) })
-            let filterUsers = users.filter { $0.uid != loginUser.uid }
-            
-            updatePartnerUsersData(filterUsers)
-        } catch {
-            throw error
-        }
-    }
-    
-    private func updatePartnerUsersData(_ users: [User]) {
-        guard let myRooms = GlobalVar.shared.loginUser?.rooms else { return }
-        let fetchedUserDictionary = Dictionary(uniqueKeysWithValues: zip(users.map({ $0.uid}), users))
-        for room in myRooms {
-            if let user = fetchedUserDictionary[room.partnerUser?.uid ?? ""] {
-                room.partnerUser = user
-            }
-        }
-        DispatchQueue.main.async {
-            GlobalVar.shared.messageListTableView.reloadData()
+            let storyBoard = UIStoryboard.init(name: "MessageRoomView", bundle: nil)
+            let messageRoomVC = storyBoard.instantiateViewController(withIdentifier: "MessageRoomView") as! MessageRoomView
+            messageRoomVC.room = specificRoom
+            navigationController?.pushViewController(messageRoomVC, animated: true)
         }
     }
 }
