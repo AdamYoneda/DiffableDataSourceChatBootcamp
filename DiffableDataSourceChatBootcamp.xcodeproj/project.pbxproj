@@ -255,6 +255,9 @@
 		9BDECE6E2C96182F002CDE8D /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE6D2C96182F002CDE8D /* UIButtonExtension.swift */; };
 		9BDECE6F2C96182F002CDE8D /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE6D2C96182F002CDE8D /* UIButtonExtension.swift */; };
 		9BDECE702C96182F002CDE8D /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE6D2C96182F002CDE8D /* UIButtonExtension.swift */; };
+		9BDECE722C979F14002CDE8D /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE712C979F14002CDE8D /* StringExtension.swift */; };
+		9BDECE732C979F14002CDE8D /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE712C979F14002CDE8D /* StringExtension.swift */; };
+		9BDECE742C979F14002CDE8D /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BDECE712C979F14002CDE8D /* StringExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -364,6 +367,7 @@
 		9BDECE622C8C6393002CDE8D /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		9BDECE642C8CA499002CDE8D /* UIViewContrllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewContrllerExtension.swift; sourceTree = "<group>"; };
 		9BDECE6D2C96182F002CDE8D /* UIButtonExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
+		9BDECE712C979F14002CDE8D /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -541,6 +545,7 @@
 				9BDECE2A2C8A32EF002CDE8D /* UITextViewExtension.swift */,
 				9BDECE622C8C6393002CDE8D /* ArrayExtension.swift */,
 				9BDECE642C8CA499002CDE8D /* UIViewContrllerExtension.swift */,
+				9BDECE712C979F14002CDE8D /* StringExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -938,6 +943,7 @@
 				9BDECD642C8A2DB2002CDE8D /* OtherMessageCollectionViewReplyStickerCell.swift in Sources */,
 				9BDECD222C8A2D4B002CDE8D /* NoteBubbleView.swift in Sources */,
 				9BDECDFB2C8A31E1002CDE8D /* MessageInputView.swift in Sources */,
+				9BDECE722C979F14002CDE8D /* StringExtension.swift in Sources */,
 				9BDECE202C8A32CB002CDE8D /* UIColorExtension.swift in Sources */,
 				9BDECDC82C8A2F6B002CDE8D /* MessagePopoverBackgroundView.swift in Sources */,
 				9BDECCA82C8A2403002CDE8D /* AppDelegate.swift in Sources */,
@@ -992,6 +998,7 @@
 				9BDECDEA2C8A31C3002CDE8D /* MessageRoomView.swift in Sources */,
 				9BDECDA72C8A2F61002CDE8D /* StickerKeyboardChildCell.swift in Sources */,
 				9BDECE102C8A322C002CDE8D /* ImageDetailViewController.swift in Sources */,
+				9BDECE732C979F14002CDE8D /* StringExtension.swift in Sources */,
 				9BDECE242C8A32CB002CDE8D /* UIViewExtension.swift in Sources */,
 				9BDECD532C8A2DB2002CDE8D /* OtherMessageCollectionViewCell.swift in Sources */,
 				9BDECCF92C8A2B5F002CDE8D /* CustomMessageType.swift in Sources */,
@@ -1041,6 +1048,7 @@
 				9BDECE2D2C8A32EF002CDE8D /* UITextFieldExtension.swift in Sources */,
 				9BDECCEA2C8A2B0A002CDE8D /* MessageSection.swift in Sources */,
 				9BDECE002C8A31E1002CDE8D /* MessageRoomTitleView.swift in Sources */,
+				9BDECE742C979F14002CDE8D /* StringExtension.swift in Sources */,
 				9BDECCCB2C8A2405002CDE8D /* DiffableDataSourceChatBootcampUITestsLaunchTests.swift in Sources */,
 				9BDECCEE2C8A2B20002CDE8D /* Message.swift in Sources */,
 				9BDECD122C8A2D4B002CDE8D /* MessageListTableViewCell.swift in Sources */,
