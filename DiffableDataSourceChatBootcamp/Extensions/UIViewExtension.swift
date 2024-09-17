@@ -21,77 +21,9 @@ extension UIView {
         self.layer.borderWidth = 2
         self.layer.borderColor = UIColor.white.cgColor
     }
-
-    func fadeIn(duration: TimeInterval = 1.0) {
-        UIView.animate(withDuration: duration, animations: {
-            self.alpha = 1.0
-        })
-    }
-    
-    func fadeOut(duration: TimeInterval = 1.0) {
-        UIView.animate(withDuration: duration, animations: {
-            self.alpha = 0.0
-        })
-    }
     
     func rounded() {
         layer.cornerRadius = bounds.height / 2
-    }
-    
-    @objc class var identifier: String {
-        return String(describing: self)
-    }
-    
-    var getType: UIView.Type {
-        return type(of: self)
-    }
-    
-    var nib: UINib {
-        return UINib(nibName: getType.identifier, bundle: Bundle(for: getType))
-    }
-    
-    func getViewFromNIB<T: UIView>() -> T{
-        guard let view = nib.instantiate(withOwner: self, options: nil).first as? T else {
-            fatalError("Error loading nib with name \(getType.identifier)")
-        }
-        return view
-    }
-    
-    func setupNIB() {
-        let customView = getViewFromNIB()
-        addSubview(customView)
-        customView.frame = bounds
-        customView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    }
-    
-    func customUp() {
-        layer.cornerRadius = 8
-        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-    }
-    
-    func customLeft() {
-        layer.cornerRadius = 8
-        layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
-    }
-    
-    func customRightDiagonallyUp() {
-        layer.cornerRadius = 8
-        layer.maskedCorners = [.layerMaxXMinYCorner]
-    }
-    
-    func customLeftDiagonallyUp() {
-        layer.cornerRadius = 8
-        layer.maskedCorners = [.layerMinXMinYCorner]
-    }
-    
-    func customRightDiagonallyDown() {
-        layer.cornerRadius = 8
-        layer.maskedCorners = [.layerMaxXMaxYCorner]
-    }
-    
-    func customRight() {
-        layer.cornerRadius = 8
-        layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
     }
     
     func customTop() {
