@@ -8,21 +8,6 @@
 import UIKit
 
 extension UIButton {
-    
-    func enable(bgColor: UIColor = .accentColor) {
-        self.isUserInteractionEnabled = true
-        self.backgroundColor = bgColor
-    }
-    
-    func disable() {
-        self.isUserInteractionEnabled = false
-        self.backgroundColor = .lightGray
-    }
-    
-    func disableColor() {
-        self.backgroundColor = .lightGray
-    }
-    
     //ナビゲーションバー用のボタン
     func changeIntoBarItem(systemImage: String) -> UIBarButtonItem {
         setImage(UIImage(systemName: systemImage), for: .normal)

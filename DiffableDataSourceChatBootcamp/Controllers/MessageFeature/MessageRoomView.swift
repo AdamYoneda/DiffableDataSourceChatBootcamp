@@ -2467,6 +2467,7 @@ extension MessageRoomView: PHPickerViewControllerDelegate, UIImagePickerControll
                 } else {
                     guard let image = item as? UIImage else {
                         continuation.resume(throwing: NSError() as! Never)
+                        return
                     }
                     if let resizedImage = image.resized(size: CGSize(width: 400, height: 400)) {
                         continuation.resume(returning: resizedImage)
